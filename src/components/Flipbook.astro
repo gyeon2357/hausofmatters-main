@@ -1,3 +1,32 @@
+---
+export interface Props {
+  pdfPath: string;
+}
 
-<script src="../../scripts/jquery-3.6.0.min.js"></script>
-<script src="../../scripts/flipbook.min.js"></script>
+const { pdfPath } = Astro.props;
+---
+
+<!-- 버튼 -->
+<h3 id="read" role="button" tabindex="0">Read&nbsp;Flipbook</h3>
+
+<!-- flipBook 실행 스크립트 -->
+<script is:inline>
+  const pdfPath = "{pdfPath}";
+
+  document.getElementById("read").addEventListener("click", () => {
+    $("#read").flipBook({
+      pdfUrl: pdfPath,
+      lightBox: true,
+      layout: 3,
+      currentPage: { vAlign: "bottom", hAlign: "left" },
+      btnShare: { enabled: false },
+      btnPrint: { hideOnMobile: true },
+      btnColor: "rgb(255,120,60)",
+      sideBtnColor: "rgb(255,120,60)",
+      sideBtnSize: 60,
+      sideBtnBackground: "rgba(0,0,0,.7)",
+      btnSound: { vAlign: "top", hAlign: "left" },
+      btnAutoplay: { vAlign: "top", hAlign: "left" },
+    });
+  });
+</script>

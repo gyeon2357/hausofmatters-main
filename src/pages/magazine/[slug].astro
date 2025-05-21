@@ -4,6 +4,7 @@ import { getCollection, render } from 'astro:content';
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Separator from '../../components/Separator.astro';
+
 import Flipbook from '../../components/Flipbook.astro';
 
 /* ────────────────────────────────────────────
@@ -43,6 +44,7 @@ const { title, date, pdfPath, image } = issue.data;
 const { Content } = await render(issue);
 ---
 
+
 <BaseLayout title={title}>
   <section>
     <header class="title-header">
@@ -78,7 +80,7 @@ const { Content } = await render(issue);
           </dd>
         </dl>
 
-        <h3 id="read">Read&nbsp;Flipbook</h3>
+     <Flipbook pdfPath={issue.data.pdfPath} />
        
       </div>
     </div>
@@ -102,23 +104,3 @@ const { Content } = await render(issue);
 <script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
 <script is:inline src="/scripts/flipbook.min.js"></script>
 
-<script is:inline>
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const readBtn = document.getElementById("read");
-
-    readBtn?.addEventListener("click", () => {
-      $("#read").flipBook({
-      pdfUrl: "/pdf/hom-1.pdf",
-      btnColor: "#000",
-          sideBtnBackground: "transparent",
-          sideBtnColor: "#fff",
-          lightBox: true,
-          viewMode: "3d",
-          layout: 3,
-          currentPage: {vAlign: "bottom", hAlign: "left"},
-      });
-    });
-  });
-</script>
