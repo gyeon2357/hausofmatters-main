@@ -1,0 +1,124 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Separator from '../../components/Separator.astro';
+import Flipbook from '../../components/Flipbook.astro';
+
+/* ────────────────────────────────────────────
+   1) 정적 경로 생성
+   ──────────────────────────────────────────── */
+export const getStaticPaths = async () => {
+  const issues = await getCollection('magazine');   // 모든 호 불러오기
+
+  return issues.map((issue) => ({
+    params: { slug: issue.id },
+    props : { issues, issue },
+  }));
+};
+
+/* ────────────────────────────────────────────
+   2) 타입 정의 & props 분해
+   ──────────────────────────────────────────── */
+type Props = {
+  issues: CollectionEntry<'magazine'>[];
+  issue : CollectionEntry<'magazine'>;
+};
+
+const { issues, issue } = Astro.props;
+const slug = issue.id;
+
+/* ────────────────────────────────────────────
+   3) 다음 호 계산
+   ──────────────────────────────────────────── */
+const currentIndex = issues.findIndex(i => i.id === slug);
+const nextIndex    = (currentIndex + 1) % issues.length;
+const nextIssue    = issues[nextIndex];
+
+/* ────────────────────────────────────────────
+   4) 콘텐츠·데이터 추출
+   ──────────────────────────────────────────── */
+const { title, date, pdfPath, image } = issue.data;
+const { Content } = await render(issue);
+---
+
+<BaseLayout title={title}>
+  <section>
+    <header class="title-header">
+      <h2>{title}</h2>
+      <div>
+        <a class="back" href="/releases">View all</a>
+        <span class="faded">/</span>
+        <a href={`/magazine/${nextIssue.id}`}>Next&nbsp;Issue</a>
+      </div>
+    </header>
+
+    <Separator />
+
+    <div class="content-wrap">
+      <img
+        class="image fade-in"
+        src={image.src}
+        alt={image.alt}
+      />
+
+      <div class="content">
+        <h3>Description</h3>
+        <Content />
+
+        <dl>
+          <dt>Published</dt>
+          <dd>
+            {date.toLocaleDateString('ko-KR', {
+              year:  'numeric',
+              month: 'long',
+              day:   'numeric',
+            })}
+          </dd>
+        </dl>
+
+        <h3 id="read">Read&nbsp;Flipbook</h3>
+       
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .title-header{display:flex;justify-content:space-between;align-items:baseline;gap:.75rem;flex-wrap:wrap}
+  .back{color:var(--color-primary);text-decoration:none}
+  .content-wrap{display:grid;gap:2rem;grid-template-areas:"img" "content";grid-template-columns:100%}
+  @media(min-width:44em){.content-wrap{grid-template-columns:1fr 1fr;grid-template-areas:"img content"}}
+  .image{grid-area:img;width:100%;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+  .content{grid-area:content}
+  dl{margin-top:1rem}
+  dt{font-weight:700}
+  dd{margin:0 0 1rem}
+</style>
+
+<link rel="stylesheet" href="/styles/flipbook.style.css">
+<link rel="stylesheet" href="/styles/font-awesome.css">
+<script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
+<script is:inline src="/scripts/flipbook.min.js"></script>
+
+<script is:inline>
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const readBtn = document.getElementById("read");
+
+    readBtn?.addEventListener("click", () => {
+      $("#read").flipBook({
+      pdfUrl: "/pdf/hom-1.pdf",
+      btnColor: "#000",
+          sideBtnBackground: "transparent",
+          sideBtnColor: "#fff",
+          lightBox: true,
+          viewMode: "3d",
+          layout: 3,
+          currentPage: {vAlign: "bottom", hAlign: "left"},
+      });
+    });
+  });
+</script>

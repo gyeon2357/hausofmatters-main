@@ -42,7 +42,6 @@ const animateHomepageElements = () => {
   )
   .from(textSliders, { yPercent: 100, stagger: 0.1 }, 0.2)
   .set(gridContainer, { autoAlpha: 1 }, '<+=1')
-  .from(gridItems, { yPercent: 100, stagger: 0.08 }, '<')
   .from(gridItems, { ease: 'sine', autoAlpha: 0, stagger: 0.08 }, '<');
 };
 
