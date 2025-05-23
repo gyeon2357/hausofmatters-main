@@ -3,7 +3,7 @@ name: "Amara Patel"
 stage_name: "Amarié"
 genre: "Experimental R&B"
 image: 
-    src: "/images/artists/amerie.webp"
+    src: "/images/artists/amerie.jpg"
     alt: "Amarié with a bold and mysterious presence under dramatic lighting"
 ---
 

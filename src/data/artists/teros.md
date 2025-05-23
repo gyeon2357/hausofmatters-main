@@ -3,7 +3,7 @@ name: "Teros Ayhan"
 stage_name: "Teros"
 genre: "Neo-Soul"
 image: 
-    src: "/images/artists/teros.webp"
+    src: "/images/artists/teros.jpg"
     alt: "Teros in an intricate, textured jacket, exuding a mysterious and introspective aura, captured in moody, cinematic lighting"
 ---
 

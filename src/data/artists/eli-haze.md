@@ -3,7 +3,7 @@ name: "Elliot Hawthorne"
 stage_name: "Eli Haze"
 genre: "Indie Acoustic"
 image: 
-    src: "/images/artists/eli_haze.webp"
+    src: "/images/artists/eli_haze.jpg"
     alt: "Eli Haze sitting casually with a bohemian look, exuding introspective charm"
 ---
 

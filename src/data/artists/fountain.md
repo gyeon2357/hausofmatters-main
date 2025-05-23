@@ -3,7 +3,7 @@ name: "Clara Fontaine"
 stage_name: "Fountain"
 genre: "Jazz-Pop"
 image: 
-    src: "/images/artists/fountain.webp"
+    src: "/images/artists/fountain.jpg"
     alt: "Velvet Fontaine exuding elegance in a tailored suit, embodying modern jazz glamour"
 ---
 

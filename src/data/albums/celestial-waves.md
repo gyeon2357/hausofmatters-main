@@ -1,7 +1,7 @@
 ---
 name: "Celestial Waves"
 image:
-  src: "/images/albums/celestial_waves.webp"
+  src: "/images/albums/celestial_waves.jpg"
   alt: "Illustration for Celestial Waves featuring soft, flowing waves of color in hues of blue, purple, and pink"
 publishDate: 2025-02-14
 tracks:

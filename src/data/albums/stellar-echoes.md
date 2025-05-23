@@ -1,7 +1,7 @@
 ---
 name: "Stellar Echoes"
 image:
-  src: "/images/albums/desi_beats_reloaded.webp"
+  src: "/images/albums/desi_beats_reloaded.jpg"
   alt: "Illustration of a futuristic cityscape under a vibrant, starry sky with glowing neon accents, retro 1980s aesthetics, and soundwave patterns for a synthwave album"
 publishDate: 2022-10-03
 tracks:

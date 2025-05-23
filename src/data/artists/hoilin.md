@@ -3,7 +3,7 @@ name: "Hikaru Inoue"
 stage_name: "Hoilin"
 genre: "J-Pop"
 image: 
-    src: "/images/artists/hoilin.webp"
+    src: "/images/artists/hoilin.jpg"
     alt: "Hoilin performing on a brhghtly lit stage with pastel visuals"
 ---
 

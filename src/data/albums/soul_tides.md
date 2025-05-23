@@ -1,7 +1,7 @@
 ---
 name: "Soul Tides"
 image:
-  src: "/images/albums/soul_tides.webp"
+  src: "/images/albums/soul_tides.jpg"
   alt: "A vivid red flower reflected in tranquil teal water with gentle ripples, illuminated by golden sunlight, embodying serenity and rhythm."
 publishDate: 2026-02-14
 tracks:

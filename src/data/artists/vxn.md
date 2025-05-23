@@ -3,7 +3,7 @@ name: "Marco Alvarez"
 stage_name: "VXN"
 genre: "Cinematic Electronic"
 image: 
-    src: "/images/artists/vxn.webp"
+    src: "/images/artists/vxn.jpg"
     alt: "VXN with a piercing gaze under moody green and orange lighting, exuding mystery and intensity"
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: "Bloom Theory"
 image:
-  src: "/images/albums/bloom_theory.webp"
+  src: "/images/albums/bloom_theory.jpg"
   alt: "A close-up of a vivid red flower in full bloom, surrounded by a lush green background, emphasizing natural elegance and growth."
 publishDate: 2024-11-20
 tracks:

@@ -1,7 +1,7 @@
 ---
 name: "Solar Reverie"
 image:
-  src: "/images/albums/solar_reverie.webp"
+  src: "/images/albums/solar_reverie.jpg"
   alt: "A vibrant, abstract depiction of solar flares and warm tones, blending shades of orange, gold, and crimson with radiant textures"
 publishDate: 2026-03-15
 tracks:

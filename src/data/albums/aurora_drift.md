@@ -1,7 +1,7 @@
 ---
 name: "Aurora Drift"
 image:
-  src: "/images/albums/aurora_drift.webp"
+  src: "/images/albums/aurora_drift.jpg"
   alt: "A surreal, dreamlike depiction of a glowing aurora borealis against a dark, starry sky with hints of abstract textures"
 publishDate: 2024-09-22
 tracks:

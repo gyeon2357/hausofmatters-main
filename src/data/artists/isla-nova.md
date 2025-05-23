@@ -3,7 +3,7 @@ name: "Isla Carrington"
 stage_name: "Isla Nova"
 genre: "Synth-Pop"
 image: 
-    src: "/images/artists/isla_nova.webp"
+    src: "/images/artists/isla_nova.jpg"
     alt: "Isla Nova posing under dynamic neon lighting, radiating confidence and style"
 ---
 

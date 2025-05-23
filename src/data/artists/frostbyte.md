@@ -3,7 +3,7 @@ name: "Julian Frost"
 stage_name: "Frostbyte"
 genre: "Electro Funk"
 image: 
-    src: "/images/artists/frostbyte.webp"
+    src: "/images/artists/frostbyte.jpg"
     alt: "Frostbyte performing on a rooftop, surrounded by neon visuals"
 ---
 

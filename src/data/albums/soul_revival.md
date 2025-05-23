@@ -1,7 +1,7 @@
 ---
 name: "Soul Revival"
 image:
-  src: "/images/albums/soul_revival.webp"
+  src: "/images/albums/soul_revival.jpg"
   alt: "An abstract sunburst in soft gold and orange hues emerging from a record player, symbolizing rebirth and timeless music."
 publishDate: 2025-06-20
 tracks:

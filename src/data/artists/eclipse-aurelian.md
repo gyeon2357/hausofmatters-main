@@ -3,7 +3,7 @@ name: "Alexander Rowe"
 stage_name: "Eclipse Aurelian"
 genre: "Ambient Jazz"
 image: 
-    src: "/images/artists/eclipse_aurelian.webp"
+    src: "/images/artists/eclipse_aurelian.jpg"
     alt: "Eclipse Aurelian in a sharp corduroy suit, radiating mystery and refinement under moody lighting"
 ---
 

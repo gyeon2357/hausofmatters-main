@@ -1,32 +1,39 @@
 ---
 export interface Props {
-  pdfPath: string;
+  pdfPath: string
 }
 
 const { pdfPath } = Astro.props;
 ---
 
-<!-- 버튼 -->
-<h3 id="read" role="button" tabindex="0">Read&nbsp;Flipbook</h3>
 
-<!-- flipBook 실행 스크립트 -->
+<button
+  type="button"
+  class="flipbook-btn"
+  data-pdf={pdfPath}
+>
+  Read
+</button>
+<script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
+<script is:inline src="/scripts/flipbook.min.js"></script>
 <script is:inline>
-  const pdfPath = "{pdfPath}";
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.querySelector(".flipbook-btn");
+    if (!btn || typeof $ === "undefined") return;
 
-  document.getElementById("read").addEventListener("click", () => {
-    $("#read").flipBook({
-      pdfUrl: pdfPath,
-      lightBox: true,
-      layout: 3,
-      currentPage: { vAlign: "bottom", hAlign: "left" },
-      btnShare: { enabled: false },
-      btnPrint: { hideOnMobile: true },
-      btnColor: "rgb(255,120,60)",
-      sideBtnColor: "rgb(255,120,60)",
-      sideBtnSize: 60,
-      sideBtnBackground: "rgba(0,0,0,.7)",
-      btnSound: { vAlign: "top", hAlign: "left" },
-      btnAutoplay: { vAlign: "top", hAlign: "left" },
-    });
+      const pdfUrl = btn.dataset.pdf;
+      if (!pdfUrl) return;
+
+      $(btn).flipBook({
+        pdfUrl: pdfUrl,
+         btnColor: "#000",
+          sideBtnBackground: "transparent",
+          sideBtnColor: "#fff",
+          lightBox: true,
+          viewMode: "3d",
+          layout: 3,
+          currentPage: {vAlign: "bottom", hAlign: "left"},
+      });
+
   });
 </script>

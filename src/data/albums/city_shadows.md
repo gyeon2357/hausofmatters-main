@@ -1,7 +1,7 @@
 ---
 name: "City Shadows"
 image:
-  src: "/images/albums/city_shadows.webp"
+  src: "/images/albums/city_shadows.jpg"
   alt: "Photography of a gritty urban cityscape at twilight, featuring dimly lit streets, graffiti, dramatic shadows, and glimmers of streetlights reflecting off wet pavement."
 publishDate: 2024-08-30
 tracks:

@@ -3,7 +3,7 @@ name: "Evelyn Harper"
 stage_name: "Echo Lume"
 genre: "Synthwave"
 image: 
-    src: "/images/artists/echo_lume.webp"
+    src: "/images/artists/echo_lume.jpg"
     alt: "Echo Lume performing under neon lights"
 ---
 

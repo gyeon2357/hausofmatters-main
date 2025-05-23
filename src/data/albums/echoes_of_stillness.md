@@ -1,7 +1,7 @@
 ---
 name: "Echoes of Stillness"
 image:
-  src: "/images/albums/echoes_of_stillness.webp"
+  src: "/images/albums/echoes_of_stillness.jpg"
   alt: "A tranquil lakeside scene under a twilight sky with indigos and silver tones, reflecting stars on the water, featuring Ivy Veil's unique IV ivy vine logo."
 publishDate: 2026-02-20
 tracks:

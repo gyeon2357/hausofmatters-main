@@ -1,7 +1,7 @@
 ---
 name: "Pulsewave"
 image:
-  src: "/images/albums/pulsewave.webp"
+  src: "/images/albums/pulsewave.jpg"
   alt: "A futuristic dance floor lit with streaks of neon green and pink lights, with abstract geometric patterns pulsating in the background, evoking bold energy and modernity."
 publishDate: 2025-03-25
 tracks:

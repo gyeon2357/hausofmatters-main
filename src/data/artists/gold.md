@@ -3,7 +3,7 @@ name: "Ren Takahashi"
 stage_name: "Gold"
 genre: "Indie Pop"
 image: 
-    src: "/images/artists/gold.webp"
+    src: "/images/artists/gold.jpg"
     alt: "Gold with a soft, introspective look in a golden fur coat, exuding artistic warmth"
 ---
 

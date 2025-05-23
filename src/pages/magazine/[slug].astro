@@ -10,14 +10,14 @@ import Flipbook from '../../components/Flipbook.astro';
 /* ────────────────────────────────────────────
    1) 정적 경로 생성
    ──────────────────────────────────────────── */
-export const getStaticPaths = async () => {
-  const issues = await getCollection('magazine');   // 모든 호 불러오기
+export async function getStaticPaths() {
+  const issues = await getCollection('magazine');
 
   return issues.map((issue) => ({
-    params: { slug: issue.id },
-    props : { issues, issue },
+    params: { slug: issue.id }, 
+    props: { issues, issue },
   }));
-};
+}
 
 /* ────────────────────────────────────────────
    2) 타입 정의 & props 분해
@@ -28,31 +28,36 @@ type Props = {
 };
 
 const { issues, issue } = Astro.props;
+const { title, date, pdfPath, image } = issue.data;
 const slug = issue.id;
-
-/* ────────────────────────────────────────────
-   3) 다음 호 계산
-   ──────────────────────────────────────────── */
-const currentIndex = issues.findIndex(i => i.id === slug);
-const nextIndex    = (currentIndex + 1) % issues.length;
-const nextIssue    = issues[nextIndex];
 
 /* ────────────────────────────────────────────
    4) 콘텐츠·데이터 추출
    ──────────────────────────────────────────── */
-const { title, date, pdfPath, image } = issue.data;
-const { Content } = await render(issue);
----
 
+const { Content } = await render(issue);
+
+/* ────────────────
+   3. 다음 호 계산
+   ──────────────── */
+const currentIndex = issues.findIndex(i => i.id === slug);
+const nextIndex = (currentIndex + 1) % issues.length;
+const nextIssue = issues[nextIndex];
+---
+  
 
 <BaseLayout title={title}>
+<link rel="stylesheet" href="/styles/flipbook.style.css">
+<link rel="stylesheet" href="/styles/font-awesome.css">
+
+
   <section>
     <header class="title-header">
       <h2>{title}</h2>
       <div>
         <a class="back" href="/releases">View all</a>
         <span class="faded">/</span>
-        <a href={`/magazine/${nextIssue.id}`}>Next&nbsp;Issue</a>
+        <a href={`/magazine/${nextIssue.id}`} class="reload-link">Next&nbsp;Issue</a>
       </div>
     </header>
 
@@ -79,9 +84,7 @@ const { Content } = await render(issue);
             })}
           </dd>
         </dl>
-
-     <Flipbook pdfPath={issue.data.pdfPath} />
-       
+<Flipbook pdfPath={pdfPath} />
       </div>
     </div>
   </section>
@@ -99,8 +102,19 @@ const { Content } = await render(issue);
   dd{margin:0 0 1rem}
 </style>
 
-<link rel="stylesheet" href="/styles/flipbook.style.css">
-<link rel="stylesheet" href="/styles/font-awesome.css">
-<script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
-<script is:inline src="/scripts/flipbook.min.js"></script>
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const reloadLink = document.querySelector(".reload-link");
+
+    if (reloadLink) {
+      reloadLink.addEventListener("click", (e) => {
+        e.preventDefault(); // 기본 Astro SPA 전환 막기
+        const href = reloadLink.getAttribute("href");
+        if (href) {
+          location.href = href; // 강제 새로고침 이동
+        }
+      });
+    }
+  });
+</script>
 

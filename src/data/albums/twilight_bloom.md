@@ -1,7 +1,7 @@
 ---
 name: "Twilight Bloom"
 image:
-  src: "/images/albums/twilight_bloom.webp"
+  src: "/images/albums/twilight_bloom.jpg"
   alt: "A peaceful evening with glowing lanterns hanging among cherry blossoms, a soft purple-pink sky, and gentle reflections in a calm pond, evoking serenity and romance."
 publishDate: 2025-05-20
 tracks:

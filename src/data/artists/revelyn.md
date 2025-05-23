@@ -3,7 +3,7 @@ name: "Sophia Delgado"
 stage_name: "Revelyn"
 genre: "Indie Rock"
 image: 
-    src: "/images/artists/revelyn.webp"
+    src: "/images/artists/revelyn.jpg"
     alt: "Revelyn with a vintage electric guitar, radiating raw energy and artistic confidence"
 ---
 

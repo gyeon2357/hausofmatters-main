@@ -1,7 +1,7 @@
 ---
 name: "Whispering Pines"
 image:
-  src: "/images/albums/whispering_pines.webp"
+  src: "/images/albums/whispering_pines.jpg"
   alt: "Photography of a peaceful forest with tall pine trees silhouetted against a soft evening sky in shades of teal and gold."
 publishDate: 2025-05-20
 tracks:

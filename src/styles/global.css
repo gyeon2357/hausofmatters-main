@@ -24,11 +24,11 @@
 
 body {
   margin: 0;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   color: var(--color-text);
   background-color: var(--color-bg);
   line-height: 1;
-  font-family: 'Instrument Sans Variable', serif;
+  font-family: 'Instrument Sans Variable', sans-serif;
   font-variant-ligatures: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

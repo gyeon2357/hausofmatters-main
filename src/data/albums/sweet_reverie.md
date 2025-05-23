@@ -1,7 +1,7 @@
 ---
 name: "Sweet Reverie"
 image:
-  src: "/images/albums/sweet_reverie.webp"
+  src: "/images/albums/sweet_reverie.jpg"
   alt: "A pastel-colored park in springtime with blooming cherry blossoms, soft pink skies, and a vintage-style swing, evoking a playful and dreamy J-Pop mood."
 publishDate: 2024-04-15
 tracks:

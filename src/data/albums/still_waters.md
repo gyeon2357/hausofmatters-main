@@ -1,7 +1,7 @@
 ---
 name: "Still Waters"
 image:
-  src: "/images/albums/still_waters.webp"
+  src: "/images/albums/still_waters.jpg"
   alt: "Photography of a serene lake at sunrise, surrounded by soft pastel hues of blue, pink, and lavender, with a simple acoustic guitar subtly reflected in the water."
 publishDate: 2024-10-15
 tracks:

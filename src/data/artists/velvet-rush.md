@@ -3,7 +3,7 @@ name: "Sophia Nguyen"
 stage_name: "Velvet Rush"
 genre: "Neo-Soul"
 image: 
-    src: "/images/artists/velvet_rush.webp"
+    src: "/images/artists/velvet_rush.jpg"
     alt: "Velvet Rush performing in a moody jazz club, lit by golden spotlights"
 ---
 

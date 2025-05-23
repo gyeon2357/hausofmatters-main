@@ -3,7 +3,7 @@ name: "Zion Maxim Torres"
 stage_name: "Z.T."
 genre: "Hip-Hop"
 image: 
-    src: "/images/artists/z_t.webp"
+    src: "/images/artists/z_t.jpg"
     alt: "Z.T. posing in an understated but stylish outfit, exuding calm intensity"
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: "Spice Trail Beats"
 image:
-  src: "/images/albums/spice_trail_beats.webp"
+  src: "/images/albums/spice_trail_beats.jpg"
   alt: "Illustration featuring vibrant paisley patterns, tabla drums, and neon accents for a Bollywood fusion album, blending traditional Indian and modern electronic styles"
 publishDate: 2022-07-15
 tracks:

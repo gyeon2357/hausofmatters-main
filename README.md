@@ -1,8 +1,5 @@
 # KHL, Hausofmatters Website In Production
 
-
-[Article on Codrops](https://tympanus.net/codrops/?p=86632)
-
 [Demo](https://hausofmatters-main.vercel.app/)
 
 ## Commands

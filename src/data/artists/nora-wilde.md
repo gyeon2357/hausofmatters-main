@@ -3,7 +3,7 @@ name: "Eleanor Wyatt"
 stage_name: "Nora Wilde"
 genre: "Alternative Folk"
 image: 
-    src: "/images/artists/nora_wilde.webp"
+    src: "/images/artists/nora_wilde.jpg"
     alt: "Nora Wilde holding her guitar with a minimalist and modern style"
 ---
 

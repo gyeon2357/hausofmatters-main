@@ -3,7 +3,7 @@ name: "Samantha Reed"
 stage_name: "Ivy Veil"
 genre: "Electronica"
 image: 
-    src: "/images/artists/ivy_veil.webp"
+    src: "/images/artists/ivy_veil.jpg"
     alt: "Ivy Veil shrouded in delicate lace, radiating a mysterious and serene presence"
 ---
 

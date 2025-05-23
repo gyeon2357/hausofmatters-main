@@ -1,7 +1,7 @@
 ---
 name: "The Well"
 image:
-  src: "/images/albums/the_well.webp"
+  src: "/images/albums/the_well.jpg"
   alt: "A tranquil Japanese garden featuring a circular stone well surrounded by moss with soft ripples in the water reflecting warm sunlight, creating a calm and meditative atmosphere."
 publishDate: 2024-10-10
 tracks:

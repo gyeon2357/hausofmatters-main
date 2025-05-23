@@ -21,7 +21,9 @@ const activeRoute = routes[currentPath] || null;
     <a href="/" class={activeRoute === "Home" ? "current" : ""}
       ><TextSlider content="Hausofmatters" /></a>
   </h1>
+  
   <span><TextSlider content="KHL" /></span>
+  
   <ul>
     <li>
       <a
@@ -57,7 +59,7 @@ const activeRoute = routes[currentPath] || null;
     display: grid;
     grid-template-columns: min-content auto;
     font-weight: 700;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     gap: 1rem;
   }
   header a.current {

@@ -5,7 +5,7 @@ pdfPath: "/pdf/hom-1.pdf"
 date: 2023-06-01
 image: 
   src: "/thumb/hom-1.jpg"
-  alt: "hom image"
+  alt: "hom-1"
 ---
 
 Welcome to the first edition of Haus of Matters.

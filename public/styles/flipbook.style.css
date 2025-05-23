@@ -960,10 +960,9 @@
   cursor: pointer;
   /* padding: 5px 25px; */
   width: 200px;
-  line-height: 32px;
-  text-align: center;
+
   /* background: rgba(0,0,0,.1); */
-  margin: 5px auto;
+  margin: 5px;
   border: 1px solid #868686;
   border: none;
   background: #f9f9f9;
@@ -974,7 +973,13 @@
   -webkit-transition: none;
   -o-transition: none;
   transition: none;
-  font-size: 12px;
+
+  text-align: center;
+  font-size: 16px;
+  line-height: 32px;
+
+  text-decoration: underline;
+  text-underline-position: under;
 }
 
 /*dark*/

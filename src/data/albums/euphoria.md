@@ -1,7 +1,7 @@
 ---
 name: "Euphoria"
 image:
-  src: "/images/albums/euphoria.webp"
+  src: "/images/albums/euphoria.jpg"
   alt: "A vibrant city skyline at night glowing with neon lights in pink, blue, and purple, with a silhouette of a confident figure looking out, evoking empowerment and dynamism."
 publishDate: 2024-06-10
 tracks:

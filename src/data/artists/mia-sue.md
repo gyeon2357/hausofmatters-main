@@ -3,7 +3,7 @@ name: "Mia Sullivan"
 stage_name: "Mia Sue"
 genre: "Hip Hop"
 image: 
-    src: "/images/artists/mia_sue.webp"
+    src: "/images/artists/mia_sue.jpg"
     alt: "Mia Sue performing under vibrant graffiti art"
 ---
 

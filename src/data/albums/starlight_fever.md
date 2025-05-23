@@ -1,7 +1,7 @@
 ---
 name: "Starlight Fever"
 image:
-  src: "/images/albums/starlight_fever.webp"
+  src: "/images/albums/starlight_fever.jpg"
   alt: "A shimmering disco ball glowing under vibrant pink and gold lights, surrounded by subtle star patterns."
 publishDate: 2024-10-10
 tracks:

@@ -1,7 +1,7 @@
 ---
 name: "Pixel Groove"
 image:
-  src: "/images/albums/pixel_groove.webp"
+  src: "/images/albums/pixel_groove.jpg"
   alt: "A stylized neon pixelated cityscape with vibrant colors like electric blue, pink, and purple, featuring a glowing equalizer integrated into the skyline."
 publishDate: 2024-07-01
 tracks:

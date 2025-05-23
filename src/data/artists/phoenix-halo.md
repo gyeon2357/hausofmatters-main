@@ -3,7 +3,7 @@ name: "Riley Cross"
 stage_name: "Phoenix Halo"
 genre: "Neo-Glam Rock"
 image: 
-    src: "/images/artists/phoenix_halo.webp"
+    src: "/images/artists/phoenix_halo.jpg"
     alt: "Phoenix Halo exuding fiery confidence in a vibrant, avant-garde outfit"
 ---
 

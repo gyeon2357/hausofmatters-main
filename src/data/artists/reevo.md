@@ -3,7 +3,7 @@ name: "Jamal Reeves"
 stage_name: "Reevo"
 genre: "Hip-Hop Lyricism"
 image: 
-    src: "/images/artists/reevo.webp"
+    src: "/images/artists/reevo.jpg"
     alt: "Reevo gazing confidently at the camera, exuding a mix of calm and intensity"
 ---
 

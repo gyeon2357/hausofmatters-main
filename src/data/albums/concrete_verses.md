@@ -1,7 +1,7 @@
 ---
 name: "Concrete Verses"
 image:
-  src: "/images/albums/concrete_verses.webp"
+  src: "/images/albums/concrete_verses.jpg"
   alt: "A gritty urban skyline with stylized graffiti text, a microphone embedded in the concrete, and vibrant pops of red and yellow, featuring mia-sue's 'MS' logo prominently at the top."
 publishDate: 2026-01-30
 tracks:

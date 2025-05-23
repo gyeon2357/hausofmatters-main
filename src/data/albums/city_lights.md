@@ -1,7 +1,7 @@
 ---
 name: "City Lights"
 image:
-  src: "/images/albums/city_lights.webp"
+  src: "/images/albums/city_lights.jpg"
   alt: "A jazz singer performing under warm streetlights in a cityscape with blurred cars and glowing signs in the background, creating an elegant and contemporary atmosphere."
 publishDate: 2024-11-22
 tracks:

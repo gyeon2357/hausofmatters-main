@@ -3,7 +3,7 @@ name: "Imani Bishop"
 stage_name: "Zariah Bloom"
 genre: "Neo-Soul"
 image: 
-    src: "/images/artists/zariah_bloom.webp"
+    src: "/images/artists/zariah_bloom.jpg"
     alt: "Zariah Bloom with a striking profile, exuding elegance and soulful confidence"
 ---
 

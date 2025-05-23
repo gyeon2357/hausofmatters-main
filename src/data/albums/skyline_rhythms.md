@@ -1,7 +1,7 @@
 ---
 name: "Skyline Rhythms"
 image:
-  src: "/images/albums/skyline_rhythms.webp"
+  src: "/images/albums/skyline_rhythms.jpg"
   alt: "Photography of a vibrant urban rooftop scene at sunset, featuring a silhouetted figure against a glowing skyline, graffiti art on the walls, and warm orange and purple hues in the sky."
 publishDate: 2025-06-15
 tracks:

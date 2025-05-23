@@ -1,7 +1,7 @@
 ---
 name: "Fleeting Echoes"
 image:
-  src: "/images/albums/fleeting_echoes.webp"
+  src: "/images/albums/fleeting_echoes.jpg"
   alt: "A serene golden hour scene with soft, warm light streaming through an open window overlooking a minimalist landscape, evoking nostalgia and introspection."
 publishDate: 2024-11-01
 tracks:

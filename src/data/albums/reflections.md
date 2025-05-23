@@ -1,7 +1,7 @@
 ---
 name: "Reflections"
 image:
-  src: "/images/albums/reflections.webp"
+  src: "/images/albums/reflections.jpg"
   alt: "A still pond in a Japanese garden with vibrant koi fish swimming beneath the surface, surrounded by delicate cherry blossoms, creating a peaceful and meditative atmosphere."
 publishDate: 2025-04-15
 tracks:
