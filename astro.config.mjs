@@ -9,7 +9,7 @@ export default defineConfig({
     enabled: false
   },
   prefetch: true,
-  site: 'https://playersclub88.netlify.app/',
+  site: 'https://hausofmatters-main.vercel.app/',
   integrations: [sitemap()],
   experimental: {
     svg: true,
