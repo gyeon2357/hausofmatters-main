@@ -2,10 +2,10 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Separator from '../../components/Separator.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Separator from '../../../components/Separator.astro';
 
-import Flipbook from '../../components/Flipbook.astro';
+import Flipbook from '../../../components/Flipbook.astro';
 
 /* ────────────────────────────────────────────
    1) 정적 경로 생성
@@ -57,7 +57,7 @@ const nextIssue = issues[nextIndex];
       <div>
         <a class="back" href="/releases">View all</a>
         <span class="faded">/</span>
-        <a href={`/magazine/${nextIssue.id}`} class="reload-link">Next&nbsp;Issue</a>
+        <a href={`/magazine/hom/${nextIssue.id}`} class="reload-link">Next&nbsp;Issue</a>
       </div>
     </header>
 
