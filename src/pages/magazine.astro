@@ -11,11 +11,11 @@ magazineEntries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 <BaseLayout title={title}>
   <div class="content content--page">
-    <h1>magazine</h1>
+    <h1>Magazine - HOM</h1>
 <ul>
     {magazineEntries.map((entry) => (
       <li>
-        <a href={`/magazine/hom/${entry.data.slug}`}>
+        <a class="reload-link" rel="external" href={`/magazine/hom/${entry.data.slug}`} >
           <img src={entry.data.image.src} alt={entry.data.image.alt} width="100" />
           <div>
             <strong>{entry.data.title}</strong><br />

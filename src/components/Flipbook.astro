@@ -6,7 +6,6 @@ export interface Props {
 const { pdfPath } = Astro.props;
 ---
 
-
 <button
   type="button"
   class="flipbook-btn"
@@ -14,26 +13,74 @@ const { pdfPath } = Astro.props;
 >
   Read
 </button>
-<script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
-<script is:inline src="/scripts/flipbook.min.js"></script>
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
+
+<script>
+  // Flipbook 초기화 함수
+  function initFlipbook() {
+    // jQuery와 flipBook이 로드될 때까지 대기
+    if (typeof $ === "undefined" || typeof $.fn?.flipBook === "undefined") {
+      console.log("[Flipbook] 라이브러리 로드 대기 중...");
+      setTimeout(initFlipbook, 100);
+      return;
+    }
+
     const btn = document.querySelector(".flipbook-btn");
-    if (!btn || typeof $ === "undefined") return;
+    if (!btn) {
+      console.log("[Flipbook] 버튼을 찾을 수 없음");
+      return;
+    }
 
-      const pdfUrl = btn.dataset.pdf;
-      if (!pdfUrl) return;
+    const pdfUrl = btn.dataset.pdf;
+    if (!pdfUrl) {
+      console.log("[Flipbook] PDF 경로가 없음");
+      return;
+    }
 
+    // 이미 초기화된 경우 스킵
+    if (btn.classList.contains("flipbook-initialized")) {
+      console.log("[Flipbook] 이미 초기화됨");
+      return;
+    }
+
+    console.log("[Flipbook] 초기화 중:", pdfUrl);
+
+    try {
       $(btn).flipBook({
         pdfUrl: pdfUrl,
-         btnColor: "#000",
-          sideBtnBackground: "transparent",
-          sideBtnColor: "#fff",
-          lightBox: true,
-          viewMode: "3d",
-          layout: 3,
-          currentPage: {vAlign: "bottom", hAlign: "left"},
+        btnColor: "#000",
+        sideBtnBackground: "transparent",
+        sideBtnColor: "#fff",
+        lightBox: true,
+        viewMode: "3d",
+        layout: 3,
+        currentPage: { vAlign: "bottom", hAlign: "left" },
       });
 
+      btn.classList.add("flipbook-initialized");
+      console.log("[Flipbook] ✅ 초기화 완료!");
+    } catch (error) {
+      console.error("[Flipbook] 초기화 실패:", error);
+    }
+  }
+
+  // 초기 로드
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("[Flipbook] DOMContentLoaded 발동");
+      initFlipbook();
+    });
+  } else {
+    console.log("[Flipbook] 문서 이미 로드됨");
+    initFlipbook();
+  }
+
+  // View Transitions 이후 재초기화
+  document.addEventListener("astro:after-swap", () => {
+    console.log("[Flipbook] View Transition 완료 - 재초기화");
+    const btn = document.querySelector(".flipbook-btn");
+    if (btn) {
+      btn.classList.remove("flipbook-initialized");
+    }
+    initFlipbook();
   });
 </script>

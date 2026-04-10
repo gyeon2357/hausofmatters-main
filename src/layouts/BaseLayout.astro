@@ -84,6 +84,13 @@ const currentPage =
       }}
     />
     <ClientRouter />
+
+   <!-- Flipbook 라이브러리 사전 로드 -->
+    <script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
+    <script is:inline src="/scripts/flipbook.min.js"></script>
+    <link rel="stylesheet" href="/styles/flipbook.style.css">
+    <link rel="stylesheet" href="/styles/font-awesome.css">
+
   </head>
   <body>
     <SmoothScroll />
@@ -93,3 +100,12 @@ const currentPage =
     <script src="../scripts/imageFade.js"></script>
   </body>
 </html>
+
+<script is:inline>
+ document.addEventListener('astro:before-page-load', () => {
+    if (window.currentFlipbookInstance?.dispose) {
+      window.currentFlipbookInstance.dispose();
+      window.currentFlipbookInstance = null;
+    }
+  });
+</script>

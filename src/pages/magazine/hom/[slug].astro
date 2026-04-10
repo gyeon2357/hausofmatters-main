@@ -57,7 +57,13 @@ const nextIssue = issues[nextIndex];
       <div>
         <a class="back" href="/releases">View all</a>
         <span class="faded">/</span>
-        <a href={`/magazine/hom/${nextIssue.id}`} class="reload-link">Next&nbsp;Issue</a>
+        <button
+  type="button"
+  class="next-issue"
+  data-href={`/magazine/hom/${nextIssue.id}`}
+>
+  Next Issue
+</button>
       </div>
     </header>
 
@@ -84,7 +90,7 @@ const nextIssue = issues[nextIndex];
             })}
           </dd>
         </dl>
-<Flipbook pdfPath={pdfPath} />
+      <Flipbook client:load pdfPath={pdfPath} />
       </div>
     </div>
   </section>
@@ -101,20 +107,3 @@ const nextIssue = issues[nextIndex];
   dt{font-weight:700}
   dd{margin:0 0 1rem}
 </style>
-
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    const reloadLink = document.querySelector(".reload-link");
-
-    if (reloadLink) {
-      reloadLink.addEventListener("click", (e) => {
-        e.preventDefault(); // 기본 Astro SPA 전환 막기
-        const href = reloadLink.getAttribute("href");
-        if (href) {
-          location.href = href; // 강제 새로고침 이동
-        }
-      });
-    }
-  });
-</script>
-
