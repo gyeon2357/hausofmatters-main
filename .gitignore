@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # Visual Studio Code settings
 .vscode/
+.vercel
