@@ -24,11 +24,8 @@ const { pdfPath } = Astro.props;
       return;
     }
 
-    const btn = document.querySelector(".flipbook-btn");
-    if (!btn) {
-      console.log("[Flipbook] 버튼을 찾을 수 없음");
-      return;
-    }
+   const btn = document.querySelector(".flipbook-btn");
+  if (!(btn instanceof HTMLElement)) return;
 
     const pdfUrl = btn.dataset.pdf;
     if (!pdfUrl) {
@@ -75,12 +72,11 @@ const { pdfPath } = Astro.props;
   }
 
   // View Transitions 이후 재초기화
-  document.addEventListener("astro:after-swap", () => {
-    console.log("[Flipbook] View Transition 완료 - 재초기화");
-    const btn = document.querySelector(".flipbook-btn");
-    if (btn) {
-      btn.classList.remove("flipbook-initialized");
-    }
-    initFlipbook();
-  });
+ document.addEventListener("astro:after-swap", () => {
+  const btn = document.querySelector<HTMLElement>(".flipbook-btn");
+  if (btn) {
+    btn.classList.remove("flipbook-initialized");
+  }
+  initFlipbook();
+});
 </script>
