@@ -5,14 +5,14 @@ import Search from "../components/Search.astro";
 import Cross from "../assets/images/cross.svg";
 
 type Props = {
-  artistsTotal: number;
+  albumsTotal: number;
 };
 
-const { artistsTotal } = Astro.props;
+const { albumsTotal } = Astro.props;
 ---
 
 <header class="title-header title-header--initial">
-  <h2><TextSlider content="HOME - ARTISTS" /></h2>
+  <h2><TextSlider content="ALBUMS" /></h2>
 
   <section>
     <div>
@@ -26,9 +26,8 @@ const { artistsTotal } = Astro.props;
         </button>
       </div>
     </div>
-      <span class="total-num"><TextSlider content={"("+ artistsTotal+ ")"} /></span>
+    <span class="total-num"><TextSlider content={"(" + albumsTotal + ")"} /></span>
   </section>
- 
 </header>
 
 <Separator />
@@ -71,9 +70,8 @@ const { artistsTotal } = Astro.props;
     }
   }
 
-.total-num {
-  font-size: 75%;
-}
-
+  .total-num {
+    font-size: 75%;
+  }
 </style>
 <script src="../scripts/gridActions.js"></script>

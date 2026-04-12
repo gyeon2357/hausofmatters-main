@@ -22,13 +22,37 @@
   --font-size-xl: clamp(1.25rem, 4vw, 2rem);
 }
 
+@font-face {
+  font-family: "SpoqaHanSansNeo";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/SpoqaHanSansNeo-Regular.eot");
+  src:
+    url("/fonts/SpoqaHanSansNeo-Regular.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/SpoqaHanSansNeo-Regular.woff2") format("woff2"),
+    url("/fonts/SpoqaHanSansNeo-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "SpoqaHanSansNeo";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/SpoqaHanSansNeo-Bold.eot");
+  src:
+    url("/fonts/SpoqaHanSansNeo-Bold.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/SpoqaHanSansNeo-Bold.woff2") format("woff2"),
+    url("/fonts/SpoqaHanSansNeo-Bold.woff") format("woff");
+}
+
 body {
   margin: 0;
   padding: 0 0.5rem;
   color: var(--color-text);
   background-color: var(--color-bg);
   line-height: 1;
-  font-family: 'Instrument Sans Variable', sans-serif;
+  font-family: "SpoqaHanSansNeo", sans-serif;
   font-variant-ligatures: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -50,7 +74,7 @@ h3 {
   margin-bottom: 2.5rem;
 }
 
-p+h3 {
+p + h3 {
   margin-top: 4rem;
 }
 
@@ -160,13 +184,13 @@ img {
   padding: 3rem 0 10vh;
   grid-template-columns: 100%;
   grid-auto-columns: auto;
-  grid-template-areas: 'img' 'content';
+  grid-template-areas: "img" "content";
 }
 
 @media screen and (min-width: 44em) {
   .content-wrap {
     grid-template-columns: 35vw 1fr;
-    grid-template-areas: 'img content';
+    grid-template-areas: "img content";
   }
 }
 

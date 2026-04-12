@@ -66,7 +66,8 @@ const initializeVariables = () => {
 
 /* Shuffle grid items randomly and update the container */
 const shuffleGrid = () => {
-  const shuffledItems = gridItems.sort(() => Math.random() - 0.5);
+  const items = Array.from(gridContainer?.children || []);
+  const shuffledItems = items.sort(() => Math.random() - 0.5);
   if (gridContainer) {
     gridContainer.innerHTML = '';
     shuffledItems.forEach((item) => gridContainer.appendChild(item));
@@ -75,9 +76,10 @@ const shuffleGrid = () => {
 
 /* Sort grid items alphabetically by 'data-stagename' */
 const sortGrid = () => {
-  const sortedItems = gridItems.sort((a, b) => {
-    const nameA = a.getAttribute('data-stagename').toLowerCase();
-    const nameB = b.getAttribute('data-stagename').toLowerCase();
+  const items = Array.from(gridContainer?.children || []);
+  const sortedItems = items.sort((a, b) => {
+    const nameA = (a.getAttribute('data-stagename') || '').toLowerCase();
+    const nameB = (b.getAttribute('data-stagename') || '').toLowerCase();
     return nameA.localeCompare(nameB);
   });
   if (gridContainer) {
@@ -89,9 +91,10 @@ const sortGrid = () => {
 /* Filter grid items based on the search input */
 const filterGrid = (searchValue) => {
   const lowerCaseSearch = searchValue.toLowerCase();
-  gridItems.forEach((item) => {
-    const name = item.getAttribute('data-name').toLowerCase();
-    const stagename = item.getAttribute('data-stagename').toLowerCase();
+  const items = Array.from(gridContainer?.children || []);
+  items.forEach((item) => {
+    const name = (item.getAttribute('data-name') || '').toLowerCase();
+    const stagename = (item.getAttribute('data-stagename') || '').toLowerCase();
     item.style.display =
       name.includes(lowerCaseSearch) || stagename.includes(lowerCaseSearch)
         ? ''
@@ -154,7 +157,7 @@ const cleanup = () => {
 /* Handle Astro page events on the home page */
 const handlePageEvent = (type) => {
   const page = document.documentElement.getAttribute('data-page');
-  if (page !== 'home') return;
+  if (page !== 'home' && page !== 'albums') return;
   if (type === 'load') {
     init();
   } else if (type === 'before-swap') {
