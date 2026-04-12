@@ -12,26 +12,34 @@ const { artistsTotal } = Astro.props;
 ---
 
 <header class="title-header title-header--initial">
-  <h2><TextSlider content="REVIEWS" /></h2>
+  <h2><TextSlider content="ARTISTS" /></h2>
 
-  <div>
-    <button data-sort><TextSlider content="Sort" /></button>
-    <button data-shuffle><TextSlider content="Shuffle" /></button>
+  <section>
     <div>
-      <button data-search class="search"><TextSlider content="Search" /></button
-      >
-      <button data-clear class="clear hidden" aria-label="Clear search">
-        <Cross width={14} height={14} />
-      </button>
+      <button data-sort><TextSlider content="Sort" /></button>
+      <button data-shuffle><TextSlider content="Shuffle" /></button>
+      <div>
+        <button data-search class="search"><TextSlider content="Search" /></button
+        >
+        <button data-clear class="clear hidden" aria-label="Clear search">
+          <Cross width={14} height={14} />
+        </button>
+      </div>
     </div>
-  </div>
-  <span><TextSlider content={"("+ artistsTotal+ ")"} /></span>
+      <span class="total-num"><TextSlider content={"("+ artistsTotal+ ")"} /></span>
+  </section>
+ 
 </header>
 
 <Separator />
 <Search />
 
 <style>
+  section {
+    display: flex;
+    justify-content: space-between;
+  }
+
   div {
     display: flex;
     list-style: none;
@@ -62,5 +70,10 @@ const { artistsTotal } = Astro.props;
       color: inherit;
     }
   }
+
+.total-num {
+  font-size: 75%;
+}
+
 </style>
 <script src="../scripts/gridActions.js"></script>

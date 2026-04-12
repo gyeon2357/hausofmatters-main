@@ -26,7 +26,7 @@ const animateHomepageElements = () => {
 
   gsap.timeline({
     defaults: {
-      duration: 1.4,
+      duration: 1.2,
       ease: 'power4',
     },
     onComplete: () => {
@@ -38,11 +38,11 @@ const animateHomepageElements = () => {
   .fromTo(
     lines,
     { transformOrigin: '0% 50%', scaleX: 0 },
-    { duration: 1.6, ease: 'power2', stagger: 0.9, scaleX: 1 }
+    { duration: 1.6, ease: 'power2', stagger: 0.5, scaleX: 1 }
   )
-  .from(textSliders, { yPercent: 100, stagger: 0.1 }, 0.2)
+  .from(textSliders, { yPercent: 100, stagger: 0.04 }, 0.2)
   .set(gridContainer, { autoAlpha: 1 }, '<+=1')
-  .from(gridItems, { ease: 'sine', autoAlpha: 0, stagger: 0.08 }, '<');
+  .from(gridItems, { ease: 'sine', autoAlpha: 0, stagger: 0.03 }, '<');
 };
 
 // Clean up animations and DOM references to prevent memory leaks.
