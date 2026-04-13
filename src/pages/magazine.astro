@@ -26,6 +26,23 @@ magazineEntries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
     ))}
   </ul>
   </div>
+
+  <div class="content content--page">
+    <h1>w/HOM</h1>
+<ul>
+    {magazineEntries.map((entry) => (
+      <li>
+        <a class="reload-link" rel="external" href={`/magazine/hom/${entry.data.slug}`} >
+          <img src={entry.data.image.src} alt={entry.data.image.alt} width="100" />
+          <div>
+            <span>{entry.data.title}</span>
+            <span>{entry.data.date.toLocaleDateString('ko-KR')}</span>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+  </div>
 </BaseLayout>
 
 <style>
