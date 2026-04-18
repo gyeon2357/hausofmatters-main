@@ -39,7 +39,7 @@ const allArtists = await getCollection("artists");
    {
     recentAlbums.map(album => {
      // ✅ artist를 안전하게 체크
-     const artistId = typeof album.data.artist === "string" ? album.data.artist.trim() : "";
+     const artistId = album.data.artist.id;
 
      const hasArtist = artistId !== "";
      const artist = hasArtist ? allArtists.find(a => a.id === artistId) : null;
