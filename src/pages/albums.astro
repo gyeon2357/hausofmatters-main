@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import AlbumGridHeader from "../components/AlbumGridHeader.astro";
-import Preloader from "../components/Preloader.astro";
 
 const allAlbums = await getCollection("albums");
 const allArtists = await getCollection("artists");
@@ -17,7 +16,7 @@ const title = "Hausofmatters - Albums";
   {
    allAlbums.map(album => {
     // ✅ artist를 안전하게 체크
-    const artistId = typeof album.data.artist === "string" ? album.data.artist.trim() : "";
+    const artistId = album.data.artist.id;
 
     const hasArtist = artistId !== "";
     const artist = hasArtist ? allArtists.find(a => a.id === artistId) : null;
