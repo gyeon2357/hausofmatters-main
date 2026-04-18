@@ -1,46 +1,46 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
 
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Separator from '../../../components/Separator.astro';
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Separator from "../../../components/Separator.astro";
 
-import Flipbook from '../../../components/Flipbook.astro';
+import Flipbook from "../../../components/Flipbook.astro";
 
 /* ────────────────────────────────────────────
    1) 정적 경로 생성
    ──────────────────────────────────────────── */
 export async function getStaticPaths() {
-  const issues = await getCollection('magazine');
+ const issues = await getCollection("magazine");
 
-  return issues.map((issue) => ({
-    params: { slug: issue.data.slug ?? issue.id },
-    props: { issues, issue },
-  }));
+ return issues.map(issue => ({
+  params: { slug: issue.data.slug ?? issue.id },
+  props: { issues, issue },
+ }));
 }
 
 /* ────────────────────────────────────────────
    2) 타입 정의 & props 분해
    ──────────────────────────────────────────── */
 type Props = {
-  issues: CollectionEntry<'magazine'>[];
-  issue : CollectionEntry<'magazine'>;
+ issues: CollectionEntry<"magazine">[];
+ issue: CollectionEntry<"magazine">;
 };
 
 const { issues, issue } = Astro.props;
 const id = issue.id;
 
 function formatTitle(id: string): string {
-  if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
-  if (/^hom-(\d+)$/.test(id))   return id.replace(/^hom-(\d+)$/, "HOM #$1");
-  return id.toUpperCase();
+ if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
+ if (/^hom-(\d+)$/.test(id)) return id.replace(/^hom-(\d+)$/, "HOM #$1");
+ return id.toUpperCase();
 }
 
-const title   = issue.data.title   ?? formatTitle(id);
-const slug    = issue.data.slug    ?? id;
+const title = issue.data.title ?? formatTitle(id);
+const slug = issue.data.slug ?? id;
 const pdfPath = issue.data.pdfPath;
-const image   = issue.data.image   ?? { src: `/images/magazine/thumb/${id}.jpg`, alt: id };
-const date    = issue.data.date;
+const image = issue.data.image ?? { src: `/images/magazine/thumb/${id}.jpg`, alt: id };
+const date = issue.data.date;
 
 /* ────────────────────────────────────────────
    4) 콘텐츠·데이터 추출
@@ -55,62 +55,88 @@ const currentIndex = issues.findIndex(i => i.id === slug);
 const nextIndex = (currentIndex + 1) % issues.length;
 const nextIssue = issues[nextIndex];
 ---
-  
 
 <BaseLayout title={title}>
-<link rel="stylesheet" href="/styles/flipbook.style.css">
-<link rel="stylesheet" href="/styles/font-awesome.css">
+ <link rel="stylesheet" href="/styles/flipbook.style.css" />
+ <link rel="stylesheet" href="/styles/font-awesome.css" />
 
+ <section>
+  <header class="title-header">
+   <h2>{title}</h2>
+   <div>
+    <a class="back" href="/albums">View all</a>
+    <span class="faded">/</span>
+    <a href={`/magazine/hom/${nextIssue.id}`} data-astro-prefetch>Next Issue</a>
+   </div>
+  </header>
 
-  <section>
-    <header class="title-header">
-      <h2>{title}</h2>
-      <div>
-        <a class="back" href="/albums">View all</a>
-        <span class="faded">/</span>
-        <a href={`/magazine/hom/${nextIssue.id}`} data-astro-prefetch>Next Issue</a>
-      </div>
-    </header>
+  <Separator />
 
-    <Separator />
+  <div class="content-wrap">
+   {image && <img class="image fade-in" src={image.src} alt={image.alt} />}
 
-    <div class="content-wrap">
-      {image && (
-        <img
-          class="image fade-in"
-          src={image.src}
-          alt={image.alt}
-        />
-      )}
+   <div class="content">
+    <h3>Description</h3>
+    <Content />
 
-      <div class="content">
-        <h3>Description</h3>
-        <Content />
-
-        <dl>
-          <dt>Published</dt>
-          <dd>
-            {date.toLocaleDateString('ko-KR', {
-              year:  'numeric',
-              month: 'long',
-              day:   'numeric',
-            })}
-          </dd>
-        </dl>
-      <Flipbook pdfPath={pdfPath} />
-      </div>
-    </div>
-  </section>
+    <dl>
+     <dt>Published</dt>
+     <dd>
+      {
+       date.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+       })
+      }
+     </dd>
+    </dl>
+    <Flipbook pdfPath={pdfPath} />
+   </div>
+  </div>
+ </section>
 </BaseLayout>
 
 <style>
-  .title-header{display:flex;justify-content:space-between;align-items:baseline;gap:.75rem;flex-wrap:wrap}
-  .back{color:var(--color-primary);text-decoration:none}
-  .content-wrap{display:grid;gap:2rem;grid-template-areas:"img" "content";grid-template-columns:100%}
-  @media(min-width:44em){.content-wrap{grid-template-columns:1fr 1fr;grid-template-areas:"img content"}}
-  .image{grid-area:img;width:100%;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-  .content{grid-area:content}
-  dl{margin-top:1rem}
-  dt{font-weight:700}
-  dd{margin:0 0 1rem}
+ .title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+ }
+ .back {
+  color: var(--color-primary);
+  text-decoration: none;
+ }
+ .content-wrap {
+  display: grid;
+  gap: 2rem;
+  grid-template-areas: "img" "content";
+  grid-template-columns: 100%;
+ }
+ @media (min-width: 44em) {
+  .content-wrap {
+   grid-template-columns: 1fr 1fr;
+   grid-template-areas: "img content";
+  }
+ }
+ .image {
+  grid-area: img;
+  width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+ }
+ .content {
+  grid-area: content;
+ }
+ dl {
+  margin-top: 1rem;
+ }
+ dt {
+  font-weight: 700;
+ }
+ dd {
+  margin: 0 0 1rem;
+ }
 </style>
