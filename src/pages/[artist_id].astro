@@ -1,6 +1,6 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import { getCollection, render } from "astro:content";
+import type {CollectionEntry} from "astro:content";
+import {getCollection, render} from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Separator from "../components/Separator.astro";
 import AlbumGrid from "../components/AlbumGrid.astro";
@@ -10,10 +10,10 @@ export const getStaticPaths = async () => {
   const artists = await getCollection("artists");
 
   // Map over the artists to generate paths for each artist's page
-  const paths = artists.map((artist) => {
+  const paths = artists.map(artist => {
     return {
-      params: { artist_id: artist.id }, // URL parameter for the artist's ID
-      props: { artists, artist }, // Pass the full artist and all artists as props
+      params: {artist_id: artist.id}, // URL parameter for the artist's ID
+      props: {artists, artist}, // Pass the full artist and all artists as props
     };
   });
 
@@ -26,13 +26,13 @@ type Props = {
   artist: CollectionEntry<"artists">; // Current artist being rendered
 };
 
-const { artists, artist } = Astro.props; // Extract the artists list and current artist from the props
+const {artists, artist} = Astro.props; // Extract the artists list and current artist from the props
 
 // Extract the ID of the current artist
 const artist_id = artist.id;
 
 // Find the index of the current artist in the artists array
-const currentArtistIndex = artists.findIndex((a) => a.id === artist_id);
+const currentArtistIndex = artists.findIndex(a => a.id === artist_id);
 
 // Calculate the index of the "next" artist in the array (wrap around if at the last artist)
 const nextArtistIndex = (currentArtistIndex + 1) % artists.length;
@@ -43,11 +43,11 @@ const nextArtist = artists[nextArtistIndex];
 // Fetch all albums that belong to the current artist
 const albums = await getCollection(
   "albums",
-  ({ data }) => data.artist.id === artist_id,
+  ({data}) => data.artist.id === artist_id
 );
 
 // Render the content of the current artist (e.g., markdown or MDX)
-const { Content } = await render(artist);
+const {Content} = await render(artist);
 ---
 
 <BaseLayout title={artist.data.name}>

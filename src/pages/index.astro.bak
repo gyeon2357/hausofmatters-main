@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Hausofmatters";
+---
+
+<BaseLayout title={title}>
+  <div class="content content--page">
+    <h1>HOME</h1>
+    <p>This is a blank page.</p>
+  </div>
+</BaseLayout>

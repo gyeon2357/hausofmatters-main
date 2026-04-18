@@ -1,18 +1,12 @@
 ---
 export interface Props {
-  pdfPath: string
+  pdfPath: string;
 }
 
-const { pdfPath } = Astro.props;
+const {pdfPath} = Astro.props;
 ---
 
-<button
-  type="button"
-  class="flipbook-btn"
-  data-pdf={pdfPath}
->
-  Read
-</button>
+<button type="button" class="flipbook-btn" data-pdf={pdfPath}> Read </button>
 
 <script>
   // Flipbook 초기화 함수
@@ -24,8 +18,8 @@ const { pdfPath } = Astro.props;
       return;
     }
 
-   const btn = document.querySelector(".flipbook-btn");
-  if (!(btn instanceof HTMLElement)) return;
+    const btn = document.querySelector(".flipbook-btn");
+    if (!(btn instanceof HTMLElement)) return;
 
     const pdfUrl = btn.dataset.pdf;
     if (!pdfUrl) {
@@ -50,7 +44,7 @@ const { pdfPath } = Astro.props;
         lightBox: true,
         viewMode: "3d",
         layout: 3,
-        currentPage: { vAlign: "bottom", hAlign: "left" },
+        currentPage: {vAlign: "bottom", hAlign: "left"},
       });
 
       btn.classList.add("flipbook-initialized");
@@ -72,11 +66,11 @@ const { pdfPath } = Astro.props;
   }
 
   // View Transitions 이후 재초기화
- document.addEventListener("astro:after-swap", () => {
-  const btn = document.querySelector<HTMLElement>(".flipbook-btn");
-  if (btn) {
-    btn.classList.remove("flipbook-initialized");
-  }
-  initFlipbook();
-});
+  document.addEventListener("astro:after-swap", () => {
+    const btn = document.querySelector<HTMLElement>(".flipbook-btn");
+    if (btn) {
+      btn.classList.remove("flipbook-initialized");
+    }
+    initFlipbook();
+  });
 </script>

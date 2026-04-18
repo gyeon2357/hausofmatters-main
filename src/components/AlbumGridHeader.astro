@@ -8,7 +8,7 @@ type Props = {
   albumsTotal: number;
 };
 
-const { albumsTotal } = Astro.props;
+const {albumsTotal} = Astro.props;
 ---
 
 <header class="title-header title-header--initial">
@@ -19,14 +19,17 @@ const { albumsTotal } = Astro.props;
       <button data-sort><TextSlider content="Sort" /></button>
       <button data-shuffle><TextSlider content="Shuffle" /></button>
       <div>
-        <button data-search class="search"><TextSlider content="Search" /></button
+        <button data-search class="search"
+          ><TextSlider content="Search" /></button
         >
         <button data-clear class="clear hidden" aria-label="Clear search">
           <Cross width={14} height={14} />
         </button>
       </div>
     </div>
-    <span class="total-num"><TextSlider content={"(" + albumsTotal + ")"} /></span>
+    <span class="total-num"
+      ><TextSlider content={"(" + albumsTotal + ")"} /></span
+    >
   </section>
 </header>
 

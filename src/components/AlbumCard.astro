@@ -1,11 +1,11 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type {CollectionEntry} from "astro:content";
 
 type Props = {
   album: CollectionEntry<"albums">;
 };
 
-const { album } = Astro.props;
+const {album} = Astro.props;
 ---
 
 <a class="album-card" href={`/${album.data.artist.id}/albums/${album.id}`}>

@@ -157,7 +157,7 @@ const cleanup = () => {
 /* Handle Astro page events on the home page */
 const handlePageEvent = (type) => {
   const page = document.documentElement.getAttribute('data-page');
-  if (page !== 'artists' && page !== 'albums') return;
+  if (page !== 'home' && page !== 'artists' && page !== 'albums') return;
   if (type === 'load') {
     init();
   } else if (type === 'before-swap') {

@@ -5,85 +5,90 @@ import AlbumGridHeader from "../components/AlbumGridHeader.astro";
 import Preloader from "../components/Preloader.astro";
 
 const allAlbums = await getCollection("albums");
+const allArtists = await getCollection("artists");
 const albumsTotal = allAlbums.length;
 const title = "Hausofmatters - Albums";
 ---
 
 <BaseLayout title={title}>
-  <AlbumGridHeader albumsTotal={albumsTotal} />
+ <AlbumGridHeader albumsTotal={albumsTotal} />
 
-  <section class="album-grid" id="grid" data-grid="albums">
-    {allAlbums.map((album) => (
-      <a
-        class="album-card"
-        href={`/${album.data.artist.id}/albums/${album.id}`}
-        data-stagename={album.data.name}
-        data-name={album.data.name}
-        data-astro-prefetch
-      >
-        <div class="album-img">
-          <img
-            class="fade-in"
-            loading="lazy"
-            src={album.data.image.src}
-            alt={album.data.image.alt}
-          />
-        </div>
-        <h3 class="album-name">{album.data.name}</h3>
-        <h3 class="album-year faded">{new Date(album.data.publishDate).getFullYear()}</h3>
-      </a>
-    ))}
-  </section>
+ <section class="album-grid" id="grid" data-grid="albums">
+  {
+   allAlbums.map(album => {
+    // ✅ artist를 안전하게 체크
+    const artistId = typeof album.data.artist === "string" ? album.data.artist.trim() : "";
+
+    const hasArtist = artistId !== "";
+    const artist = hasArtist ? allArtists.find(a => a.id === artistId) : null;
+
+    return (
+     <a
+      class="album-card"
+      href={artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`}
+      data-stagename={album.data.name}
+      data-name={album.data.name}
+      data-astro-prefetch>
+      <div class="album-img">
+       <img class="fade-in" loading="lazy" src={album.data.image.src} alt={album.data.image.alt} />
+      </div>
+      <h3 class="album-name">{album.data.name}</h3>
+      <h3 class="album-year faded">{new Date(album.data.publishDate).getFullYear()}</h3>
+     </a>
+    );
+   })
+  }
+ </section>
 </BaseLayout>
 
 <style>
-  .album-grid {
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(2, 1fr);
-    gap: .5rem;
-    margin: 1rem 0 10rem;
+ .album-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0 10rem;
 
-    @media screen and (min-width: 30em) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    @media screen and (min-width: 50em) {
-      grid-template-columns: repeat(5, 1fr);
-    }
+  @media screen and (min-width: 30em) {
+   grid-template-columns: repeat(3, 1fr);
   }
+  @media screen and (min-width: 50em) {
+   grid-template-columns: repeat(5, 1fr);
+  }
+ }
 
-  .album-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: inherit;
-  }
+ .album-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+ }
 
-  .album-img {
-    aspect-ratio: 1;
-    overflow: hidden;
-    background: var(--color-placeholder);
-  }
+ .album-img {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-placeholder);
+ }
 
-  .album-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.3s ease;
-  }
+ .album-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+ }
 
-  .album-card:hover .album-img img {
-    transform: scale(1.04);
-  }
+ .album-card:hover .album-img img {
+  transform: scale(1.04);
+ }
 
-  .album-name {
-    margin: 0;
-  }
+ .album-name {
+  margin: 0;
+ }
 
-  .album-year {
-    margin: 0;
-  }
+ .album-year {
+  margin: 0;
+ }
 </style>
 <script src="../scripts/index.js"></script>

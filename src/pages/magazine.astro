@@ -1,69 +1,73 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const title = "Hausofmatters - Contact";
-const magazineEntries = await getCollection('magazine');
+const title = "Hausofmatters - Magazine";
+const magazineEntries = await getCollection("magazine");
 
 // 최신순 정렬 (선택)
 magazineEntries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <BaseLayout title={title}>
-  <div class="content content--page">
-    <h1>HOM</h1>
-<ul>
-    {magazineEntries.map((entry) => (
-      <li>
-        <a class="reload-link" rel="external" href={`/magazine/hom/${entry.data.slug}`} >
-          <img src={entry.data.image.src} alt={entry.data.image.alt} width="100" />
-          <div>
-            <span>{entry.data.title}</span>
-            <span>{entry.data.date.toLocaleDateString('ko-KR')}</span>
-          </div>
-        </a>
-      </li>
-    ))}
+ <div class="content content--page">
+  <h1>HOM</h1>
+  <ul>
+   {
+    magazineEntries.map(entry => (
+     <li>
+      <a class="reload-link" rel="external" href={`/magazine/hom/${entry.data.slug}`}>
+       <img src={entry.data.image.src} alt={entry.data.image.alt} width="100" />
+       <div>
+        <span>{entry.data.title}</span>
+        <span>{entry.data.date.toLocaleDateString("ko-KR")}</span>
+       </div>
+      </a>
+     </li>
+    ))
+   }
   </ul>
-  </div>
+ </div>
 
-  <div class="content content--page">
-    <h1>w/HOM</h1>
-<ul>
-    {magazineEntries.map((entry) => (
-      <li>
-        <a class="reload-link" rel="external" href={`/magazine/hom/${entry.data.slug}`} >
-          <img src={entry.data.image.src} alt={entry.data.image.alt} width="100" />
-          <div>
-            <span>{entry.data.title}</span>
-            <span>{entry.data.date.toLocaleDateString('ko-KR')}</span>
-          </div>
-        </a>
-      </li>
-    ))}
+ <div class="content content--page">
+  <h1>w/HOM</h1>
+  <ul>
+   {
+    magazineEntries.map(entry => (
+     <li>
+      <a class="reload-link" rel="external" href={`/magazine/hom/${entry.data.slug}`}>
+       <img src={entry.data.image.src} alt={entry.data.image.alt} width="100" />
+       <div>
+        <span>{entry.data.title}</span>
+        <span>{entry.data.date.toLocaleDateString("ko-KR")}</span>
+       </div>
+      </a>
+     </li>
+    ))
+   }
   </ul>
-  </div>
+ </div>
 </BaseLayout>
 
 <style>
-ul {
-display: flex;
+ ul {
+  display: flex;
 
-margin: 0 auto;
-padding: 0;
-}
+  margin: 0 auto;
+  padding: 0;
+ }
 
-li {
-width: 100%;
-list-style: none;
-padding: 1rem;
-}
+ li {
+  width: 100%;
+  list-style: none;
+  padding: 1rem;
+ }
 
-li a {
-width: 100%;
-}
+ li a {
+  width: 100%;
+ }
 
-li a img {
-width: 100%;
-}
+ li a img {
+  width: 100%;
+ }
 </style>

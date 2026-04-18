@@ -1,9 +1,9 @@
 ---
-import { ClientRouter } from "astro:transitions";
+import {ClientRouter} from "astro:transitions";
 
 import "../styles/global.css";
 
-import { SEO } from "astro-seo";
+import {SEO} from "astro-seo";
 
 import SmoothScroll from "../components/SmoothScroll.astro";
 import Header from "../components/Header.astro";
@@ -14,7 +14,7 @@ type Props = {
   description?: string;
 };
 
-const { title, description = "HAUSOFMATTERS Web Renewal Project" } = Astro.props;
+const {title, description = "HAUSOFMATTERS Web Renewal Project"} = Astro.props;
 
 // Current page value (/home, /about, /404 ...)
 const currentPage =
@@ -58,29 +58,28 @@ const currentPage =
             sizes: "180x180",
             href: "/favicon/apple-touch-icon.png",
           },
-          { rel: "manifest", href: "/favicon/site.webmanifest" },
-          { rel: "sitemap", href: "/sitemap-index.xml" },
+          {rel: "manifest", href: "/favicon/site.webmanifest"},
+          {rel: "sitemap", href: "/sitemap-index.xml"},
         ],
         // extending the default meta tags
         meta: [
-          { name: "twitter:image", content: "/og-image.jpg" },
-          { name: "twitter:title", content: title },
-          { name: "twitter:description", content: description },
-          { name: "viewport", content: "width=device-width" },
-          { name: "msapplication-TileColor", content: "#000000" },
-          { name: "theme-color", content: "#ffffff" },
-          { name: "generator", content: Astro.generator },
+          {name: "twitter:image", content: "/og-image.jpg"},
+          {name: "twitter:title", content: title},
+          {name: "twitter:description", content: description},
+          {name: "viewport", content: "width=device-width"},
+          {name: "msapplication-TileColor", content: "#000000"},
+          {name: "theme-color", content: "#ffffff"},
+          {name: "generator", content: Astro.generator},
         ],
       }}
     />
     <ClientRouter />
 
-   <!-- Flipbook 라이브러리 사전 로드 -->
+    <!-- Flipbook 라이브러리 사전 로드 -->
     <script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
     <script is:inline src="/scripts/flipbook.min.js"></script>
-    <link rel="stylesheet" href="/styles/flipbook.style.css">
-    <link rel="stylesheet" href="/styles/font-awesome.css">
-
+    <link rel="stylesheet" href="/styles/flipbook.style.css" />
+    <link rel="stylesheet" href="/styles/font-awesome.css" />
   </head>
   <body>
     <SmoothScroll />
@@ -92,7 +91,7 @@ const currentPage =
 </html>
 
 <script is:inline>
- document.addEventListener('astro:before-page-load', () => {
+  document.addEventListener("astro:before-page-load", () => {
     if (window.currentFlipbookInstance?.dispose) {
       window.currentFlipbookInstance.dispose();
       window.currentFlipbookInstance = null;
