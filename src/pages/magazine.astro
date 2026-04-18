@@ -82,6 +82,10 @@ const whomEntries = magazineEntries.filter(e => (e.data.slug ?? e.id).startsWith
 </BaseLayout>
 
 <style>
+ body {
+  background-color: #dddddd;
+ }
+
  .magazine-page {
   display: flex;
   flex-direction: column;
@@ -91,7 +95,6 @@ const whomEntries = magazineEntries.filter(e => (e.data.slug ?? e.id).startsWith
 
  .section-title {
   margin: 0 0 1.5rem;
-  letter-spacing: 0.05em;
  }
 
  .grid {

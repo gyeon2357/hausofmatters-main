@@ -171,7 +171,7 @@ const whomEditors: Member[] = [
 <BaseLayout title={title}>
  <div class="info-page">
   <header class="title-header title-header--initial">
-   <h2>Info</h2>
+   <h2>About</h2>
   </header>
   <Separator />
 
@@ -269,14 +269,15 @@ const whomEditors: Member[] = [
  .group-title {
   font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+
   margin: 0;
  }
 
  .members-wrapper ol {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  row-gap: 3rem;
+  column-gap: 1.5rem;
   width: 100%;
   max-width: 1080px;
   list-style: none;
@@ -381,7 +382,7 @@ const whomEditors: Member[] = [
  .contact-label {
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+
   color: var(--color-text-secondary);
   text-transform: uppercase;
  }

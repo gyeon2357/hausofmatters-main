@@ -38,9 +38,8 @@ const activeRoute = routes[currentPath] || null;
    <a href="/magazine/" class={activeRoute === "Magazine" ? "current" : ""} data-astro-prefetch><TextSlider content="Magazine" /></a>
   </li>
   <li>
-   <a href="/info/" class={activeRoute === "Info" ? "current" : ""} data-astro-prefetch><TextSlider content="Info" /></a>
+   <a href="/about/" class={activeRoute === "About" ? "current" : ""} data-astro-prefetch><TextSlider content="About" /></a>
   </li>
-  
  </ul>
 </header>
 <Separator />
@@ -56,7 +55,7 @@ const activeRoute = routes[currentPath] || null;
  }
  header a.current {
   pointer-events: none;
-  color: silver;
+  opacity: 0.3;
  }
 
  header h1 a.current {

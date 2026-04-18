@@ -13,7 +13,7 @@
  --color-text-alt: #6a6a6a;
  --color-faded: #c9c9c9;
  --color-bg: #fff;
- --border-color: #ccc;
+ --border-color: #00000016;
  --color-link: #000;
  --color-link-hover: #999;
  --color-placeholder: #f8f8f8;
@@ -67,16 +67,19 @@
 }
 
 body {
- margin: 0;
- padding: 0 0.5rem;
- color: var(--color-text);
- background-color: var(--color-bg);
- line-height: 1;
  /* font-family: "SpoqaHanSansNeo", sans-serif; */
  font-family: "Pretendard", sans-serif;
  font-variant-ligatures: none;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
+
+ line-height: 1.5875;
+ letter-spacing: .2px;
+
+ margin: 0;
+ padding: 0 0.5rem;
+ color: var(--color-text);
+ background-color: var(--color-bg);
 
  &.blurred {
   filter: blur(5px);
@@ -222,7 +225,7 @@ img {
 
 .content--page {
  max-width: none;
- min-height: calc(100vh - 10rem);
+ min-height: calc(100vh - 7rem);
  display: flex;
  flex-direction: column;
  align-items: center;
@@ -238,7 +241,7 @@ img {
 .content ol {
  line-height: 1.4;
  font-weight: 500;
- font-size: .875rem;
+ font-size: 0.875rem;
 }
 
 .content ol {

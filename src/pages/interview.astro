@@ -1,12 +1,128 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Separator from "../components/Separator.astro";
 
 const title = "Hausofmatters - Interview";
+
+const allinterview = await getCollection("interview");
+const allArtists = await getCollection("artists");
+
+const interviewCards = allinterview
+ .filter(i => i.data.published)
+ .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+ .map(interview => {
+  // ✅ reference("artists")를 사용하므로 interview.data.artist는 artist ID
+  const artistId = String(interview.data.artist);
+  const artist = allArtists.find(a => a.id === artistId);
+
+  return {
+   href: `/interview/${interview.id}`,
+   stageName: artist?.data.stage_name ?? interview.id,
+   genre: artist?.data.genre ?? "",
+   date: new Date(interview.data.date).toLocaleDateString("ko-KR"),
+   coverSrc: interview.data.coverImage?.src ?? artist?.data.image.src ?? "",
+   coverAlt: interview.data.coverImage?.alt ?? artist?.data.stage_name ?? "",
+  };
+ });
 ---
 
 <BaseLayout title={title}>
-  <div class="content content--page">
-    <h1>Interview</h1>
-    <p>This is a blank page.</p>
-  </div>
+ <header class="title-header title-header--initial">
+  <h2>Interview</h2>
+ </header>
+ <Separator />
+
+ <div class="interview-page">
+  <ul class="grid">
+   {
+    interviewCards.map(card => (
+     <li>
+      <a href={card.href} data-astro-prefetch>
+       <div class="cover">{card.coverSrc && <img class="fade-in" src={card.coverSrc} alt={card.coverAlt} loading="lazy" />}</div>
+       <div class="meta">
+        <span class="meta-name">{card.stageName}</span>
+        <span class="meta-genre">{card.genre}</span>
+        <span class="meta-date">{card.date}</span>
+       </div>
+      </a>
+     </li>
+    ))
+   }
+  </ul>
+ </div>
 </BaseLayout>
+
+<style>
+ .interview-page {
+  margin: 2rem 0 8rem;
+ }
+
+ .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+ }
+
+ @media (min-width: 30em) {
+  .grid {
+   grid-template-columns: repeat(3, 1fr);
+  }
+ }
+
+ @media (min-width: 50em) {
+  .grid {
+   grid-template-columns: repeat(4, 1fr);
+  }
+ }
+
+ li a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+ }
+
+ li a:hover {
+  opacity: 0.7;
+ }
+
+ .cover {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background: var(--color-placeholder);
+ }
+
+ .cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+ }
+
+ .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+ }
+
+ .meta-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+ }
+
+ .meta-genre {
+  font-size: 0.8rem;
+ }
+
+ .meta-date {
+  font-size: 0.8rem;
+  color: var(--color-faded);
+ }
+</style>
