@@ -1,5 +1,7 @@
 ---
 name: "Future Vibes"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/future_vibes.jpg"
   alt: "Minimalist intersecting lines and abstract shapes in bold orange, blue, and white, with a stylized 'K' logo featuring Afro-futuristic elements."

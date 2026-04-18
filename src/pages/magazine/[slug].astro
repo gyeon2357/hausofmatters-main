@@ -2,14 +2,10 @@
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Separator from "../../../components/Separator.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Separator from "../../components/Separator.astro";
+import Flipbook from "../../components/Flipbook.astro";
 
-import Flipbook from "../../../components/Flipbook.astro";
-
-/* ────────────────────────────────────────────
-   1) 정적 경로 생성
-   ──────────────────────────────────────────── */
 export async function getStaticPaths() {
  const issues = await getCollection("magazine");
 
@@ -19,9 +15,6 @@ export async function getStaticPaths() {
  }));
 }
 
-/* ────────────────────────────────────────────
-   2) 타입 정의 & props 분해
-   ──────────────────────────────────────────── */
 type Props = {
  issues: CollectionEntry<"magazine">[];
  issue: CollectionEntry<"magazine">;
@@ -42,18 +35,20 @@ const pdfPath = issue.data.pdfPath;
 const image = issue.data.image ?? { src: `/images/magazine/thumb/${id}.jpg`, alt: id };
 const date = issue.data.date;
 
-/* ────────────────────────────────────────────
-   4) 콘텐츠·데이터 추출
-   ──────────────────────────────────────────── */
-
 const { Content } = await render(issue);
 
-/* ────────────────
-   3. 다음 호 계산
-   ──────────────── */
-const currentIndex = issues.findIndex(i => i.id === slug);
-const nextIndex = (currentIndex + 1) % issues.length;
-const nextIssue = issues[nextIndex];
+// 같은 category 내에서 다음 호 계산
+const sameCategory = issues
+ .filter(i => i.data.category === issue.data.category)
+ .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const currentIndex = sameCategory.findIndex(i => (i.data.slug ?? i.id) === slug);
+const nextIndex = (currentIndex + 1) % sameCategory.length;
+const nextIssue = sameCategory[nextIndex];
+const nextSlug = nextIssue.data.slug ?? nextIssue.id;
+
+// 목록으로 돌아가는 링크 (category 기반)
+const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazine/hom";
 ---
 
 <BaseLayout title={title}>
@@ -64,9 +59,9 @@ const nextIssue = issues[nextIndex];
   <header class="title-header">
    <h2>{title}</h2>
    <div>
-    <a class="back" href="/albums">View all</a>
+    <a class="back" href={backHref}>View All</a>
     <span class="faded">/</span>
-    <a href={`/magazine/hom/${nextIssue.id}`} data-astro-prefetch>Next Issue</a>
+    <a href={`/magazine/${nextSlug}`} data-astro-prefetch>Next Issue</a>
    </div>
   </header>
 
@@ -109,37 +104,45 @@ const nextIssue = issues[nextIndex];
   gap: 0.75rem;
   flex-wrap: wrap;
  }
+
  .back {
   color: var(--color-primary);
   text-decoration: none;
  }
+
  .content-wrap {
   display: grid;
   gap: 2rem;
   grid-template-areas: "img" "content";
   grid-template-columns: 100%;
  }
+
  @media (min-width: 44em) {
   .content-wrap {
    grid-template-columns: 1fr 1fr;
    grid-template-areas: "img content";
   }
  }
+
  .image {
   grid-area: img;
   width: 100%;
   border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
  }
+
  .content {
   grid-area: content;
  }
+
  dl {
   margin-top: 1rem;
  }
+
  dt {
   font-weight: 700;
  }
+
  dd {
   margin: 0 0 1rem;
  }

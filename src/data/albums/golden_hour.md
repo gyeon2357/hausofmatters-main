@@ -1,5 +1,7 @@
 ---
 name: "Golden Hour"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/golden_hour.jpg"
   alt: "A jazz singer performing on a small stage in a cozy café during sunset, with warm golden light streaming through the windows and an intimate audience watching."

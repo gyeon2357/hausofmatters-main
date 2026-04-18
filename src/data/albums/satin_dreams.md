@@ -1,5 +1,7 @@
 ---
 name: "Satin Dreams"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/satin_dreams.jpg"
   alt: "A sleek album cover featuring rich pink and purple satin textures illuminated by soft, dreamy light, evoking sensuality and sophistication."

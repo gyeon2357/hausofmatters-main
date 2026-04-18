@@ -1,5 +1,7 @@
 ---
 name: "Soul Tides"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/soul_tides.jpg"
   alt: "A vivid red flower reflected in tranquil teal water with gentle ripples, illuminated by golden sunlight, embodying serenity and rhythm."

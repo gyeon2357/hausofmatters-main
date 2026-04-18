@@ -1,5 +1,7 @@
 ---
 name: "Reflections"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/reflections.jpg"
   alt: "A still pond in a Japanese garden with vibrant koi fish swimming beneath the surface, surrounded by delicate cherry blossoms, creating a peaceful and meditative atmosphere."

@@ -1,5 +1,7 @@
 ---
 name: "Lucid"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/lucid.jpg"
   alt: "An abstract album art design featuring gradients of pale yellow and silver with smooth, flowing waves and subtle shimmering textures."

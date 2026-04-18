@@ -1,20 +1,22 @@
 ---
 name: "Concrete Verses"
+category: "hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/concrete_verses.jpg"
-  alt: "A gritty urban skyline with stylized graffiti text, a microphone embedded in the concrete, and vibrant pops of red and yellow, featuring mia-sue's 'MS' logo prominently at the top."
+ src: "/images/albums/concrete_verses.jpg"
+ alt: "A gritty urban skyline with stylized graffiti text, a microphone embedded in the concrete, and vibrant pops of red and yellow, featuring mia-sue's 'MS' logo prominently at the top."
 publishDate: 2026-01-30
 tracks:
-  - "Concrete Verses"
-  - "Echoes of Strength"
-  - "The Underdog"
-  - "Fire on the Pavement"
-  - "Graffiti Anthem"
-  - "Legacy Written in Stone"
-  - "LA Rhythms"
-  - "Resilience Rising"
-  - "Microphone Justice"
-  - "Unbreakable Flow"
+ - "Concrete Verses"
+ - "Echoes of Strength"
+ - "The Underdog"
+ - "Fire on the Pavement"
+ - "Graffiti Anthem"
+ - "Legacy Written in Stone"
+ - "LA Rhythms"
+ - "Resilience Rising"
+ - "Microphone Justice"
+ - "Unbreakable Flow"
 artist: "mia-sue"
 ---
 

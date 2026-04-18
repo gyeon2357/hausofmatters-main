@@ -1,5 +1,7 @@
 ---
 name: "Starlight Serenade"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/starlight_serenade.jpg"
   alt: "A dreamy night sky with twinkling stars, cherry blossoms illuminated by fairy lights, and a soft glow from the horizon, evoking magic and peace."

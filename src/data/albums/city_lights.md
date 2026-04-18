@@ -1,20 +1,22 @@
 ---
 name: "City Lights"
+category: "hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/city_lights.jpg"
-  alt: "A jazz singer performing under warm streetlights in a cityscape with blurred cars and glowing signs in the background, creating an elegant and contemporary atmosphere."
+ src: "/images/albums/city_lights.jpg"
+ alt: "A jazz singer performing under warm streetlights in a cityscape with blurred cars and glowing signs in the background, creating an elegant and contemporary atmosphere."
 publishDate: 2024-11-22
 tracks:
-  - "City Lights"
-  - "Downtown Serenade"
-  - "Evening Rhythms"
-  - "The Night Scene"
-  - "Urban Elegance"
-  - "Late-Night Melody"
-  - "Neon Reflections"
-  - "Silhouettes"
-  - "Under the Streetlights"
-  - "Final Verse"
+ - "City Lights"
+ - "Downtown Serenade"
+ - "Evening Rhythms"
+ - "The Night Scene"
+ - "Urban Elegance"
+ - "Late-Night Melody"
+ - "Neon Reflections"
+ - "Silhouettes"
+ - "Under the Streetlights"
+ - "Final Verse"
 artist: "fountain"
 ---
 

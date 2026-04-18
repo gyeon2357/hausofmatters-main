@@ -1,4 +1,5 @@
 ---
+category: "hom"
 pdfPath: "/pdf/hom-3.pdf"
 date: 2023-08-01
 ---

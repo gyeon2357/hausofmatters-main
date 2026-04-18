@@ -1,5 +1,7 @@
 ---
 name: "Heartstrings"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/heartstrings.jpg"
   alt: "A glowing red heart wrapped in guitar strings, set against a textured background of earthy brown and soft gold tones, symbolizing love and music."

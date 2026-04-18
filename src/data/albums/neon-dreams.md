@@ -1,5 +1,7 @@
 ---
 name: "Neon Dreams"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/neon_dreams.jpg"
   alt: "Album cover of Neon Dreams by Echo Lume, featuring a glowing cityscape under a cyberpunk sky"

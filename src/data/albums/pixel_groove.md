@@ -1,5 +1,7 @@
 ---
 name: "Pixel Groove"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/pixel_groove.jpg"
   alt: "A stylized neon pixelated cityscape with vibrant colors like electric blue, pink, and purple, featuring a glowing equalizer integrated into the skyline."

@@ -1,93 +1,176 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import AlbumGridHeader from "../components/AlbumGridHeader.astro";
+import Separator from "../components/Separator.astro";
+
+const title = "Hausofmatters - Albums";
 
 const allAlbums = await getCollection("albums");
 const allArtists = await getCollection("artists");
-const albumsTotal = allAlbums.length;
-const title = "Hausofmatters - Albums";
+
+// category 필드 기준으로 분리, 날짜 내림차순
+const sorted = allAlbums.sort(
+  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
+const domesticAlbums = sorted.filter(a => a.data.category === "hom");
+const intlAlbums = sorted.filter(a => a.data.category === "w-hom");
+
+const makeCard = (album: (typeof allAlbums)[number]) => {
+  const artist = allArtists.find(a => a.id === album.data.artist.id);
+  return {
+    href: artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`,
+    name: album.data.name,
+    imageSrc: album.data.image.src,
+    imageAlt: album.data.image.alt,
+    year: new Date(album.data.publishDate).getFullYear(),
+  };
+};
+
+const domesticCards = domesticAlbums.map(makeCard);
+const intlCards = intlAlbums.map(makeCard);
 ---
 
 <BaseLayout title={title}>
- <AlbumGridHeader albumsTotal={albumsTotal} />
+  <header class="title-header title-header--initial">
+    <h2>Albums</h2>
+  </header>
+  <Separator />
 
- <section class="album-grid" id="grid" data-grid="albums">
-  {
-   allAlbums.map(album => {
-    // ✅ artist를 안전하게 체크
-    const artistId = album.data.artist.id;
+  <div class="albums-page">
 
-    const hasArtist = artistId !== "";
-    const artist = hasArtist ? allArtists.find(a => a.id === artistId) : null;
-
-    return (
-     <a
-      class="album-card"
-      href={artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`}
-      data-stagename={album.data.name}
-      data-name={album.data.name}
-      data-astro-prefetch>
-      <div class="album-img">
-       <img class="fade-in" loading="lazy" src={album.data.image.src} alt={album.data.image.alt} />
+    <!-- 국내 섹션 -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">국내</h2>
+        <a class="more-link" href="/albums/hom">전체보기 →</a>
       </div>
-      <h3 class="album-name">{album.data.name}</h3>
-      <h3 class="album-year faded">{new Date(album.data.publishDate).getFullYear()}</h3>
-     </a>
-    );
-   })
-  }
- </section>
+      <div class="album-grid">
+        {domesticCards.map(card => (
+          <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
+            <div class="album-img">
+              <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+            </div>
+            <p class="album-name">{card.name}</p>
+            <p class="album-year faded">{card.year}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 해외 섹션 -->
+    {intlCards.length > 0 && (
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">해외</h2>
+          <a class="more-link" href="/albums/w-hom">전체보기 →</a>
+        </div>
+        <div class="album-grid">
+          {intlCards.map(card => (
+            <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
+              <div class="album-img">
+                <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+              </div>
+              <p class="album-name">{card.name}</p>
+              <p class="album-year faded">{card.year}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+  </div>
 </BaseLayout>
 
 <style>
- .album-grid {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-  margin: 1rem 0 10rem;
-
-  @media screen and (min-width: 30em) {
-   grid-template-columns: repeat(3, 1fr);
+  .albums-page {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin: 2rem 0 10rem;
   }
-  @media screen and (min-width: 50em) {
-   grid-template-columns: repeat(5, 1fr);
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
   }
- }
 
- .album-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: inherit;
- }
+  .section-title {
+    margin: 0;
+  }
 
- .album-img {
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: var(--color-placeholder);
- }
+  .more-link {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
 
- .album-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
- }
+  .more-link:hover {
+    opacity: 1;
+  }
 
- .album-card:hover .album-img img {
-  transform: scale(1.04);
- }
+  .album-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
 
- .album-name {
-  margin: 0;
- }
+  @media (min-width: 30em) {
+    .album-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 50em) {
+    .album-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
 
- .album-year {
-  margin: 0;
- }
+  .album-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .album-img {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-placeholder);
+  }
+
+  .album-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .album-card:hover .album-img img {
+    transform: scale(1.04);
+  }
+
+  .album-name {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .album-year {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  .faded {
+    opacity: 0.5;
+  }
 </style>
+
 <script src="../scripts/index.js"></script>

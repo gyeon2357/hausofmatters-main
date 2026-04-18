@@ -1,5 +1,7 @@
 ---
 name: "Velvet Hues"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/velvet_hues.jpg"
   alt: "A minimal symbol-based design featuring a flowing ribbon-like shape forming a heart, using black and violet colors, symbolizing love and resilience."

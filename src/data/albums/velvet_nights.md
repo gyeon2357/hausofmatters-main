@@ -1,5 +1,7 @@
 ---
 name: "Velvet Nights"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/velvet_nights.jpg"
   alt: "A retro dancefloor lit with warm golden and pink hues, with shimmering curtains in the background, featuring luna-deluxe's 'LD' logo elegantly integrated."

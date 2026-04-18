@@ -1,4 +1,5 @@
 ---
+category: "hom"
 pdfPath: "/pdf/hom-35.pdf"
 date: 2026-04-13
 ---

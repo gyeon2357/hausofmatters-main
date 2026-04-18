@@ -1,5 +1,7 @@
 ---
 name: "Solar Flare"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/solar_flare.jpg"
   alt: "Photography of a dynamic concert scene featuring a radiant stage with glowing orange and yellow lights resembling solar flares, dramatic smoke effects, and a striking androgynous figure performing with a guitar."

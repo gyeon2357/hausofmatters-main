@@ -1,5 +1,7 @@
 ---
 name: "Roots in Motion"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/roots_in_motion.jpg"
   alt: "Minimalist lines forming abstract waves and geometric patterns in bold gold, green, and black, with a stylized 'K' logo inspired by Adinkra symbols."

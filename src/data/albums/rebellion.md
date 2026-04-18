@@ -1,20 +1,22 @@
 ---
 name: "Rebellion"
+category: "w-hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/rebellion.jpg"
-  alt: "An abstract album art design featuring a single bold red color with dynamic streaks and shapes resembling lightning and flames, symbolizing energy and defiance."
+ src: "/images/albums/rebellion.jpg"
+ alt: "An abstract album art design featuring a single bold red color with dynamic streaks and shapes resembling lightning and flames, symbolizing energy and defiance."
 publishDate: 2024-10-05
 tracks:
-  - "Rebellion"
-  - "Flames of Freedom"
-  - "Electric Hearts"
-  - "Through the Crimson Light"
-  - "Rise of the Underdogs"
-  - "Starlit Chaos"
-  - "Burning Bright"
-  - "Crimson Serenade"
-  - "Eclipse of the Crown"
-  - "Final Spark"
+ - "Rebellion"
+ - "Flames of Freedom"
+ - "Electric Hearts"
+ - "Through the Crimson Light"
+ - "Rise of the Underdogs"
+ - "Starlit Chaos"
+ - "Burning Bright"
+ - "Crimson Serenade"
+ - "Eclipse of the Crown"
+ - "Final Spark"
 artist: "stardust-royale"
 ---
 

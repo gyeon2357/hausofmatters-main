@@ -1,5 +1,7 @@
 ---
 name: "Whispering Pines"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/whispering_pines.jpg"
   alt: "Photography of a peaceful forest with tall pine trees silhouetted against a soft evening sky in shades of teal and gold."

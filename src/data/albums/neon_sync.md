@@ -1,5 +1,7 @@
 ---
 name: "Neon Sync"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/neon_sync.jpg"
   alt: "Glowing intersecting neon lines forming a funky geometric pattern with vibrant colors like magenta, cyan, and lime green on a dark background."

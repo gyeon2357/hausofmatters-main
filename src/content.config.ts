@@ -14,34 +14,32 @@ const artists = defineCollection({
  }),
 });
 
-const albums = defineCollection({
- loader: glob({ pattern: "**/*.md", base: "./src/data/albums" }),
- schema: z.object({
-  name: z.string(),
-  image: z.object({
-   src: z.string(),
-   alt: z.string(),
+const magazine = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/data/magazine" }),
+  schema: z.object({
+    title: z.string().optional(),
+    slug: z.string().optional(),
+    pdfPath: z.string(),
+    date: z.date(),
+    category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
+    image: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }).optional(),
   }),
-  publishDate: z.date(), // e.g. 2024-09-17
-  tracks: z.array(z.string()),
-  artist: reference("artists"),
- }),
 });
 
-const magazine = defineCollection({
- loader: glob({ pattern: "**/*.md", base: "./src/data/magazine" }),
- schema: z.object({
-  title: z.string().optional(),
-  slug: z.string().optional(),
-  pdfPath: z.string(),
-  date: z.date(),
-  image: z
-   .object({
-    src: z.string(),
-    alt: z.string(),
-   })
-   .optional(),
- }),
+const albums = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/data/albums" }),
+  schema: z.object({
+    name: z.string(),
+    image: z.object({ src: z.string(), alt: z.string() }),
+    publishDate: z.date(),
+    tracks: z.array(z.string()),
+    artist: reference("artists"),
+    category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
+    editor: z.string().optional(),  // ← 추가
+  }),
 });
 
 const interview = defineCollection({
@@ -77,7 +75,6 @@ const interview = defineCollection({
  }),
 });
 
-// Export all collections
 export const collections = {
  artists,
  albums,

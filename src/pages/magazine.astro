@@ -8,140 +8,168 @@ const magazineEntries = await getCollection("magazine");
 
 magazineEntries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// id 기반 fallback 헬퍼
 function formatTitle(id: string): string {
- if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
- if (/^hom-(\d+)$/.test(id)) return id.replace(/^hom-(\d+)$/, "HOM #$1");
- return id.toUpperCase();
+  if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
+  if (/^hom-(\d+)$/.test(id)) return id.replace(/^hom-(\d+)$/, "HOM #$1");
+  return id.toUpperCase();
 }
 
 const resolve = (entry: (typeof magazineEntries)[number]) => ({
- id: entry.id,
- title: entry.data.title ?? formatTitle(entry.id),
- slug: entry.data.slug ?? entry.id,
- image: entry.data.image ?? { src: `/images/magazine/thumb/${entry.id}.jpg`, alt: entry.id },
+  title: entry.data.title ?? formatTitle(entry.id),
+  slug: entry.data.slug ?? entry.id,
+  image: entry.data.image ?? { src: `/images/magazine/thumb/${entry.id}.jpg`, alt: entry.id },
 });
 
-const homEntries = magazineEntries.filter(e => !(e.data.slug ?? e.id).startsWith("w-"));
-const whomEntries = magazineEntries.filter(e => (e.data.slug ?? e.id).startsWith("w-"));
+// ✅ category 기반, 각 최신 3개
+const homEntries = magazineEntries.filter(e => e.data.category === "hom").slice(0, 3);
+const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").slice(0, 3);
 ---
 
 <BaseLayout title={title}>
- <header class="title-header title-header--initial">
-  <h2>Magazine</h2>
- </header>
- <Separator />
+  <header class="title-header title-header--initial">
+    <h2>Magazine</h2>
+  </header>
+  <Separator />
 
- <div class="magazine-page">
-  <section>
-   <h2 class="section-title">HOM</h2>
-   <ul class="grid">
-    {
-     homEntries.map(entry => {
-      const { title: t, slug, image } = resolve(entry);
-      return (
-       <li>
-        <a href={`/magazine/hom/${slug}`}>
-         {image && <img class="fade-in" src={image.src} alt={image.alt} loading="lazy" />}
-         <div class="meta">
-          <span class="meta-title">{t}</span>
-          <span class="meta-date faded">{entry.data.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</span>
-         </div>
-        </a>
-       </li>
-      );
-     })
-    }
-   </ul>
-  </section>
+  <div class="magazine-page">
 
-  {
-   whomEntries.length > 0 && (
     <section>
-     <h2 class="section-title">w/HOM</h2>
-     <ul class="grid">
-      {whomEntries.map(entry => {
-       const { title: t, slug, image } = resolve(entry);
-       return (
-        <li>
-         <a href={`/magazine/hom/${slug}`}>
-          {image && <img class="fade-in" src={image.src} alt={image.alt} loading="lazy" />}
-          <div class="meta">
-           <span class="meta-title">{t}</span>
-           <span class="meta-date faded">{entry.data.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</span>
-          </div>
-         </a>
-        </li>
-       );
-      })}
-     </ul>
+      <div class="section-header">
+        <h2 class="section-title">HOM</h2>
+        <a class="more-link" href="/magazine/hom">전체보기 →</a>
+      </div>
+      <ul class="grid">
+        {homEntries.map(entry => {
+          const { title: t, slug, image } = resolve(entry);
+          return (
+            <li>
+              <a href={`/magazine/${slug}`} data-astro-prefetch>
+                {image && <img class="fade-in" src={image.src} alt={image.alt} loading="lazy" />}
+                <div class="meta">
+                  <span class="meta-title">{t}</span>
+                  <span class="meta-date faded">
+                    {entry.data.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
+                  </span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </section>
-   )
-  }
- </div>
+
+    {whomEntries.length > 0 && (
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">w/HOM</h2>
+          <a class="more-link" href="/magazine/w-hom">전체보기 →</a>
+        </div>
+        <ul class="grid">
+          {whomEntries.map(entry => {
+            const { title: t, slug, image } = resolve(entry);
+            return (
+              <li>
+                <a href={`/magazine/${slug}`} data-astro-prefetch>
+                  {image && <img class="fade-in" src={image.src} alt={image.alt} loading="lazy" />}
+                  <div class="meta">
+                    <span class="meta-title">{t}</span>
+                    <span class="meta-date faded">
+                      {entry.data.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
+                    </span>
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )}
+
+  </div>
 </BaseLayout>
 
 <style>
- body {
-  background-color: #dddddd;
- }
-
- .magazine-page {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-  margin: 2rem 0 8rem;
- }
-
- .section-title {
-  margin: 0 0 1.5rem;
- }
-
- .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
- }
-
- @media (min-width: 30em) {
-  .grid {
-   grid-template-columns: repeat(3, 1fr);
+  .magazine-page {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin: 2rem 0 8rem;
   }
- }
- @media (min-width: 50em) {
-  .grid {
-   grid-template-columns: repeat(4, 1fr);
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
   }
- }
 
- li a {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: inherit;
- }
+  .section-title {
+    margin: 0;
+    letter-spacing: 0.05em;
+  }
 
- li a img {
-  width: 100%;
-  object-fit: cover;
- }
+  .more-link {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
 
- .meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
- }
+  .more-link:hover {
+    opacity: 1;
+  }
 
- .meta-title {
-  font-size: 0.875rem;
-  font-weight: 600;
- }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
- .meta-date {
-  font-size: 0.8rem;
- }
+  @media (max-width: 30em) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  li a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  li a:hover {
+    opacity: 0.7;
+  }
+
+  li a img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .meta-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .meta-date {
+    font-size: 0.8rem;
+  }
+
+  .faded {
+    opacity: 0.5;
+  }
 </style>

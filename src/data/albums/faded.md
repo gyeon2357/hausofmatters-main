@@ -1,5 +1,7 @@
 ---
 name: "Faded"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/faded.jpg"
   alt: "A dreamy, ethereal photography-based art design featuring a foggy meadow at sunrise with soft pastel hues of lavender and blue, and a faint glowing horizon."

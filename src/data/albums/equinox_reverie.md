@@ -1,20 +1,22 @@
 ---
 name: "Equinox Reverie"
+category: "w-hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/equinox_reverie.jpg"
-  alt: "Celestial crescent moons with gradients of deep blue and silver, surrounded by starry textures, evoking elegance and contemplation."
+ src: "/images/albums/equinox_reverie.jpg"
+ alt: "Celestial crescent moons with gradients of deep blue and silver, surrounded by starry textures, evoking elegance and contemplation."
 publishDate: 2026-04-12
 tracks:
-  - "Lunar Prelude"
-  - "Nebula Dreams"
-  - "Equinox Reverie"
-  - "Stellar Lullaby"
-  - "Gravity's Whisper"
-  - "Celestial Drift"
-  - "Harmonic Orbit"
-  - "Saturn's Serenade"
-  - "Nocturne's Glow"
-  - "Infinite Reflections"
+ - "Lunar Prelude"
+ - "Nebula Dreams"
+ - "Equinox Reverie"
+ - "Stellar Lullaby"
+ - "Gravity's Whisper"
+ - "Celestial Drift"
+ - "Harmonic Orbit"
+ - "Saturn's Serenade"
+ - "Nocturne's Glow"
+ - "Infinite Reflections"
 artist: "eclipse-aurelian"
 ---
 

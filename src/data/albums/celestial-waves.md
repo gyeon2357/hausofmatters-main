@@ -1,20 +1,22 @@
 ---
 name: "Celestial Waves"
+category: "hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/celestial_waves.jpg"
-  alt: "Illustration for Celestial Waves featuring soft, flowing waves of color in hues of blue, purple, and pink"
+ src: "/images/albums/celestial_waves.jpg"
+ alt: "Illustration for Celestial Waves featuring soft, flowing waves of color in hues of blue, purple, and pink"
 publishDate: 2025-02-14
 tracks:
-  - "Ethereal Glow"
-  - "Ocean's Whisper"
-  - "Starlight Drift"
-  - "Dream Cascade"
-  - "Subtle Currents"
-  - "Lunar Harmony"
-  - "Tidal Reflections"
-  - "Aurora's Lament"
-  - "Serene Radiance"
-  - "Infinite Horizon"
+ - "Ethereal Glow"
+ - "Ocean's Whisper"
+ - "Starlight Drift"
+ - "Dream Cascade"
+ - "Subtle Currents"
+ - "Lunar Harmony"
+ - "Tidal Reflections"
+ - "Aurora's Lament"
+ - "Serene Radiance"
+ - "Infinite Horizon"
 artist: "amarie"
 ---
 

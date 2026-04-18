@@ -1,5 +1,7 @@
 ---
 name: "The Well"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/the_well.jpg"
   alt: "A tranquil Japanese garden featuring a circular stone well surrounded by moss with soft ripples in the water reflecting warm sunlight, creating a calm and meditative atmosphere."

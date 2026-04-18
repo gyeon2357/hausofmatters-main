@@ -9,303 +9,278 @@ const allArtists = await getCollection("artists");
 const allMagazines = await getCollection("magazine");
 
 const recentAlbums = allAlbums
- .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
- .slice(0, 5)
- .sort(() => Math.random() - 0.5);
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 5)
+  .sort(() => Math.random() - 0.5);
 
 function formatTitle(id: string): string {
- if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
- if (/^hom-(\d+)$/.test(id)) return id.replace(/^hom-(\d+)$/, "HOM #$1");
- return id.toUpperCase();
+  if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
+  if (/^hom-(\d+)$/.test(id)) return id.replace(/^hom-(\d+)$/, "HOM #$1");
+  return id.toUpperCase();
 }
 
 const albumCards = recentAlbums.map(album => {
- const artist = allArtists.find(a => a.id === album.data.artist.id);
- return {
-  href: artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`,
-  name: album.data.name,
-  imageSrc: album.data.image.src,
-  imageAlt: album.data.image.alt,
-  year: new Date(album.data.publishDate).getFullYear(),
- };
+  const artist = allArtists.find(a => a.id === album.data.artist.id);
+  return {
+    href: artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`,
+    name: album.data.name,
+    imageSrc: album.data.image.src,
+    imageAlt: album.data.image.alt,
+    year: new Date(album.data.publishDate).getFullYear(),
+  };
 });
 
 const sorted = allMagazines.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-// ✅ hom / w-hom 각각 최신 2개씩
+// ✅ category 기반, 각 최신 2개
 const homCards = sorted
- .filter(m => !m.id.startsWith("w-"))
- .slice(0, 2)
- .map(m => ({
-  href: `/magazine/hom/${m.data.slug ?? m.id}`,
-  title: m.data.title ?? formatTitle(m.id),
-  date: new Date(m.data.date).toLocaleDateString("ko-KR"),
-  imageSrc: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
-  imageAlt: m.data.image?.alt ?? m.id,
- }));
+  .filter(m => m.data.category === "hom")
+  .slice(0, 2)
+  .map(m => ({
+    href: `/magazine/${m.data.slug ?? m.id}`,
+    title: m.data.title ?? formatTitle(m.id),
+    date: new Date(m.data.date).toLocaleDateString("ko-KR"),
+    imageSrc: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
+    imageAlt: m.data.image?.alt ?? m.id,
+  }));
 
 const whomCards = sorted
- .filter(m => m.id.startsWith("w-"))
- .slice(0, 2)
- .map(m => ({
-  href: `/magazine/hom/${m.data.slug ?? m.id}`,
-  title: m.data.title ?? formatTitle(m.id),
-  date: new Date(m.data.date).toLocaleDateString("ko-KR"),
-  imageSrc: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
-  imageAlt: m.data.image?.alt ?? m.id,
- }));
+  .filter(m => m.data.category === "w-hom")
+  .slice(0, 2)
+  .map(m => ({
+    href: `/magazine/${m.data.slug ?? m.id}`,
+    title: m.data.title ?? formatTitle(m.id),
+    date: new Date(m.data.date).toLocaleDateString("ko-KR"),
+    imageSrc: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
+    imageAlt: m.data.image?.alt ?? m.id,
+  }));
 ---
 
 <BaseLayout title={title}>
- <div class="content content--page">
-  <h1>HAUS OF MATTERS KHL KILL THEM ALL</h1>
-  <p></p>
- </div>
-
- <section class="featured-albums">
-  <div class="section-header">
-   <h2>Featured Review</h2>
-   <a class="more-link" href="/albums">More View →</a>
+  <div class="content content--page">
+    <h1>HAUS OF MATTERS KHL KILL THEM ALL</h1>
+    <p></p>
   </div>
-  <div class="albums-grid">
-   {
-    albumCards.map(card => (
-     <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
-      <div class="album-img">
-       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+
+  <section class="featured-albums">
+    <div class="section-header">
+      <h2>Featured Review</h2>
+      <a class="more-link" href="/albums">More View →</a>
+    </div>
+    <div class="albums-grid">
+      {albumCards.map(card => (
+        <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
+          <div class="album-img">
+            <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+          </div>
+          <h3>{card.name}</h3>
+          <p class="album-year">{card.year}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="latest-magazine">
+    <div class="section-header">
+      <h2>MAGAZINE</h2>
+      <a class="more-link" href="/magazine">More View →</a>
+    </div>
+    <div class="magazine-columns">
+      <div class="magazine-column">
+        <h3 class="column-label">HOM</h3>
+        <div class="magazine-list">
+          {homCards.map(card => (
+            <a class="magazine-card" href={card.href} data-astro-prefetch>
+              <div class="magazine-img">
+                <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+              </div>
+              <div class="magazine-info">
+                <p class="magazine-title">{card.title}</p>
+                <p class="magazine-date">{card.date}</p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
-      <h3>{card.name}</h3>
-      <p class="album-year">{card.year}</p>
-     </a>
-    ))
-   }
-  </div>
- </section>
 
- <section class="latest-magazine">
-  <div class="section-header">
-   <h2>MAGAZINE</h2>
-   <a class="more-link" href="/magazine">More View →</a>
-  </div>
-  <div class="magazine-columns">
-   <div class="magazine-column">
-    <h3 class="column-label">HOM</h3>
-    <div class="magazine-list">
-     {
-      homCards.map(card => (
-       <a class="magazine-card" href={card.href} data-astro-prefetch>
-        <div class="magazine-img">
-         <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+      <div class="magazine-column">
+        <h3 class="column-label">w/HOM</h3>
+        <div class="magazine-list">
+          {whomCards.map(card => (
+            <a class="magazine-card" href={card.href} data-astro-prefetch>
+              <div class="magazine-img">
+                <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+              </div>
+              <div class="magazine-info">
+                <p class="magazine-title">{card.title}</p>
+                <p class="magazine-date">{card.date}</p>
+              </div>
+            </a>
+          ))}
         </div>
-        <div class="magazine-info">
-         <p class="magazine-title">{card.title}</p>
-         <p class="magazine-date">{card.date}</p>
-        </div>
-       </a>
-      ))
-     }
+      </div>
     </div>
-   </div>
-
-   <div class="magazine-column">
-    <h3 class="column-label">w/HOM</h3>
-    <div class="magazine-list">
-     {
-      whomCards.map(card => (
-       <a class="magazine-card" href={card.href} data-astro-prefetch>
-        <div class="magazine-img">
-         <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
-        </div>
-        <div class="magazine-info">
-         <p class="magazine-title">{card.title}</p>
-         <p class="magazine-date">{card.date}</p>
-        </div>
-       </a>
-      ))
-     }
-    </div>
-   </div>
-  </div>
- </section>
+  </section>
 </BaseLayout>
 
 <style>
- .featured-albums {
-  margin: 4rem 0;
- }
+  .featured-albums {
+    margin: 4rem 0;
+  }
 
- .featured-albums h2 {
-  margin-bottom: 2rem;
-  font-size: 1.5rem;
- }
-
- .albums-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 4rem;
- }
-
- .album-card {
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.3s ease;
- }
-
- .album-card:hover {
-  transform: translateY(-4px);
- }
-
- .album-img {
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-radius: 0.25rem;
-  background: var(--color-placeholder);
-  margin-bottom: 0.75rem;
- }
-
- .album-img img {
-  width: 100%;
-
-  object-fit: cover;
-  display: block;
- }
-
- .album-card h3 {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.3;
- }
-
- .album-year {
-  margin: 0;
-  font-size: 0.85rem;
- }
-
- /* Magazine 섹션 */
- .latest-magazine {
-  margin: 4rem 0 6rem;
- }
-
- .latest-magazine > h2 {
-  margin-bottom: 2rem;
-  font-size: 1.5rem;
- }
-
- .magazine-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
- }
-
- .column-label {
-  margin: 0 0 1.25rem;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-
- }
-
- .magazine-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
- }
-
- .magazine-card {
-  display: flex;
-  flex-direction: column;
-
-  gap: 1rem;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s ease;
- }
-
- .magazine-card:hover {
-  opacity: 0.7;
- }
-
- .magazine-img {
-  overflow: hidden;
-  background: var(--color-placeholder);
- }
-
- .magazine-img img {
-  width: 100%;
-
-  object-fit: cover;
-  display: block;
- }
-
- .magazine-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.3rem;
- }
-
- .magazine-title {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.3;
- }
-
- .magazine-date {
-  margin: 0;
-  font-size: 0.8rem;
-  opacity: 0.5;
- }
-
- .section-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 2rem;
- }
-
- .section-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
- }
-
- .more-link {
-  opacity: 0.7;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s ease;
- }
-
- .more-link:hover {
-  opacity: 1;
- }
-
- @media (max-width: 768px) {
   .albums-grid {
-   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-   gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
   }
-  .magazine-columns {
-   gap: 2rem;
-  }
-  .magazine-card {
-   grid-template-columns: 64px 1fr;
-  }
- }
 
- @media (max-width: 480px) {
-  .featured-albums,
+  .album-card {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+
+  .album-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .album-img {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background: var(--color-placeholder);
+    margin-bottom: 0.75rem;
+  }
+
+  .album-img img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .album-card h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  .album-year {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
   .latest-magazine {
-   margin: 2rem 0;
+    margin: 4rem 0 6rem;
   }
-  .albums-grid {
-   grid-template-columns: repeat(2, 1fr);
-  }
+
   .magazine-columns {
-   grid-template-columns: 1fr;
-   gap: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
   }
- }
+
+  .column-label {
+    margin: 0 0 1.25rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+
+  .magazine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .magazine-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  .magazine-card:hover {
+    opacity: 0.7;
+  }
+
+  .magazine-img {
+    overflow: hidden;
+    background: var(--color-placeholder);
+  }
+
+  .magazine-img img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .magazine-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .magazine-title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .magazine-date {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.5;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .section-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .more-link {
+    opacity: 0.7;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  .more-link:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .albums-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+    .magazine-columns {
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .featured-albums,
+    .latest-magazine {
+      margin: 2rem 0;
+    }
+    .albums-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .magazine-columns {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
 </style>
 
 <script src="../scripts/index.js"></script>

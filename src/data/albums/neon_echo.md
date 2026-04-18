@@ -1,5 +1,7 @@
 ---
 name: "Neon Echo"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/neon_echo.jpg"
   alt: "Bold, glowing neon shapes in electric pink, purple, and blue, creating a layered echo effect on a dark background with gradient glow, evoking movement and energy."

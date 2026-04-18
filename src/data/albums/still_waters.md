@@ -1,5 +1,7 @@
 ---
 name: "Still Waters"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/still_waters.jpg"
   alt: "Photography of a serene lake at sunrise, surrounded by soft pastel hues of blue, pink, and lavender, with a simple acoustic guitar subtly reflected in the water."

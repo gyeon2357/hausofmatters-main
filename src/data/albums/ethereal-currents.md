@@ -1,5 +1,7 @@
 ---
 name: "Ethereal Currents"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/ethereal_currents.jpg"
   alt: "Album cover of Ethereal Currents by Amarié, featuring abstract, atmospheric visuals with glowing light patterns."

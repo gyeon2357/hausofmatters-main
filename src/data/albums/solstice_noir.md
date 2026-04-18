@@ -1,5 +1,7 @@
 ---
 name: "Solstice Noir"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/solstice_noir.jpg"
   alt: "A golden eclipse surrounded by ethereal textures and abstract, smoky patterns on a dark background, evoking themes of mystery and ambient jazz."

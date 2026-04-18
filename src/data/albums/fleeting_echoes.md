@@ -1,5 +1,7 @@
 ---
 name: "Fleeting Echoes"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/fleeting_echoes.jpg"
   alt: "A serene golden hour scene with soft, warm light streaming through an open window overlooking a minimalist landscape, evoking nostalgia and introspection."

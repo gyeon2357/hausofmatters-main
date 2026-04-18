@@ -1,5 +1,7 @@
 ---
 name: "Solar Reverie"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/solar_reverie.jpg"
   alt: "A vibrant, abstract depiction of solar flares and warm tones, blending shades of orange, gold, and crimson with radiant textures"

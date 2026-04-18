@@ -7,7 +7,7 @@ const currentPath = Astro.url.pathname;
 // Define a map of routes
 const routes = {
  "/": "Home",
- "/artists/": "Artists",
+//  "/artists/": "Artists",
  "/albums/": "Albums",
  "/magazine/": "Magazine",
  "/info/": "Info",
@@ -26,11 +26,11 @@ const activeRoute = routes[currentPath] || null;
 
  <ul>
   <li>
-   <a href="/albums/" class={activeRoute === "Albums" ? "current" : ""} data-astro-prefetch><TextSlider content="Albums" /></a>
+   <a href="/albums/" class={activeRoute === "Albums" ? "current" : ""} data-astro-prefetch><TextSlider content="Review" /></a>
   </li>
-  <li>
+  <!-- <li>
    <a href="/artists/" class={activeRoute === "Artists" ? "current" : ""} data-astro-prefetch><TextSlider content="Artists" /></a>
-  </li>
+  </li> -->
   <li>
    <a href="/interview/" class={activeRoute === "Interview" ? "current" : ""} data-astro-prefetch><TextSlider content="Interview" /></a>
   </li>

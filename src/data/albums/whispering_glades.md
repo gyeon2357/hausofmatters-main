@@ -1,5 +1,7 @@
 ---
 name: "Whispering Glades"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/whispering_glades.jpg"
   alt: "A serene misty forest at dawn with pastel hues of green, lavender, and blue, featuring Ivy Veil's unique logo of an intertwined ivy vine with an 'IV' monogram."

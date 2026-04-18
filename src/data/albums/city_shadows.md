@@ -1,20 +1,22 @@
 ---
 name: "City Shadows"
+category: "hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/city_shadows.jpg"
-  alt: "Photography of a gritty urban cityscape at twilight, featuring dimly lit streets, graffiti, dramatic shadows, and glimmers of streetlights reflecting off wet pavement."
+ src: "/images/albums/city_shadows.jpg"
+ alt: "Photography of a gritty urban cityscape at twilight, featuring dimly lit streets, graffiti, dramatic shadows, and glimmers of streetlights reflecting off wet pavement."
 publishDate: 2024-08-30
 tracks:
-  - "City Shadows"
-  - "Echoes of the Block"
-  - "Through the Smoke"
-  - "Midnight Thoughts"
-  - "Crossroads"
-  - "Streetlights and Silence"
-  - "Resilience Rising"
-  - "Broken Glass Poetry"
-  - "Tales of the Night"
-  - "Final Verse"
+ - "City Shadows"
+ - "Echoes of the Block"
+ - "Through the Smoke"
+ - "Midnight Thoughts"
+ - "Crossroads"
+ - "Streetlights and Silence"
+ - "Resilience Rising"
+ - "Broken Glass Poetry"
+ - "Tales of the Night"
+ - "Final Verse"
 artist: "reevo"
 ---
 

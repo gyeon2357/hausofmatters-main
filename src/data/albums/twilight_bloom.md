@@ -1,5 +1,7 @@
 ---
 name: "Twilight Bloom"
+category: "w-hom"
+editor: "zyaez"
 image:
   src: "/images/albums/twilight_bloom.jpg"
   alt: "A peaceful evening with glowing lanterns hanging among cherry blossoms, a soft purple-pink sky, and gentle reflections in a calm pond, evoking serenity and romance."

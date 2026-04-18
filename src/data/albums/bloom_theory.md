@@ -1,20 +1,22 @@
 ---
 name: "Bloom Theory"
+category: "hom"
+editor: "zyaez"
 image:
-  src: "/images/albums/bloom_theory.jpg"
-  alt: "A close-up of a vivid red flower in full bloom, surrounded by a lush green background, emphasizing natural elegance and growth."
+ src: "/images/albums/bloom_theory.jpg"
+ alt: "A close-up of a vivid red flower in full bloom, surrounded by a lush green background, emphasizing natural elegance and growth."
 publishDate: 2024-11-20
 tracks:
-  - "Bloom Theory"
-  - "Emerald Dream"
-  - "Rooted in Love"
-  - "Golden Petals"
-  - "Vines of Reflection"
-  - "Serene Glow"
-  - "Whispers of Growth"
-  - "Blossom Horizon"
-  - "Nurtured Soul"
-  - "Final Bloom"
+ - "Bloom Theory"
+ - "Emerald Dream"
+ - "Rooted in Love"
+ - "Golden Petals"
+ - "Vines of Reflection"
+ - "Serene Glow"
+ - "Whispers of Growth"
+ - "Blossom Horizon"
+ - "Nurtured Soul"
+ - "Final Bloom"
 artist: "zariah-bloom"
 ---
 
