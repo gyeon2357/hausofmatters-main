@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { getCollection, render, getEntry } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Separator from "../../../components/Separator.astro";
+import Share from "../../../components/Share.astro";
 
 export const getStaticPaths = async () => {
  const albums = await getCollection("albums");
@@ -71,6 +72,7 @@ const { Content } = await render(album);
     </ol>
     {album.data.editor && <p class="editor">Editor. {album.data.editor}</p>}
     <Content />
+    <Share title={album.data.name} />
    </div>
   </div>
  </section>

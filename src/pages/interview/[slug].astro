@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Separator from "../../components/Separator.astro";
 
+
 export async function getStaticPaths() {
  const allinterview = await getCollection("interview");
  return allinterview
@@ -47,11 +48,14 @@ const title = `Hausofmatters - Interview: ${stageName}`;
  <header class="interview-header">
   <p class="interview-label">HAUS OF interview</p>
   <h1>{stageName}</h1>
+  
   <p class="interview-meta">
    <span>{genre}</span>
    <span class="sep">·</span>
    <span>{dateStr}</span>
   </p>
+
+  
  </header>
 
  <Separator />

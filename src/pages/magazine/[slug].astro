@@ -6,6 +6,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Separator from "../../components/Separator.astro";
 import Flipbook from "../../components/Flipbook.astro";
 
+import Share from "../../components/Share.astro";
+
 export async function getStaticPaths() {
  const issues = await getCollection("magazine");
 
@@ -51,7 +53,7 @@ const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazine/hom";
 ---
 
-<BaseLayout title={title} >
+<BaseLayout title={title} ogImage={image.src}>
  <link rel="stylesheet" href="/styles/flipbook.style.css" />
  <link rel="stylesheet" href="/styles/font-awesome.css" />
 
@@ -87,6 +89,7 @@ const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazin
      </dd>
     </dl>
     <Flipbook pdfPath={pdfPath} />
+    <Share title={title} />
    </div>
   </div>
  </section>
@@ -97,6 +100,10 @@ const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazin
   background-color: #dddddd;
  }
 
+ h3 {
+  margin: 0;
+ }
+
  .title-header {
   display: flex;
   justify-content: space-between;
@@ -104,7 +111,6 @@ const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazin
   gap: 0.75rem;
   flex-wrap: wrap;
  }
-
 
  .content-wrap {
   display: grid;
@@ -123,7 +129,6 @@ const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazin
  .image {
   grid-area: img;
   width: 100%;
-  border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
  }
 

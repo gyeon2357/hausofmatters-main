@@ -317,3 +317,12 @@ dd {
 .back:hover {
  opacity: 1;
 }
+
+.share {
+ display: flex;
+ gap: 1rem;
+}
+
+.share button {
+ font-size: 0.875rem  ;
+}
