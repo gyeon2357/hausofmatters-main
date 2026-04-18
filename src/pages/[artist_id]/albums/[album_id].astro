@@ -52,7 +52,7 @@ const { artist, album } = Astro.props;
 const { Content } = await render(album);
 ---
 
-<BaseLayout title={album.data.name}>
+<BaseLayout title={album.data.name} ogImage={album.data.image.src}>
  <section>
   <header class="title-header">
    <h2>

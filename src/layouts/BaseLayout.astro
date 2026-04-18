@@ -1,100 +1,103 @@
 ---
-import {ClientRouter} from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 import "../styles/global.css";
 
-import {SEO} from "astro-seo";
+import { SEO } from "astro-seo";
 
 import SmoothScroll from "../components/SmoothScroll.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 type Props = {
-  title: string;
-  description?: string;
+ title: string;
+ description?: string;
+ ogImage?: string;
 };
 
-const {title, description = "HAUSOFMATTERS Web Renewal Project"} = Astro.props;
+const { title, description = "HAUSOFMATTERS Web Renewal Project", ogImage = "/og-image.jpg" } = Astro.props;
+
+const site = Astro.site;
+const ogImageUrl = new URL(ogImage, site).href;
 
 // Current page value (/home, /about, /404 ...)
-const currentPage =
-  Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "home";
+const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "home";
 ---
 
 <!doctype html>
 <html lang="ko" data-page={currentPage}>
-  <head>
-    <SEO
-      title={title}
-      description={description}
-      charset="UTF-8"
-      openGraph={{
-        basic: {
-          title: title,
-          type: "image/jpeg",
-          image: "/og-image.jpg",
-        },
-      }}
-      twitter={{
-        creator: "@zamso",
-      }}
-      extend={{
-        // extending the default link tags
-        link: [
-          {
-            rel: "icon",
-            type: "image/png",
-            sizes: "16x16",
-            href: "/favicon/favicon-16x16.png",
-          },
-          {
-            rel: "icon",
-            type: "image/png",
-            sizes: "32x32",
-            href: "/favicon/favicon-32x32.png",
-          },
-          {
-            rel: "apple-touch-icon",
-            sizes: "180x180",
-            href: "/favicon/apple-touch-icon.png",
-          },
-          {rel: "manifest", href: "/favicon/site.webmanifest"},
-          {rel: "sitemap", href: "/sitemap-index.xml"},
-        ],
-        // extending the default meta tags
-        meta: [
-          {name: "twitter:image", content: "/og-image.jpg"},
-          {name: "twitter:title", content: title},
-          {name: "twitter:description", content: description},
-          {name: "viewport", content: "width=device-width"},
-          {name: "msapplication-TileColor", content: "#000000"},
-          {name: "theme-color", content: "#ffffff"},
-          {name: "generator", content: Astro.generator},
-        ],
-      }}
-    />
-    <ClientRouter />
+ <head>
+  <SEO
+   title={title}
+   description={description}
+   charset="UTF-8"
+   openGraph={{
+    basic: {
+     title: title,
+     type: "website",
+     image: "/og-image.jpg",
+    },
+   }}
+   twitter={{
+    creator: "@zamso",
+   }}
+   extend={{
+    // extending the default link tags
+    link: [
+     {
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      href: "/favicon/favicon-16x16.png",
+     },
+     {
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      href: "/favicon/favicon-32x32.png",
+     },
+     {
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      href: "/favicon/apple-touch-icon.png",
+     },
+     { rel: "manifest", href: "/favicon/site.webmanifest" },
+     { rel: "sitemap", href: "/sitemap-index.xml" },
+    ],
+    // extending the default meta tags
+    meta: [
+     { name: "twitter:image", content: ogImageUrl },
+     { name: "twitter:title", content: title },
+     { name: "twitter:description", content: description },
+     { name: "viewport", content: "width=device-width" },
+     { name: "msapplication-TileColor", content: "#000000" },
+     { name: "theme-color", content: "#ffffff" },
+     { name: "generator", content: Astro.generator },
+    ],
+   }}
+  />
+  <ClientRouter />
 
-    <!-- Flipbook 라이브러리 사전 로드 -->
-    <script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
-    <script is:inline src="/scripts/flipbook.min.js"></script>
-    <link rel="stylesheet" href="/styles/flipbook.style.css" />
-    <link rel="stylesheet" href="/styles/font-awesome.css" />
-  </head>
-  <body>
-    <SmoothScroll />
-    <Header />
-    <slot />
-    <Footer />
-    <script src="../scripts/imageFade.js"></script>
-  </body>
+  <!-- Flipbook 라이브러리 사전 로드 -->
+  <script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
+  <script is:inline src="/scripts/flipbook.min.js"></script>
+  <link rel="stylesheet" href="/styles/flipbook.style.css" />
+  <link rel="stylesheet" href="/styles/font-awesome.css" />
+ </head>
+ <body>
+  <SmoothScroll />
+  <Header />
+  <slot />
+  <Footer />
+  <script src="../scripts/imageFade.js"></script>
+ </body>
 </html>
 
 <script is:inline>
-  document.addEventListener("astro:before-page-load", () => {
-    if (window.currentFlipbookInstance?.dispose) {
-      window.currentFlipbookInstance.dispose();
-      window.currentFlipbookInstance = null;
-    }
-  });
+ document.addEventListener("astro:before-page-load", () => {
+  if (window.currentFlipbookInstance?.dispose) {
+   window.currentFlipbookInstance.dispose();
+   window.currentFlipbookInstance = null;
+  }
+ });
 </script>
