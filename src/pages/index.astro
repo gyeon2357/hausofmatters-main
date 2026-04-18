@@ -58,12 +58,15 @@ const whomCards = sorted
 
 <BaseLayout title={title}>
  <div class="content content--page">
-  <h1>Hausofmatters</h1>
-  <p>Welcome to our music platform</p>
+  <h1>HAUS OF MATTERS KHL KILL THEM ALL</h1>
+  <p></p>
  </div>
 
  <section class="featured-albums">
-  <h2>오늘의 추천 리뷰</h2>
+  <div class="section-header">
+   <h2>Featured Review</h2>
+   <a class="more-link" href="/albums">More View →</a>
+  </div>
   <div class="albums-grid">
    {
     albumCards.map(card => (
@@ -80,7 +83,10 @@ const whomCards = sorted
  </section>
 
  <section class="latest-magazine">
-  <h2>매거진 최신호</h2>
+  <div class="section-header">
+   <h2>MAGAZINE</h2>
+   <a class="more-link" href="/magazine">More View →</a>
+  </div>
   <div class="magazine-columns">
    <div class="magazine-column">
     <h3 class="column-label">HOM</h3>
@@ -135,7 +141,7 @@ const whomCards = sorted
 
  .albums-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 4rem;
  }
@@ -172,9 +178,8 @@ const whomCards = sorted
  }
 
  .album-year {
-  margin: 0.5rem 0 0;
+  margin: 0;
   font-size: 0.85rem;
-  opacity: 0.6;
  }
 
  /* Magazine 섹션 */
@@ -250,6 +255,29 @@ const whomCards = sorted
   margin: 0;
   font-size: 0.8rem;
   opacity: 0.5;
+ }
+
+ .section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+ }
+
+ .section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+ }
+
+ .more-link {
+  opacity: 0.7;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+ }
+
+ .more-link:hover {
+  opacity: 1;
  }
 
  @media (max-width: 768px) {
