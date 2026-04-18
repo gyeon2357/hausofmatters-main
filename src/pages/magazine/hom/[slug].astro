@@ -14,7 +14,7 @@ export async function getStaticPaths() {
   const issues = await getCollection('magazine');
 
   return issues.map((issue) => ({
-    params: { slug: issue.id }, 
+    params: { slug: issue.data.slug ?? issue.id },
     props: { issues, issue },
   }));
 }
@@ -28,8 +28,19 @@ type Props = {
 };
 
 const { issues, issue } = Astro.props;
-const { title, date, pdfPath, image } = issue.data;
-const slug = issue.id;
+const id = issue.id;
+
+function formatTitle(id: string): string {
+  if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
+  if (/^hom-(\d+)$/.test(id))   return id.replace(/^hom-(\d+)$/, "HOM #$1");
+  return id.toUpperCase();
+}
+
+const title   = issue.data.title   ?? formatTitle(id);
+const slug    = issue.data.slug    ?? id;
+const pdfPath = issue.data.pdfPath;
+const image   = issue.data.image   ?? { src: `/images/magazine/thumb/${id}.jpg`, alt: id };
+const date    = issue.data.date;
 
 /* ────────────────────────────────────────────
    4) 콘텐츠·데이터 추출
@@ -55,7 +66,7 @@ const nextIssue = issues[nextIndex];
     <header class="title-header">
       <h2>{title}</h2>
       <div>
-        <a class="back" href="/magazine">View all</a>
+        <a class="back" href="/albums">View all</a>
         <span class="faded">/</span>
         <a href={`/magazine/hom/${nextIssue.id}`} data-astro-prefetch>Next Issue</a>
       </div>
@@ -64,11 +75,13 @@ const nextIssue = issues[nextIndex];
     <Separator />
 
     <div class="content-wrap">
-      <img
-        class="image fade-in"
-        src={image.src}
-        alt={image.alt}
-      />
+      {image && (
+        <img
+          class="image fade-in"
+          src={image.src}
+          alt={image.alt}
+        />
+      )}
 
       <div class="content">
         <h3>Description</h3>
@@ -95,8 +108,9 @@ const nextIssue = issues[nextIndex];
   .back{color:var(--color-primary);text-decoration:none}
   .content-wrap{display:grid;gap:2rem;grid-template-areas:"img" "content";grid-template-columns:100%}
   @media(min-width:44em){.content-wrap{grid-template-columns:1fr 1fr;grid-template-areas:"img content"}}
-  .image{grid-area:img;width:100%;max-width:320px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+  .image{grid-area:img;width:100%;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,.1)}
   .content{grid-area:content}
   dl{margin-top:1rem}
+  dt{font-weight:700}
   dd{margin:0 0 1rem}
 </style>

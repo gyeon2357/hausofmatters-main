@@ -6,105 +6,83 @@ import Separator from "../components/Separator.astro";
 const currentPath = Astro.url.pathname;
 // Define a map of routes
 const routes = {
-  "/": "Home",
-  "/artists/": "Artists",
-  "/albums/": "Albums",
-  "/magazine/": "Magazine",
-  "/info/": "Info",
-  "/interview/": "Interview",
-  "/contact/": "Contact",
+ "/": "Home",
+ "/artists/": "Artists",
+ "/albums/": "Albums",
+ "/magazine/": "Magazine",
+ "/info/": "Info",
+ "/interview/": "Interview",
 };
 // Determine the active route
 const activeRoute = routes[currentPath] || null;
 ---
 
 <header>
-  <h1>
-    <a href="/" class={activeRoute === "Home" ? "current" : ""}
-      ><TextSlider content="HAUSOFMATTERS" /></a>
-  </h1>
+ <h1>
+  <a href="/" class={activeRoute === "Home" ? "current" : ""}><TextSlider content="HAUSOFMATTERS" /></a>
+ </h1>
+
+ <span><TextSlider content="KHL" /></span>
+
+ <ul>
+  <li>
+   <a href="/albums/" class={activeRoute === "Albums" ? "current" : ""} data-astro-prefetch><TextSlider content="Albums" /></a>
+  </li>
+  <li>
+   <a href="/artists/" class={activeRoute === "Artists" ? "current" : ""} data-astro-prefetch><TextSlider content="Artists" /></a>
+  </li>
+  <li>
+   <a href="/interview/" class={activeRoute === "Interview" ? "current" : ""} data-astro-prefetch><TextSlider content="Interview" /></a>
+  </li>
+  <li>
+   <a href="/magazine/" class={activeRoute === "Magazine" ? "current" : ""} data-astro-prefetch><TextSlider content="Magazine" /></a>
+  </li>
+  <li>
+   <a href="/info/" class={activeRoute === "Info" ? "current" : ""} data-astro-prefetch><TextSlider content="Info" /></a>
+  </li>
   
-  <span><TextSlider content="KHL" /></span>
-  
-  <ul>
-    <li>
-      <a
-        href="/albums/"
-        class={activeRoute === "Albums" ? "current" : ""}
-        data-astro-prefetch><TextSlider content="Albums" /></a>
-    </li>
-    <li>
-      <a
-        href="/artists/"
-        class={activeRoute === "Artists" ? "current" : ""}
-        data-astro-prefetch><TextSlider content="Artists" /></a>
-    </li>
-    <li>
-      <a
-        href="/interview/"
-        class={activeRoute === "Interview" ? "current" : ""}
-        data-astro-prefetch><TextSlider content="Interview" /></a>
-    </li>
-    <li>
-      <a
-        href="/magazine/"
-        class={activeRoute === "Magazine" ? "current" : ""}
-        data-astro-prefetch><TextSlider content="Magazine" /></a>
-    </li>
-    <li>
-      <a
-        href="/info/"
-        class={activeRoute === "Info" ? "current" : ""}
-        data-astro-prefetch><TextSlider content="Info" /></a>
-    </li>
-    <li>
-      <a
-        href="/contact/"
-        class={activeRoute === "Contact" ? "current" : ""}
-        data-astro-prefetch><TextSlider content="Contact" /></a>
-    </li>
-  </ul>
+ </ul>
 </header>
 <Separator />
 
 <style>
-  header {
-    position: relative;
-    display: grid;
-    grid-template-columns: min-content auto;
-    font-weight: 700;
-    padding: 0.5rem 0;
-    gap: 1rem;
-  }
-  header a.current {
-    pointer-events: none;
-    color: silver;
-  }
+ header {
+  position: relative;
+  display: grid;
+  grid-template-columns: min-content auto;
+  font-weight: 700;
+  padding: 0.5rem 0;
+  gap: 1rem;
+ }
+ header a.current {
+  pointer-events: none;
+  color: silver;
+ }
 
-  header h1 a.current {
-    color: inherit;
-  }
+ header h1 a.current {
+  color: inherit;
+ }
 
-  h1 {
-    font-size: 1rem;
-    font-weight: inherit;
-    margin: 0;
-  }
-  ul {
-    display: flex;
-    list-style: none;
-    gap: 0.75rem;
-    margin: 0;
-    padding: 0;
-    grid-column: auto / span 2;
-  }
+ h1 {
+  font-size: 1rem;
+  font-weight: inherit;
+  margin: 0;
+ }
+ ul {
+  display: flex;
+  list-style: none;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  grid-column: auto / span 2;
+ }
 
-  ul li {
-    font-size: .875rem;
-    line-height: 1.6;
-  }
+ ul li {
+  font-size: 0.875rem;
+  line-height: 1.6;
+ }
 
-  /* @media screen and (min-width: 50em) {
+ /* @media screen and (min-width: 50em) {
     header {
       grid-template-columns: 20vw 1fr auto auto;
     }

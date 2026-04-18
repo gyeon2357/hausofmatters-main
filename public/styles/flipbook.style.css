@@ -403,6 +403,8 @@
   pointer-events: auto;
   display: inline-block;
   user-select: none;
+
+  color: #fff;
 }
 
 .flipbook-floating {
@@ -483,12 +485,12 @@
 
   background: none !important;
 
-  border: 1px solid #626262;
+  border: 1px solid #ddd;
 }
 
 .flipbook-currentPageInput:focus {
-  border: none;
-  outline: 2px solid color(display-p3 0 1 0.2 / 1);
+  border: 2px solid #f8f8f8;
+  outline: none;
 }
 
 .flipbook-color-transparent {

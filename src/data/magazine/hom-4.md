@@ -1,6 +1,6 @@
 ---
-pdfPath: "/pdf/hom-2.pdf"
-date: 2023-07-01
+pdfPath: "/pdf/hom-4.pdf"
+date: 2023-09-01
 ---
 
 Welcome to the first edition of Haus of Matters.

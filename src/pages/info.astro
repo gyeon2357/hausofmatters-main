@@ -1,12 +1,407 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Separator from "../components/Separator.astro";
 
-const title = "Hausofmatters - Members";
+const title = "Hausofmatters - Info";
+
+type Member = {
+ name: string;
+ bio: string;
+ image?: string;
+ links?: { label: string; href: string }[];
+ note?: string;
+};
+
+const directors: Member[] = [
+ {
+  name: "blvckmvtter",
+  bio: "私と同じ炎を持った君がいるということを",
+  image: "/images/profile/profile-14.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/_blvckmvtter_/" }],
+ },
+ {
+  name: "쟈이즈",
+  bio: "대충 쓰고 있으니 정성스럽게 읽어주시면 감사드리겠습니다.",
+  image: "/images/profile/profile-10.jpg",
+  links: [
+   { label: "instagram", href: "https://www.instagram.com/zyaez_birosini/" },
+   { label: "blog", href: "https://blog.naver.com/okonechu" },
+  ],
+ },
+ {
+  name: "공ZA",
+  bio: "공 : 공자\nZA : 자녀없음",
+  image: "/images/profile/logo.png",
+  links: [{ label: "instagram", href: "https://www.instagram.com/gong_za/" }],
+ },
+ {
+  name: "denim",
+  bio: "안녕하세요? 오늘도 즐거운 하루입니다.",
+  image: "/images/profile/profile-16.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/wooseungjoon/" }],
+ },
+];
+
+const designers: Member[] = [
+ {
+  name: "nhana",
+  bio: "Certified Layout Boy",
+  image: "/images/profile/profile-12.png",
+  links: [{ label: "instagram", href: "https://www.instagram.com/nayoungseon/" }],
+ },
+ {
+  name: "산소",
+  bio: "인생이 트랩소울",
+  image: "/images/profile/logo.png",
+ },
+ {
+  name: "잠소",
+  bio: "「명사」 가만히 웃음",
+  image: "/images/profile/profile-18.png",
+ },
+];
+
+const homEditors: Member[] = [
+ {
+  name: "Alonso2000",
+  bio: "重山, 영원한 음악 딜레탕트",
+  image: "/images/profile/profile-3.jpg",
+  links: [
+   { label: "instagram", href: "https://www.instagram.com/alonso_zooo?igsh=b2J1eWN0NDNkbnZ6" },
+   { label: "blog", href: "https://m.blog.naver.com/alonso2000" },
+  ],
+ },
+ {
+  name: "Devi Ken",
+  bio: "Art is long",
+  image: "/images/profile/logo.png",
+  links: [{ label: "instagram", href: "https://www.instagram.com/deviken_/" }],
+ },
+ {
+  name: "loding",
+  bio: "국힙 언더씬 매니아 겸 the draft 담당 에디터, a는 빼먹은거 맞습니다.",
+  image: "/images/profile/profile-5.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/1od1ng/" }],
+ },
+ {
+  name: "nicolas",
+  bio: "고쳐 쓴 생각",
+  image: "/images/profile/profile-11.jpg",
+  links: [
+   { label: "instagram", href: "https://www.instagram.com/moontoucha/" },
+   { label: "blog", href: "https://blog.naver.com/nicolasnote" },
+  ],
+ },
+ {
+  name: "WestCastle",
+  bio: "음악을 읽고 씁니다.",
+  image: "/images/profile/profile-6.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/nugsmag/" }],
+ },
+ {
+  name: "writersglock",
+  bio: "I got that writersglock so come to my block",
+  image: "/images/profile/profile-13.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/writersglock_z0y/" }],
+ },
+];
+
+const whomEditors: Member[] = [
+ {
+  name: "감상주의(KMSNJUI)",
+  bio: "성덕은 (어쩌면 정말로) 언제나 이긴다",
+  image: "/images/profile/profile-4.jpg",
+  links: [{ label: "brunch", href: "https://brunch.co.kr/@6bce52336c644f8" }],
+  note: "(브런치가 본진이길 바라는 마음으로)",
+ },
+ {
+  name: "류지모토",
+  bio: "음악업계에 몸담고 있는 직장인 에디터 류지모토입니다. 콰지모토보다 귀여운 돼지를 더 좋아합니다.",
+  image: "/images/profile/profile-8.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/ryuzimoto/" }],
+ },
+ {
+  name: "예리",
+  bio: "예리하게 슬기롭게",
+  image: "/images/profile/profile-19.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/dototrl/" }],
+ },
+ {
+  name: "온암",
+  bio: "흩어지고 있습니다",
+  image: "/images/profile/profile-1.jpg",
+  links: [
+   { label: "instagram", href: "https://www.instagram.com/xel.theus/" },
+   { label: "blog", href: "https://m.blog.naver.com/oras8384" },
+  ],
+ },
+ {
+  name: "자카",
+  bio: "음악을 정말 좋아해요",
+  image: "/images/profile/profile-9.jpg",
+  links: [
+   { label: "instagram", href: "https://www.instagram.com/thisiseoyul/" },
+   { label: "blog", href: "https://blog.naver.com/domissol-" },
+  ],
+ },
+ {
+  name: "moogsick",
+  bio: "moog 신스 쓴 sick한 music이 최고야",
+  image: "/images/profile/profile-20.jpg",
+  links: [{ label: "instagram", href: "https://www.instagram.com/moogsick/" }],
+ },
+ {
+  name: "SONGCHICO",
+  bio: "'음악을 즐기는 방법'",
+  image: "/images/profile/profile-2.png",
+  links: [{ label: "instagram", href: "https://www.instagram.com/songchico/" }],
+ },
+ {
+  name: "SRUKSAN",
+  bio: "I'm Ennui.",
+  image: "/images/profile/profile-7.jpg",
+  links: [
+   { label: "instagram", href: "https://www.instagram.com/sruksanimennui/" },
+   { label: "blog", href: "https://blog.naver.com/sruksanimennui/" },
+  ],
+ },
+];
 ---
 
 <BaseLayout title={title}>
-  <div class="content content--page">
-    <h1>Info</h1>
-    <p>This is a blank page.</p>
-  </div>
+ <div class="info-page">
+  <header class="title-header title-header--initial">
+   <h2>Info</h2>
+  </header>
+  <Separator />
+
+  <section class="members-container">
+   {
+    [
+     { label: "Directors", members: directors },
+     { label: "Designers", members: designers },
+     { label: "HOM Editors", members: homEditors },
+     { label: "w/HOM Editors", members: whomEditors },
+    ].map(({ label, members }) => (
+     <div class="members-wrapper">
+      <h2>{label}</h2>
+      <ol>
+       {members.map(m => (
+        <li>
+         <div class="member-info">
+          <h3>{m.name}</h3>
+          <p>{m.bio}</p>
+         </div>
+         <figure>
+          {m.image && <img src={m.image} alt={m.name} class="fade-in" />}
+          <figcaption>
+           {m.links?.map(l => (
+            <a href={l.href} target="_blank" rel="noopener noreferrer">
+             ‣ {l.label}
+            </a>
+           ))}
+           {m.note && <small>{m.note}</small>}
+          </figcaption>
+         </figure>
+        </li>
+       ))}
+      </ol>
+     </div>
+    ))
+   }
+  </section>
+
+  <Separator />
+
+  <section class="contact-section">
+   <h2 class="group-title">Contact</h2>
+   <div class="contact-grid">
+    <div>
+     <span class="contact-label">Mail</span>
+     <a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a>
+    </div>
+    <div>
+     <span class="contact-label">Instagram</span>
+     <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer"> @hausofmatters </a>
+    </div>
+   </div>
+  </section>
+ </div>
 </BaseLayout>
+
+<style>
+ .info-page {
+  display: flex;
+  flex-direction: column;
+ }
+
+ /* 페이지 타이틀 */
+ .page-title {
+  text-align: center;
+  margin: 4rem auto 0;
+ }
+
+ .page-title img {
+  max-height: 4.5rem;
+ }
+
+ /* 멤버 컨테이너 */
+ .members-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+
+  margin: 2rem 0 8rem;
+ }
+
+ .members-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+ }
+
+ .group-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+ }
+
+ .members-wrapper ol {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1080px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+ }
+
+ .members-wrapper li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.75rem 0.75rem 0.5rem;
+  gap: 1rem;
+  border-top: 1px solid var(--border-color);
+ }
+
+ /* 텍스트 영역 */
+ .member-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 0.4rem;
+ }
+
+ .member-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+ }
+
+ .member-info p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+
+  word-break: keep-all;
+  color: var(--color-text-secondary);
+ }
+
+ /* 이미지 + 링크 */
+ .members-wrapper figure {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin: 0;
+  flex-shrink: 0;
+ }
+
+ .members-wrapper img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+ }
+
+ .members-wrapper figcaption {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+ }
+
+ .members-wrapper figcaption a {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+ }
+
+ .members-wrapper figcaption a:hover {
+  color: var(--color-text-primary);
+ }
+
+ .members-wrapper figcaption small {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  text-align: right;
+  line-height: 1.3;
+ }
+
+ /* 연락처 */
+ .contact-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+ }
+
+ .contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+ }
+
+ .contact-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-left: 1px solid var(--color-border-tertiary);
+  padding-left: 0.75rem;
+ }
+
+ .contact-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+ }
+
+ .contact-grid a {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--color-text-primary);
+ }
+
+ .contact-grid a:hover {
+  opacity: 0.6;
+ }
+
+ /* 반응형 */
+ @media (max-width: 44em) {
+  .members-wrapper ol {
+   grid-template-columns: 1fr;
+  }
+
+  .member-info p {
+   width: auto;
+  }
+
+  .contact-grid {
+   grid-template-columns: 1fr;
+  }
+ }
+</style>

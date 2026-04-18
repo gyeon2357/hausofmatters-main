@@ -31,14 +31,14 @@ const albums = defineCollection({
 const magazine = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/data/magazine" }),
   schema: z.object({
-    title: z.string(),
-    slug: z.string(),
+    title: z.string().optional(),
+    slug: z.string().optional(),
     pdfPath: z.string(),
     date: z.date(),
     image: z.object({
       src: z.string(),
       alt: z.string(),
-    }),
+    }).optional(),
   }),
 });
 
