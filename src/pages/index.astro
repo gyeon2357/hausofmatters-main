@@ -65,7 +65,7 @@ const whomCards = sorted
   <section class="featured-albums">
     <div class="section-header">
       <h2>Featured Review</h2>
-      <a class="more-link" href="/albums">More View →</a>
+      <a class="more-link" href="/albums">MORE →</a>
     </div>
     <div class="albums-grid">
       {albumCards.map(card => (
@@ -83,7 +83,7 @@ const whomCards = sorted
   <section class="latest-magazine">
     <div class="section-header">
       <h2>MAGAZINE</h2>
-      <a class="more-link" href="/magazine">More View →</a>
+      <a class="more-link" href="/magazine">MORE →</a>
     </div>
     <div class="magazine-columns">
       <div class="magazine-column">
@@ -247,16 +247,7 @@ const whomCards = sorted
     font-size: 1.5rem;
   }
 
-  .more-link {
-    opacity: 0.7;
-    text-decoration: none;
-    color: inherit;
-    transition: opacity 0.2s ease;
-  }
 
-  .more-link:hover {
-    opacity: 1;
-  }
 
   @media (max-width: 768px) {
     .albums-grid {
