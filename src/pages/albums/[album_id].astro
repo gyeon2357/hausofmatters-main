@@ -50,9 +50,9 @@ if (artistId) {
  <section>
   <header class="title-header">
    <h2>
+    {album.data.recommended && <span class="pick-badge">pick</span>}
     {album.data.name}
     {artistName && <span class="faded">by {artistName}</span>}
-    {album.data.recommended && <span class="pick-badge" />}
    </h2>
    <div>
     <a class="back" href={backHref}>{backLabel}</a>

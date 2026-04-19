@@ -16,11 +16,11 @@ const intlCards = allAlbums
   imageSrc: album.data.image.src,
   imageAlt: album.data.image.alt,
   year: (() => {
-  const d = new Date(album.data.publishDate);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}. ${m}.`;
-})(),
+   const d = new Date(album.data.publishDate);
+   const y = d.getFullYear();
+   const m = String(d.getMonth() + 1).padStart(2, "0");
+   return `${y}. ${m}.`;
+  })(),
   recommended: album.data.recommended ?? false,
  }));
 ---
@@ -36,8 +36,8 @@ const intlCards = allAlbums
       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
      </div>
      <p class="album-name">
+      {card.recommended && <span class="pick-badge">pick</span>}
       {card.name}
-      {card.recommended && <span class="pick-badge" />}
      </p>
      <p class="album-year">{card.year}</p>
     </a>

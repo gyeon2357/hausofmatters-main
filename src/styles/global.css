@@ -373,7 +373,7 @@ dd {
 .pick-badge {
  display: inline-block;
 
- width: 0.4em;
+ /* width: 0.4em;
  height: 0.4em;
 
  margin: 0 0.1em 0;
@@ -381,7 +381,20 @@ dd {
  border-radius: 999px;
  vertical-align: text-top;
 
- background-color: crimson;
+ background-color: crimson; */
+
+ display: inline-block;
+ font-size: 0.6rem;
+ font-weight: 700;
+
+ text-transform: uppercase;
+ padding: 0.125em 0.4em;
+ border: 1px solid currentColor;
+
+ vertical-align: text-top;
+ margin-right: 0.4em;
+ opacity: 0.75;
+ line-height: 1.3;
 }
 
 .more-link {

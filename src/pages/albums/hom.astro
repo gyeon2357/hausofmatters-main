@@ -36,9 +36,8 @@ const domesticCards = allAlbums
       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
      </div>
      <h3 class="album-name">
-     
+      {card.recommended && <span class="pick-badge">pick</span>}
       {card.name}
-       {card.recommended && <span class="pick-badge" />}
      </h3>
      <p class="album-year">{card.year}</p>
     </a>
