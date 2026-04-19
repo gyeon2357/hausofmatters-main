@@ -18,6 +18,7 @@ tracks:
  - "Still Waters"
  - "Wistful Horizon"
 artist: "ivy-veil"
+recommended: true
 ---
 
 **Echoes of Stillness** is Ivy Veil’s captivating second album, merging serene electronica with hauntingly beautiful soundscapes. With its introspective themes and Ivy's signature ethereal style, this record creates a sense of calm reflection and timeless beauty.

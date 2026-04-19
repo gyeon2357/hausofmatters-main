@@ -15,23 +15,31 @@ const intlCards = allAlbums
   name: album.data.name,
   imageSrc: album.data.image.src,
   imageAlt: album.data.image.alt,
-  year: new Date(album.data.publishDate).getFullYear(),
+  year: (() => {
+  const d = new Date(album.data.publishDate);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  return `${y}. ${m}.`;
+})(),
+  recommended: album.data.recommended ?? false,
  }));
 ---
 
 <BaseLayout title={title}>
- <AlbumGridHeader albumsTotal={intlCards.length} title="해외 리뷰" />
- <a class="back" href="/albums">/ Back</a>
+ <AlbumGridHeader albumsTotal={intlCards.length} title="해외힙합" />
 
  <div class="album-grid" data-grid>
   {
    intlCards.map(card => (
-    <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
+    <a class="album-card" href={card.href} data-name={card.name} data-recommended={String(card.recommended)} data-astro-prefetch>
      <div class="album-img">
       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
      </div>
-     <p class="album-name">{card.name}</p>
-     <p class="album-year faded">{card.year}</p>
+     <p class="album-name">
+      {card.name}
+      {card.recommended && <span class="pick-badge" />}
+     </p>
+     <p class="album-year">{card.year}</p>
     </a>
    ))
   }
@@ -57,42 +65,11 @@ const intlCards = allAlbums
   }
  }
 
- .album-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  text-decoration: none;
-  color: inherit;
- }
-
- .album-img {
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: var(--color-placeholder);
- }
-
- .album-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
- }
-
- .album-card:hover .album-img img {
-  transform: scale(1.04);
- }
-
  .album-name {
   margin: 0;
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.3;
- }
-
- .album-year {
-  margin: 0;
-  font-size: 0.8rem;
  }
 
  .faded {

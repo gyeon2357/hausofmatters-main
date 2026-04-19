@@ -18,6 +18,7 @@ tracks:
  - "Twilight Serenade"
  - "Last Light"
 artist: "eli-haze"
+recommended: true
 ---
 
 **Echoes in the Pines** is the debut album by Eli Haze, capturing the stillness and beauty of the Appalachian landscapes. This collection of acoustic ballads and heartfelt lyrics paints vivid images of love, loss, and connection to nature.

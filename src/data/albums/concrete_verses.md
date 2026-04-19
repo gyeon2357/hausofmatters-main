@@ -18,6 +18,7 @@ tracks:
  - "Microphone Justice"
  - "Unbreakable Flow"
 artist: "mia-sue"
+recommended: true
 ---
 
 **Concrete Verses** is Mia Sue’s hard-hitting sophomore album, combining gritty beats with empowering lyrics. This album showcases her growth as an artist and continues to celebrate the resilience and energy of her community.

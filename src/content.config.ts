@@ -39,6 +39,7 @@ const albums = defineCollection({
     artist: z.string().optional(),
     category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
     editor: z.string().optional(),  // ← 추가
+    recommended: z.boolean().optional(),  // ← 추가
   }),
 });
 

@@ -3,6 +3,7 @@ let gridContainer;
 let gridItems;
 let shuffleButton;
 let sortButton;
+let recommendedButton;
 let searchButton;
 let searchClearButton;
 let searchContent;
@@ -13,25 +14,20 @@ let closeDialog;
 
 /* Event handler functions */
 
-// Shuffle grid: trigger grid shuffling.
 const handleShuffleClick = () => shuffleGrid();
-
-// Sort grid: trigger grid sorting.
 const handleSortClick = () => sortGrid();
+const handleRecommendedClick = () => recommendedGrid();
 
-// Open search dialog: show the dialog and blur the page.
 const handleSearchClick = () => {
   searchDialog.showModal();
   toggleDialogPageBlur(true);
 };
 
-// Close search dialog: hide the dialog and remove the blur.
 const handleCloseClick = () => {
   searchDialog.close();
   toggleDialogPageBlur(false);
 };
 
-// Clear search: reset the filter and clear the input.
 const handleSearchClearClick = () => {
   filterGrid('');
   toggleClearButton();
@@ -40,7 +36,6 @@ const handleSearchClearClick = () => {
   searchButton.classList.remove('search--active');
 };
 
-// Filter grid: update grid items based on the search input.
 const handleSearchInput = (e) => {
   const searchTerm = e.target.value;
   filterGrid(searchTerm);
@@ -55,6 +50,7 @@ const initializeVariables = () => {
   gridItems = Array.from(gridContainer?.children || []);
   shuffleButton = document.querySelector('[data-shuffle]');
   sortButton = document.querySelector('[data-sort]');
+  recommendedButton = document.querySelector('[data-recommended]');
   searchButton = document.querySelector('[data-search]');
   searchClearButton = document.querySelector('[data-clear]');
   searchContent = searchButton?.querySelector('.oh__inner');
@@ -64,31 +60,42 @@ const initializeVariables = () => {
   closeDialog = document.getElementById('close-dialog');
 };
 
-/* Shuffle grid items randomly and update the container */
+/* Shuffle grid items randomly */
 const shuffleGrid = () => {
   const items = Array.from(gridContainer?.children || []);
-  const shuffledItems = items.sort(() => Math.random() - 0.5);
+  const shuffled = items.sort(() => Math.random() - 0.5);
   if (gridContainer) {
     gridContainer.innerHTML = '';
-    shuffledItems.forEach((item) => gridContainer.appendChild(item));
+    shuffled.forEach((item) => gridContainer.appendChild(item));
   }
 };
 
-/* Sort grid items alphabetically by 'data-stagename' */
+/* Sort grid items A-Z by data-name */
 const sortGrid = () => {
   const items = Array.from(gridContainer?.children || []);
-  const sortedItems = items.sort((a, b) => {
+  const sorted = items.sort((a, b) => {
     const nameA = (a.getAttribute('data-stagename') || a.getAttribute('data-name') || '').toLowerCase();
     const nameB = (b.getAttribute('data-stagename') || b.getAttribute('data-name') || '').toLowerCase();
     return nameA.localeCompare(nameB);
   });
   if (gridContainer) {
     gridContainer.innerHTML = '';
-    sortedItems.forEach((item) => gridContainer.appendChild(item));
+    sorted.forEach((item) => gridContainer.appendChild(item));
   }
 };
 
-/* Filter grid items based on the search input */
+/* Sort grid: recommended items first, rest below (original order preserved within each group) */
+const recommendedGrid = () => {
+  const items = Array.from(gridContainer?.children || []);
+  const recommended = items.filter(item => item.getAttribute('data-recommended') === 'true');
+  const rest = items.filter(item => item.getAttribute('data-recommended') !== 'true');
+  if (gridContainer) {
+    gridContainer.innerHTML = '';
+    [...recommended, ...rest].forEach((item) => gridContainer.appendChild(item));
+  }
+};
+
+/* Filter grid items based on search input */
 const filterGrid = (searchValue) => {
   const lowerCaseSearch = searchValue.toLowerCase();
   const items = Array.from(gridContainer?.children || []);
@@ -102,16 +109,12 @@ const filterGrid = (searchValue) => {
   });
 };
 
-/* Toggle page blur when the search dialog is open or closed */
+/* Toggle page blur when search dialog opens/closes */
 const toggleDialogPageBlur = (toggle) => {
-  if (toggle) {
-    document.body.classList.add('blurred');
-  } else {
-    document.body.classList.remove('blurred');
-  }
+  document.body.classList.toggle('blurred', toggle);
 };
 
-/* Show or hide the clear button based on search input */
+/* Show or hide the clear button */
 const toggleClearButton = (searchTerm = '') => {
   const isHidden = searchClearButton?.classList.contains('hidden');
   if (searchTerm === '' && !isHidden) {
@@ -121,11 +124,12 @@ const toggleClearButton = (searchTerm = '') => {
   }
 };
 
-/* Initialize event listeners and states */
+/* Initialize event listeners */
 const init = () => {
   initializeVariables();
   shuffleButton?.addEventListener('click', handleShuffleClick);
   sortButton?.addEventListener('click', handleSortClick);
+  recommendedButton?.addEventListener('click', handleRecommendedClick);
   searchButton?.addEventListener('click', handleSearchClick);
   closeDialog?.addEventListener('click', handleCloseClick);
   searchClearButton?.addEventListener('click', handleSearchClearClick);
@@ -133,10 +137,11 @@ const init = () => {
   searchDialog?.addEventListener('close', () => toggleDialogPageBlur(false));
 };
 
-/* Cleanup event listeners and reset variables */
+/* Cleanup event listeners */
 const cleanup = () => {
   shuffleButton?.removeEventListener('click', handleShuffleClick);
   sortButton?.removeEventListener('click', handleSortClick);
+  recommendedButton?.removeEventListener('click', handleRecommendedClick);
   searchButton?.removeEventListener('click', handleSearchClick);
   closeDialog?.removeEventListener('click', handleCloseClick);
   searchClearButton?.removeEventListener('click', handleSearchClearClick);
@@ -145,6 +150,7 @@ const cleanup = () => {
   gridItems = [];
   shuffleButton = null;
   sortButton = null;
+  recommendedButton = null;
   searchButton = null;
   searchClearButton = null;
   searchContent = null;
@@ -154,7 +160,7 @@ const cleanup = () => {
   closeDialog = null;
 };
 
-/* Handle Astro page events on the home page */
+/* Handle Astro page events */
 const handlePageEvent = (type) => {
   const page = document.documentElement.getAttribute('data-page');
   if (page !== 'home' && page !== 'artists' && page !== 'albums' && page !== 'hom' && page !== 'w-hom') return;
@@ -165,6 +171,5 @@ const handlePageEvent = (type) => {
   }
 };
 
-// Listen for Astro's lifecycle events
 document.addEventListener('astro:page-load', () => handlePageEvent('load'));
 document.addEventListener('astro:before-swap', () => handlePageEvent('before-swap'));
