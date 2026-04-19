@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/velvet_nights.jpg"
   alt: "A retro dancefloor lit with warm golden and pink hues, with shimmering curtains in the background, featuring luna-deluxe's 'LD' logo elegantly integrated."
-publishDate: 2025-05-05
+release: 2025-05-05
 tracks:
   - "Velvet Nights"
   - "Shimmering Steps"

@@ -13,16 +13,19 @@ const { albumsTotal, title = "Review" } = Astro.props;
 ---
 
 <header class="title-header title-header--initial">
- <div>
+ <div class="title-row">
   <h2><TextSlider content={title} /></h2>
   <span class="total-num"><TextSlider content={"(" + albumsTotal + ")"} /></span>
  </div>
  <section>
-  <div>
+  <div class="sort-group">
+   <span class="sort-label">Sort:</span>
    <button data-sort><TextSlider content="A-Z" /></button>
+   <button data-sort-date><TextSlider content="Date" /></button>
    <button data-recommended><TextSlider content="Pick" /></button>
    <button data-shuffle><TextSlider content="Shuffle" /></button>
-   <div>
+
+   <div class="search-group">
     <button data-search class="search"><TextSlider content="Search" /></button>
     <button data-clear class="clear hidden" aria-label="Clear search">
      <Cross width={14} height={14} />
@@ -37,25 +40,44 @@ const { albumsTotal, title = "Review" } = Astro.props;
 <Search />
 
 <style>
- section {
+ .title-row {
   display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
  }
 
- div {
+ section {
   display: flex;
-  list-style: none;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+ }
+
+ .sort-group {
+  display: flex;
   align-items: center;
   gap: 1rem;
   margin: 0;
   padding: 0;
  }
- div:has(> .search) {
-  position: relative;
+
+ .sort-label {
+  opacity: 0.4;
  }
- div:has(> .search--active) {
+
+ .search-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+
   margin-left: 1rem;
  }
- div:has(> .search--active)::before {
+
+ .search-group:has(> .search--active) {
+  margin-left: 1rem;
+ }
+ .search-group:has(> .search--active)::before {
   pointer-events: none;
   content: "";
   position: absolute;
@@ -64,16 +86,13 @@ const { albumsTotal, title = "Review" } = Astro.props;
   top: -0.5rem;
   bottom: -0.5rem;
   border: 1px solid;
-  border-radius: 2rem;
  }
- .search--active {
-  &:focus-visible {
-   color: inherit;
-  }
+ .search--active:focus-visible {
+  color: inherit;
  }
 
- .pick-badge {
-  margin: 0 0 0 0.25em;
+ .search-group .clear {
+  margin-left: 1rem;
  }
 
  .total-num {

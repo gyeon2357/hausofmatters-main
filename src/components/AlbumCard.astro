@@ -13,7 +13,7 @@ const { album } = Astro.props;
   <img class="fade-in" loading="lazy" src={album.data.image.src} alt={album.data.image.alt} />
  </div>
  <h3>{album.data.name}</h3>
- <p>{new Date(album.data.publishDate).getFullYear()}</p>
+ <p>{new Date(album.data.release).getFullYear()}</p>
 </a>
 
 <style>

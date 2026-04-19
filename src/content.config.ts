@@ -34,12 +34,13 @@ const albums = defineCollection({
   schema: z.object({
     name: z.string(),
     image: z.object({ src: z.string(), alt: z.string() }).optional(),
-    publishDate: z.date(),
+    release: z.date(),
     tracks: z.array(z.string()),
     artist: z.string().optional(),
     category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
     editor: z.string().optional(),  // ← 추가
     recommended: z.boolean().optional(),  // ← 추가
+    magazine: z.string().optional(),          // ← 추가 (e.g. "hom-35")
   }),
 });
 

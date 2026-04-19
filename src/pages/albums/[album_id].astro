@@ -22,9 +22,9 @@ const { Content } = await render(album);
 
 const category = album.data.category === "w-hom" ? "w-hom" : "hom";
 const backHref = `/albums/${category}`;
-const backLabel = category === "w-hom" ? "/ Back" : "/ Back";
+const backLabel = "/ Back";
 
-// artist 필드가 string이든 reference 객체든 모두 처리
+// artist
 const rawArtist = album.data.artist as unknown;
 const artistId: string | undefined =
  typeof rawArtist === "string"
@@ -37,16 +37,26 @@ let artistName: string | undefined = artistId;
 if (artistId) {
  try {
   const artistEntry = await getEntry("artists", artistId);
-  if (artistEntry) {
-   artistName = artistEntry.data.stage_name;
+  if (artistEntry) artistName = artistEntry.data.stage_name;
+ } catch {}
+}
+
+// magazine 링크
+let magazineHref: string | undefined;
+if (album.data.magazine) {
+ try {
+  const magazineEntry = await getEntry("magazine", album.data.magazine);
+  if (magazineEntry) {
+   magazineHref = `/magazine/${magazineEntry.data.slug ?? magazineEntry.id}`;
   }
  } catch {
-  // artists 컬렉션에 해당 파일 없으면 id 그대로 표시
+  // magazine 파일이 없으면 id를 slug로 직접 사용
+  magazineHref = `/magazine/${album.data.magazine}`;
  }
 }
 ---
 
-<BaseLayout title={album.data.name} ogImage={(album.data.image?.src ?? `/images/albums/${album.id}.jpg`)}>
+<BaseLayout title={album.data.name} ogImage={album.data.image?.src ?? `/images/albums/${album.id}.jpg`}>
  <section>
   <header class="title-header">
    <h2>
@@ -60,16 +70,16 @@ if (artistId) {
   </header>
   <Separator />
   <div class="content-wrap">
-   <img class="fade-in" src={(album.data.image?.src ?? `/images/albums/${album.id}.jpg`)} alt={(album.data.image?.alt ?? album.id.replace(/-/g, " "))} />
+   <img class="fade-in" src={album.data.image?.src ?? `/images/albums/${album.id}.jpg`} alt={album.data.image?.alt ?? album.id.replace(/-/g, " ")} />
    <div class="content">
     {
-     album.data.publishDate &&
+     album.data.release &&
       (() => {
-       const d = new Date(album.data.publishDate);
+       const d = new Date(album.data.release);
        const date = d.toLocaleDateString("ko-KR", { year: "numeric", month: "numeric", day: "numeric" });
        const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
        return (
-        <h5 class="publishDate">
+        <h5 class="release">
          Released in {date} {weekday}
         </h5>
        );
@@ -82,7 +92,17 @@ if (artistId) {
     </ol>
 
     <Content />
-    {album.data.editor && <h5 class="editor">Editor. {album.data.editor}</h5>}
+    <div class="row">
+     {
+      magazineHref && (
+       <a class="magazine-link" href={magazineHref}>
+        / In {album.data.magazine?.toUpperCase()}
+       </a>
+      )
+     }
+
+     {album.data.editor && <h5 class="editor">Editor. {album.data.editor}</h5>}
+    </div>
 
     <Share title={album.data.name} />
    </div>
@@ -91,7 +111,25 @@ if (artistId) {
 </BaseLayout>
 
 <style>
- .publishDate {
+ .release {
   margin-bottom: 1.25rem;
+ }
+
+ .row {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+  margin: 0.5rem 0 1rem;
+ }
+
+ .magazine-link {
+  display: inline-block;
+
+  opacity: 0.8;
+  transition: opacity 0.2s;
+ }
+ .magazine-link:hover {
+  opacity: 1;
  }
 </style>

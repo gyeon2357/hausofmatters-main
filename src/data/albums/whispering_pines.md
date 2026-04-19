@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
  src: "/images/albums/whispering_pines.jpg"
  alt: "Photography of a peaceful forest with tall pine trees silhouetted against a soft evening sky in shades of teal and gold."
-publishDate: 2025-05-20
+release: 2025-05-20
 tracks:
  - "Whispering Pines"
  - "Fallen Leaves"

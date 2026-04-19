@@ -2,10 +2,7 @@
 name: "Echoes of the Underground"
 category: "w-hom"
 editor: "zyaez"
-image:
- src: "/images/albums/echoes_of_the_underground.jpg"
- alt: "Photography of a dramatic city alleyway with dim ambient lighting, wet cobblestones reflecting faint neon signs, and a lone figure in a hooded silhouette walking through the shadows."
-publishDate: 2026-03-20
+release: 2026-03-20
 tracks:
  - "Echoes of the Underground"
  - "Shadow Rhymes"

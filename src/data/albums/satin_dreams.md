@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/satin_dreams.jpg"
   alt: "A sleek album cover featuring rich pink and purple satin textures illuminated by soft, dreamy light, evoking sensuality and sophistication."
-publishDate: 2025-02-14
+release: 2025-02-14
 tracks:
   - "Midnight Reverie"
   - "Silk & Shadows"

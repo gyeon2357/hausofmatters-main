@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/rhythms_of_india.jpg"
   alt: "Illustration featuring vibrant Indian patterns, mandalas, and neon waveforms, blending traditional and modern music styles for a Bollywood fusion album"
-publishDate: 2021-03-20
+release: 2021-03-20
 tracks:
   - "Dance of the Dhol"
   - "Bollywood Beats 2.0"

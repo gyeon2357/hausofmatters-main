@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
  src: "/images/albums/wild.jpg"
  alt: "An abstract album art design featuring bold, sweeping brushstrokes in crimson, deep violet, and gold with subtle guitar string patterns embedded, evoking raw energy and passion."
-publishDate: 2024-09-10
+release: 2024-09-10
 tracks:
  - "Wild"
  - "Unbound"

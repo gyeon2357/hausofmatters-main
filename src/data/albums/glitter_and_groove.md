@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/glitter_and_groove.jpg"
   alt: "A dazzling album cover with golden glitter swirls and a glowing disco ball at the center, radiating light and energy."
-publishDate: 2023-11-10
+release: 2023-11-10
 tracks:
   - "Neon Nights"
   - "Golden Hour"

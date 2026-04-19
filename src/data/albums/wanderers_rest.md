@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/wanderers_rest.jpg"
   alt: "A cozy cabin in the woods under a soft twilight sky, with a warm glow emanating from its windows, symbolizing tranquility and reflection."
-publishDate: 2025-09-15
+release: 2025-09-15
 tracks:
   - "Sheltered Sky"
   - "Fireside Stories"

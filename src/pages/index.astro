@@ -8,7 +8,7 @@ const allAlbums = await getCollection("albums");
 const allMagazines = await getCollection("magazine");
 
 const recentAlbums = allAlbums
- .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+ .sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime())
  .slice(0, 5)
  .sort(() => Math.random() - 0.5);
 
@@ -24,7 +24,7 @@ const albumCards = recentAlbums.map(album => {
   name: album.data.name,
   imageSrc: album.data.image?.src ?? `/images/albums/${album.id}.jpg`,
   imageAlt: album.data.image?.alt ?? album.id.replace(/-/g, " "),
-  year: new Date(album.data.publishDate).getFullYear(),
+  year: new Date(album.data.release).getFullYear(),
  };
 });
 

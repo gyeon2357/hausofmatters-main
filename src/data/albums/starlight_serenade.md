@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/starlight_serenade.jpg"
   alt: "A dreamy night sky with twinkling stars, cherry blossoms illuminated by fairy lights, and a soft glow from the horizon, evoking magic and peace."
-publishDate: 2026-09-15
+release: 2026-09-15
 tracks:
   - "Celestial Dance"
   - "Starlight Serenade"

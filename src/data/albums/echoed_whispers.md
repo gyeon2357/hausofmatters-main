@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
  src: "/images/albums/echoed_whispers.jpg"
  alt: "A minimal symbol-based design featuring two concentric circles with wavy, echo-like lines radiating outward, using black and violet colors, symbolizing connection and storytelling."
-publishDate: 2025-03-20
+release: 2025-03-20
 tracks:
  - "Echoed Whispers"
  - "Radiant Stories"

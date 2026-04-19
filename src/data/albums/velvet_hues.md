@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/velvet_hues.jpg"
   alt: "A minimal symbol-based design featuring a flowing ribbon-like shape forming a heart, using black and violet colors, symbolizing love and resilience."
-publishDate: 2024-09-15
+release: 2024-09-15
 tracks:
   - "Velvet Hues"
   - "Ribbon of Light"

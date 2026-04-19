@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
  src: "/images/albums/equinox_reverie.jpg"
  alt: "Celestial crescent moons with gradients of deep blue and silver, surrounded by starry textures, evoking elegance and contemplation."
-publishDate: 2026-04-12
+release: 2026-04-12
 tracks:
  - "Lunar Prelude"
  - "Nebula Dreams"

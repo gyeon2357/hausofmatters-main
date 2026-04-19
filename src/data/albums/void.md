@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/void.jpg"
   alt: "An abstract album art design featuring an intersecting black circle and a white triangle on a gray gradient background, reflecting minimalist aesthetics."
-publishDate: 2025-06-20
+release: 2025-06-20
 tracks:
   - "Void"
   - "Echoes"

@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/street_serenade.jpg"
   alt: "A dynamic urban streetscape with colorful graffiti, a spotlighted microphone at the center, and a stylized 'MS' logo integrated into the graffiti."
-publishDate: 2024-08-25
+release: 2024-08-25
 tracks:
   - "Street Serenade"
   - "Graffiti Dreams"

@@ -9,29 +9,30 @@ const allAlbums = await getCollection("albums");
 
 const intlCards = allAlbums
  .filter(a => a.data.category === "w-hom")
- .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+ .sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime())
  .map(album => ({
   href: `/albums/${album.id}`,
   name: album.data.name,
   imageSrc: (album.data.image?.src ?? `/images/albums/${album.id}.jpg`),
   imageAlt: (album.data.image?.alt ?? album.id.replace(/-/g, " ")),
   year: (() => {
-   const d = new Date(album.data.publishDate);
+   const d = new Date(album.data.release);
    const y = d.getFullYear();
    const m = String(d.getMonth() + 1).padStart(2, "0");
    return `${y}. ${m}.`;
   })(),
   recommended: album.data.recommended ?? false,
+  date: new Date(album.data.release).getTime(),
  }));
 ---
 
 <BaseLayout title={title}>
- <AlbumGridHeader albumsTotal={intlCards.length} title="해외힙합" />
+ <AlbumGridHeader albumsTotal={intlCards.length} title="해외리뷰" />
 
  <div class="album-grid" data-grid>
   {
    intlCards.map(card => (
-    <a class="album-card" href={card.href} data-name={card.name} data-recommended={String(card.recommended)} data-astro-prefetch>
+    <a class="album-card" href={card.href} data-name={card.name} data-recommended={String(card.recommended)} data-date={String(card.date)} data-astro-prefetch>
      <div class="album-img">
       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
      </div>

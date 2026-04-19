@@ -8,7 +8,7 @@ const title = "Hausofmatters - Albums";
 const allAlbums = await getCollection("albums");
 
 // category 필드 기준으로 분리, 날짜 내림차순
-const sorted = allAlbums.sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
+const sorted = allAlbums.sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime());
 
 const domesticAlbums = sorted.filter(a => a.data.category === "hom").slice(0, 6);
 const intlAlbums = sorted.filter(a => a.data.category === "w-hom").slice(0, 6);
@@ -20,7 +20,7 @@ const makeCard = (album: (typeof allAlbums)[number]) => {
   imageSrc: (album.data.image?.src ?? `/images/albums/${album.id}.jpg`),
   imageAlt: (album.data.image?.alt ?? album.id.replace(/-/g, " ")),
   year: (() => {
-  const d = new Date(album.data.publishDate);
+  const d = new Date(album.data.release);
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   return `${y}. ${m}.`;

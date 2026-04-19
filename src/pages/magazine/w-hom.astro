@@ -16,7 +16,7 @@ const whomCards = allMagazines
   return {
    href: `/magazine/${slug}`,
    title: label,
-   date: new Date(m.data.date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" }),
+   date: (() => { const d = new Date(m.data.date); const y = d.getFullYear(); const mo = String(d.getMonth() + 1).padStart(2, "0"); return `${y}. ${mo}.`; })(),
    imageSrc: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
    imageAlt: m.data.image?.alt ?? label,
   };

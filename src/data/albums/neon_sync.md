@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/neon_sync.jpg"
   alt: "Glowing intersecting neon lines forming a funky geometric pattern with vibrant colors like magenta, cyan, and lime green on a dark background."
-publishDate: 2026-02-14
+release: 2026-02-14
 tracks:
   - "Syncopated Groove"
   - "Neon Sync"

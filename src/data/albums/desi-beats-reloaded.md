@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
  src: "/images/albums/desi-beats-reloaded.jpg"
  alt: "Illustration featuring vibrant Indian-inspired patterns with neon lights, blending a turntable and paisley motifs, representing Bollywood fusion music"
-publishDate: 2023-11-15
+release: 2023-11-15
 tracks:
  - "Mumbai Nights"
  - "Bollywood Bounce"

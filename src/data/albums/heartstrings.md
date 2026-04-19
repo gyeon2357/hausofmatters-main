@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/heartstrings.jpg"
   alt: "A glowing red heart wrapped in guitar strings, set against a textured background of earthy brown and soft gold tones, symbolizing love and music."
-publishDate: 2024-03-15
+release: 2024-03-15
 tracks:
   - "Strings of Love"
   - "Falling Again"

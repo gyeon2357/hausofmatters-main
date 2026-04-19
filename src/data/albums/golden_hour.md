@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/golden_hour.jpg"
   alt: "A jazz singer performing on a small stage in a cozy café during sunset, with warm golden light streaming through the windows and an intimate audience watching."
-publishDate: 2024-09-10
+release: 2024-09-10
 tracks:
   - "Golden Hour"
   - "Cafe Serenade"

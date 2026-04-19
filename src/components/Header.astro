@@ -4,7 +4,6 @@ import Separator from "../components/Separator.astro";
 
 const currentPath = Astro.url.pathname;
 
-const isHome = currentPath === "/" || currentPath === "";
 const isAlbums = currentPath.startsWith("/albums");
 const isMagazine = currentPath.startsWith("/magazine");
 const isInterview = currentPath.startsWith("/interview");
@@ -13,7 +12,7 @@ const isAbout = currentPath.startsWith("/about");
 
 <header>
  <h1>
-  <a href="/" class={isHome ? "current" : ""}><TextSlider content="HAUSOFMATTERS" /></a>
+  <a href="/"><TextSlider content="HAUSOFMATTERS" /></a>
  </h1>
 
  <span><TextSlider content="by KHL" /></span>

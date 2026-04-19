@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/lucid.jpg"
   alt: "An abstract album art design featuring gradients of pale yellow and silver with smooth, flowing waves and subtle shimmering textures."
-publishDate: 2025-05-15
+release: 2025-05-15
 tracks:
   - "Lucid"
   - "Golden Reverie"

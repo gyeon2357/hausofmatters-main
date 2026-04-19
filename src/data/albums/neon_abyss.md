@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/neon_abyss.jpg"
   alt: "An abstract album art design featuring swirling, vortex-like patterns with glowing yellow highlights set against a deep black background, evoking a mysterious and dynamic aesthetic."
-publishDate: 2025-06-15
+release: 2025-06-15
 tracks:
   - "Neon Abyss"
   - "Submerged Signals"

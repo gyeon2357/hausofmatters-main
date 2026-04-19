@@ -5,7 +5,7 @@ editor: "zyaez"
 image:
   src: "/images/albums/fragments.jpg"
   alt: "An abstract album art design featuring shattered glass-like patterns in shades of midnight blue, silver, and teal, with faint glowing lines intersecting dynamically, evoking introspection and resilience."
-publishDate: 2025-04-20
+release: 2025-04-20
 tracks:
   - "Shattered Light"
   - "Fragments"
