@@ -33,7 +33,7 @@ const albums = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/data/albums" }),
   schema: z.object({
     name: z.string(),
-    image: z.object({ src: z.string(), alt: z.string() }),
+    image: z.object({ src: z.string(), alt: z.string() }).optional(),
     publishDate: z.date(),
     tracks: z.array(z.string()),
     artist: z.string().optional(),

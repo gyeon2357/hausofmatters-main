@@ -46,7 +46,7 @@ if (artistId) {
 }
 ---
 
-<BaseLayout title={album.data.name} ogImage={album.data.image.src}>
+<BaseLayout title={album.data.name} ogImage={(album.data.image?.src ?? `/images/albums/${album.id}.jpg`)}>
  <section>
   <header class="title-header">
    <h2>
@@ -60,7 +60,7 @@ if (artistId) {
   </header>
   <Separator />
   <div class="content-wrap">
-   <img class="fade-in" src={album.data.image.src} alt={album.data.image.alt} />
+   <img class="fade-in" src={(album.data.image?.src ?? `/images/albums/${album.id}.jpg`)} alt={(album.data.image?.alt ?? album.id.replace(/-/g, " "))} />
    <div class="content">
     {
      album.data.publishDate &&

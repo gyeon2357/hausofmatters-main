@@ -13,8 +13,8 @@ const domesticCards = allAlbums
  .map(album => ({
   href: `/albums/${album.id}`,
   name: album.data.name,
-  imageSrc: album.data.image.src,
-  imageAlt: album.data.image.alt,
+  imageSrc: (album.data.image?.src ?? `/images/albums/${album.id}.jpg`),
+  imageAlt: (album.data.image?.alt ?? album.id.replace(/-/g, " ")),
   year: (() => {
    const d = new Date(album.data.publishDate);
    const y = d.getFullYear();
