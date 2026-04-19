@@ -6,13 +6,14 @@ import Cross from "../assets/images/cross.svg";
 
 type Props = {
   albumsTotal: number;
+  title?: string;
 };
 
-const {albumsTotal} = Astro.props;
+const { albumsTotal, title = "Review" } = Astro.props;
 ---
 
 <header class="title-header title-header--initial">
-  <h2><TextSlider content="Review" /></h2>
+  <h2><TextSlider content={title} /></h2>
 
   <section>
     <div>

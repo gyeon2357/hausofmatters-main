@@ -78,8 +78,8 @@ const shuffleGrid = () => {
 const sortGrid = () => {
   const items = Array.from(gridContainer?.children || []);
   const sortedItems = items.sort((a, b) => {
-    const nameA = (a.getAttribute('data-stagename') || '').toLowerCase();
-    const nameB = (b.getAttribute('data-stagename') || '').toLowerCase();
+    const nameA = (a.getAttribute('data-stagename') || a.getAttribute('data-name') || '').toLowerCase();
+    const nameB = (b.getAttribute('data-stagename') || b.getAttribute('data-name') || '').toLowerCase();
     return nameA.localeCompare(nameB);
   });
   if (gridContainer) {
@@ -157,7 +157,7 @@ const cleanup = () => {
 /* Handle Astro page events on the home page */
 const handlePageEvent = (type) => {
   const page = document.documentElement.getAttribute('data-page');
-  if (page !== 'home' && page !== 'artists' && page !== 'albums') return;
+  if (page !== 'home' && page !== 'artists' && page !== 'albums' && page !== 'hom' && page !== 'w-hom') return;
   if (type === 'load') {
     init();
   } else if (type === 'before-swap') {

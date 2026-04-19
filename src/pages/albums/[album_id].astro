@@ -1,0 +1,74 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render, getEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Separator from "../../components/Separator.astro";
+import Share from "../../components/Share.astro";
+
+export const getStaticPaths = async () => {
+  const albums = await getCollection("albums");
+  return albums.map((album) => ({
+    params: { album_id: album.id },
+    props: { album },
+  }));
+};
+
+type Props = {
+  album: CollectionEntry<"albums">;
+};
+
+const { album } = Astro.props;
+const { Content } = await render(album);
+
+const category = album.data.category === "w-hom" ? "w-hom" : "hom";
+const backHref = `/albums/${category}`;
+const backLabel = category === "w-hom" ? "← 해외 리뷰" : "← 국내 리뷰";
+
+// artist 필드가 string이든 reference 객체든 모두 처리
+const rawArtist = album.data.artist as unknown;
+const artistId: string | undefined =
+  typeof rawArtist === "string"
+    ? rawArtist
+    : typeof rawArtist === "object" && rawArtist !== null && "id" in rawArtist
+      ? (rawArtist as { id: string }).id
+      : undefined;
+
+let artistName: string | undefined = artistId;
+if (artistId) {
+  try {
+    const artistEntry = await getEntry("artists", artistId);
+    if (artistEntry) {
+      artistName = artistEntry.data.stage_name;
+    }
+  } catch {
+    // artists 컬렉션에 해당 파일 없으면 id 그대로 표시
+  }
+}
+---
+
+<BaseLayout title={album.data.name} ogImage={album.data.image.src}>
+  <section>
+    <header class="title-header">
+      <h2>
+        {album.data.name}
+        {artistName && <span class="faded">by {artistName}</span>}
+      </h2>
+      <div>
+        <a class="back" href={backHref}>{backLabel}</a>
+      </div>
+    </header>
+    <Separator />
+    <div class="content-wrap">
+      <img class="image fade-in" src={album.data.image.src} alt={album.data.image.alt} />
+      <div class="content">
+        <h4>Track List</h4>
+        <ol>
+          {album.data.tracks.map(track => <li>{track}</li>)}
+        </ol>
+        {album.data.editor && <p class="editor">Editor. {album.data.editor}</p>}
+        <Content />
+        <Share title={album.data.name} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

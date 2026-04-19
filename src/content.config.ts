@@ -36,7 +36,7 @@ const albums = defineCollection({
     image: z.object({ src: z.string(), alt: z.string() }),
     publishDate: z.date(),
     tracks: z.array(z.string()),
-    artist: reference("artists"),
+    artist: z.string().optional(),
     category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
     editor: z.string().optional(),  // ← 추가
   }),

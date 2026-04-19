@@ -26,7 +26,7 @@ const animateHomepageElements = () => {
 
   gsap.timeline({
     defaults: {
-      duration: 1.2,
+      duration: 1,
       ease: 'power4',
     },
     onComplete: () => {
@@ -35,12 +35,12 @@ const animateHomepageElements = () => {
       document.dispatchEvent(event);
     },
   })
-  .fromTo(
-    lines,
-    { transformOrigin: '0% 50%', scaleX: 0 },
-    { duration: 1.6, ease: 'power2', stagger: 0.5, scaleX: 1 }
-  )
-  .from(textSliders, { yPercent: 100, stagger: 0.04 }, 0.2)
+  // .fromTo(
+  //   lines,
+  //   { transformOrigin: '0% 50%', scaleX: 0 },
+  //   { duration: 1.6, ease: 'power2', stagger: 0.5, scaleX: 1 }
+  // )
+  // .from(textSliders, { yPercent: 100, stagger: 0.04 }, 0.2)
   .set(gridContainer, { autoAlpha: 1 }, '<+=1')
   .from(gridItems, { ease: 'sine', autoAlpha: 0, stagger: 0.03 }, '<');
 };
@@ -80,7 +80,7 @@ const init = () => {
 // Run a callback only if the current page is the home page.
 const handlePageEvent = (_event, callback) => {
   const page = document.documentElement.getAttribute('data-page');
-  if (page === 'home') callback();
+  if (page === 'home' || page === 'hom' || page === 'w-hom') callback();
 };
 
 // Astro lifecycle hook: initialize animations on page load.

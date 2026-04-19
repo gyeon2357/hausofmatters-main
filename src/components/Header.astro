@@ -2,43 +2,37 @@
 import TextSlider from "../components/TextSlider.astro";
 import Separator from "../components/Separator.astro";
 
-// Get the current pathname
 const currentPath = Astro.url.pathname;
-// Define a map of routes
-const routes = {
- "/": "Home",
-//  "/artists/": "Artists",
- "/albums/": "Albums",
- "/magazine/": "Magazine",
- "/info/": "Info",
- "/interview/": "Interview",
-};
-// Determine the active route
-const activeRoute = routes[currentPath] || null;
+
+const isHome = currentPath === "/" || currentPath === "";
+const isAlbums = currentPath.startsWith("/albums");
+const isMagazine = currentPath.startsWith("/magazine");
+const isInterview = currentPath.startsWith("/interview");
+const isAbout = currentPath.startsWith("/about");
 ---
 
 <header>
  <h1>
-  <a href="/" class={activeRoute === "Home" ? "current" : ""}><TextSlider content="HAUSOFMATTERS" /></a>
+  <a href="/" class={isHome ? "current" : ""}><TextSlider content="HAUSOFMATTERS" /></a>
  </h1>
 
  <span><TextSlider content="by KHL" /></span>
 
  <ul>
   <li>
-   <a href="/albums/" class={activeRoute === "Albums" ? "current" : ""} data-astro-prefetch><TextSlider content="Review" /></a>
+   <a href="/albums/" class={isAlbums ? "current" : ""} data-astro-prefetch><TextSlider content="Review" /></a>
   </li>
   <!-- <li>
-   <a href="/artists/" class={activeRoute === "Artists" ? "current" : ""} data-astro-prefetch><TextSlider content="Artists" /></a>
-  </li> -->
+      <a href="/artists/" class={isArtists ? "current" : ""} data-astro-prefetch><TextSlider content="Artists" /></a>
+    </li> -->
   <li>
-   <a href="/interview/" class={activeRoute === "Interview" ? "current" : ""} data-astro-prefetch><TextSlider content="Interview" /></a>
+   <a href="/interview/" class={isInterview ? "current" : ""} data-astro-prefetch><TextSlider content="Interview" /></a>
   </li>
   <li>
-   <a href="/magazine/" class={activeRoute === "Magazine" ? "current" : ""} data-astro-prefetch><TextSlider content="Magazine" /></a>
+   <a href="/magazine/" class={isMagazine ? "current" : ""} data-astro-prefetch><TextSlider content="Magazine" /></a>
   </li>
   <li>
-   <a href="/about/" class={activeRoute === "About" ? "current" : ""} data-astro-prefetch><TextSlider content="About" /></a>
+   <a href="/about/" class={isAbout ? "current" : ""} data-astro-prefetch><TextSlider content="About" /></a>
   </li>
  </ul>
 </header>
@@ -54,8 +48,7 @@ const activeRoute = routes[currentPath] || null;
   gap: 1rem;
  }
  header a.current {
-  pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.4;
  }
 
  header h1 a.current {
@@ -80,10 +73,4 @@ const activeRoute = routes[currentPath] || null;
   font-size: 0.875rem;
   line-height: 1.6;
  }
-
- /* @media screen and (min-width: 50em) {
-    header {
-      grid-template-columns: 20vw 1fr auto auto;
-    }
-  } */
 </style>

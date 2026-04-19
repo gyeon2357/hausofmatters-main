@@ -17,7 +17,7 @@ const intlAlbums = sorted.filter(a => a.data.category === "w-hom").slice(0, 6);
 const makeCard = (album: (typeof allAlbums)[number]) => {
  const artist = allArtists.find(a => a.id === album.data.artist.id);
  return {
-  href: artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`,
+  href: artist ? `/albums/${album.id}` : `/albums/${album.id}`,
   name: album.data.name,
   imageSrc: album.data.image.src,
   imageAlt: album.data.image.alt,
@@ -40,7 +40,7 @@ const intlCards = intlAlbums.map(makeCard);
   <section>
    <div class="section-header">
     <h3 class="section-title">국내 리뷰</h3>
-    <a class="more-link" href="/albums/hom">MORE →</a>
+    <a class="more-link" href="/albums/hom">/ View All</a>
    </div>
    <div class="album-grid">
     {
@@ -64,7 +64,7 @@ const intlCards = intlAlbums.map(makeCard);
      <div class="section-header">
       <h3 class="section-title">해외 리뷰</h3>
       <a class="more-link" href="/albums/w-hom">
-       MORE →
+       / View All
       </a>
      </div>
      <div class="album-grid">
@@ -92,12 +92,7 @@ const intlCards = intlAlbums.map(makeCard);
   margin: 2rem 0 10rem;
  }
 
- .section-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 1rem;
- }
+
 
  .section-title {
   margin: 0;
