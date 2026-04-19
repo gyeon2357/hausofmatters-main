@@ -62,11 +62,6 @@ if (artistId) {
   <div class="content-wrap">
    <img class="fade-in" src={album.data.image.src} alt={album.data.image.alt} />
    <div class="content">
-    <h5>Track List</h5>
-    <ol>
-     {album.data.tracks.map(track => <li>{track}</li>)}
-    </ol>
-
     {
      album.data.publishDate &&
       (() => {
@@ -74,12 +69,17 @@ if (artistId) {
        const date = d.toLocaleDateString("ko-KR", { year: "numeric", month: "numeric", day: "numeric" });
        const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
        return (
-        <li class="publishDate">
-         {date} {weekday}
-        </li>
+        <h5 class="publishDate">
+         Released in {date} {weekday}
+        </h5>
        );
       })()
     }
+
+    <h5>Track List</h5>
+    <ol>
+     {album.data.tracks.map(track => <li>{track}</li>)}
+    </ol>
 
     <Content />
     {album.data.editor && <h5 class="editor">Editor. {album.data.editor}</h5>}
@@ -89,3 +89,9 @@ if (artistId) {
   </div>
  </section>
 </BaseLayout>
+
+<style>
+ .publishDate {
+  margin-bottom: 1.25rem;
+ }
+</style>
