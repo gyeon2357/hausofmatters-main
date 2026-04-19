@@ -10,14 +10,13 @@ const { album } = Astro.props;
 
 <a class="album-card" href={`/albums/${album.id}`}>
  <div>
-  <img class="fade-in" loading="lazy" src={album.data.image.src} alt={album.data.image.alt} />
+  {album.data.image && <img src={album.data.image.src} alt={album.data.image.alt} />}
  </div>
  <h3>{album.data.name}</h3>
  <p>{new Date(album.data.release).getFullYear()}</p>
 </a>
 
 <style>
- 
  div {
   aspect-ratio: 1;
   grid-area: img;
