@@ -15,39 +15,41 @@ const artists = defineCollection({
 });
 
 const magazine = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/data/magazine" }),
-  schema: z.object({
-    title: z.string().optional(),
-    slug: z.string().optional(),
-    pdfPath: z.string(),
-    date: z.date(),
-    category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
-    image: z.object({
-      src: z.string(),
-      alt: z.string(),
-    }).optional(),
-  }),
+ loader: glob({ pattern: "**/*.md", base: "./src/data/magazine" }),
+ schema: z.object({
+  title: z.string().optional(),
+  slug: z.string().optional(),
+  pdfPath: z.string(),
+  date: z.date(),
+  category: z.enum(["hom", "w-hom"]).default("hom"), // ← 추가
+  image: z
+   .object({
+    src: z.string(),
+    alt: z.string(),
+   })
+   .optional(),
+ }),
 });
 
 const albums = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/data/albums" }),
-  schema: z.object({
-    name: z.string(),
-    image: z.object({ src: z.string(), alt: z.string() }).optional(),
-    release: z.date(),
-    tracks: z.array(z.string()),
-    artist: z.string().optional(),
-    category: z.enum(["hom", "w-hom"]).default("hom"),  // ← 추가
-    editor: z.string().optional(),  // ← 추가
-    recommended: z.boolean().optional(),  // ← 추가
-    magazine: z.string().optional(),          // ← 추가 (e.g. "hom-35")
-  }),
+ loader: glob({ pattern: "**/*.md", base: "./src/data/albums" }),
+ schema: z.object({
+  name: z.string(),
+  image: z.object({ src: z.string(), alt: z.string() }).optional(),
+  release: z.date(),
+  tracks: z.array(z.string()),
+  artist: z.string().optional(),
+  category: z.enum(["hom", "w-hom"]).default("hom"), // ← 추가
+  editor: z.string().optional(), // ← 추가
+  recommended: z.boolean().optional(), // ← 추가
+  magazine: z.string().optional(), // ← 추가 (e.g. "hom-35")
+ }),
 });
 
 const interview = defineCollection({
  loader: glob({ pattern: "**/*.md", base: "./src/data/interview" }),
  schema: z.object({
-  artist: reference("artists"),
+  artist: z.string().optional(),
   date: z.date(),
   published: z.boolean().default(true),
   coverImage: z
