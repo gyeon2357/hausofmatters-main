@@ -7,10 +7,12 @@ const artists = defineCollection({
   name: z.string(),
   stage_name: z.string(),
   genre: z.string(),
-  image: z.object({
-   src: z.string(),
-   alt: z.string(),
-  }),
+  image: z
+   .object({
+    src: z.string(),
+    alt: z.string(),
+   })
+   .optional(),
  }),
 });
 
