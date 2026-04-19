@@ -3,7 +3,6 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Separator from "../../components/Separator.astro";
 
-
 export async function getStaticPaths() {
  const allinterview = await getCollection("interview");
  return allinterview
@@ -48,14 +47,12 @@ const title = `Hausofmatters - Interview: ${stageName}`;
  <header class="interview-header">
   <p class="interview-label">HAUS OF interview</p>
   <h1>{stageName}</h1>
-  
+
   <p class="interview-meta">
    <span>{genre}</span>
    <span class="sep">·</span>
    <span>{dateStr}</span>
   </p>
-
-  
  </header>
 
  <Separator />
@@ -146,7 +143,7 @@ const title = `Hausofmatters - Interview: ${stageName}`;
  .question {
   font-size: 1rem;
   font-weight: 700;
-  text-align: justify;
+  word-break: keep-all;
 
   margin: 0;
  }
@@ -158,7 +155,6 @@ const title = `Hausofmatters - Interview: ${stageName}`;
  .answer {
   margin: 0;
   font-size: 1rem;
-  text-align: justify;
   letter-spacing: -0.25px;
 
   white-space: pre-line;

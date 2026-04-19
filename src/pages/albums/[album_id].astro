@@ -60,7 +60,7 @@ if (artistId) {
   </header>
   <Separator />
   <div class="content-wrap">
-   <img class="image fade-in" src={album.data.image.src} alt={album.data.image.alt} />
+   <img class="fade-in" src={album.data.image.src} alt={album.data.image.alt} />
    <div class="content">
     <h5>Track List</h5>
     <ol>
@@ -74,15 +74,15 @@ if (artistId) {
        const date = d.toLocaleDateString("ko-KR", { year: "numeric", month: "numeric", day: "numeric" });
        const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
        return (
-        <p class="publishDate">
-         Date. {date} {weekday}
-        </p>
+        <li class="publishDate">
+         {date} {weekday}
+        </li>
        );
       })()
     }
 
     <Content />
-    {album.data.editor && <p class="editor">Editor. {album.data.editor}</p>}
+    {album.data.editor && <h5 class="editor">Editor. {album.data.editor}</h5>}
 
     <Share title={album.data.name} />
    </div>
