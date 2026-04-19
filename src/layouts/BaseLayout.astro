@@ -1,8 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-
 import "../styles/global.css";
-
 import { SEO } from "astro-seo";
 
 import SmoothScroll from "../components/SmoothScroll.astro";
@@ -15,7 +13,7 @@ type Props = {
  ogImage?: string;
 };
 
-const { title, description = "HAUSOFMATTERS Web Renewal Project", ogImage = "/og-image.jpg" } = Astro.props;
+const { title, description = "HAUSOFMATTERS", ogImage = "/og-image.jpg" } = Astro.props;
 
 const site = Astro.site;
 const ogImageUrl = new URL(ogImage, site).href;

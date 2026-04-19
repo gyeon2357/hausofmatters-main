@@ -5,7 +5,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const title = "Hausofmatters";
 
 const allAlbums = await getCollection("albums");
-const allArtists = await getCollection("artists");
 const allMagazines = await getCollection("magazine");
 
 const recentAlbums = allAlbums
@@ -20,9 +19,8 @@ function formatTitle(id: string): string {
 }
 
 const albumCards = recentAlbums.map(album => {
-  const artist = allArtists.find(a => a.id === album.data.artist.id);
   return {
-    href: artist ? `/${artist.id}/albums/${album.id}` : `/albums/${album.id}`,
+    href: `/albums/${album.id}`,
     name: album.data.name,
     imageSrc: album.data.image.src,
     imageAlt: album.data.image.alt,
@@ -65,7 +63,7 @@ const whomCards = sorted
   <section class="featured-albums">
     <div class="section-header">
       <h2>Featured Review</h2>
-      <a class="more-link" href="/albums">/ View All</a>
+      <a class="more-link" href="/albums">MORE →</a>
     </div>
     <div class="albums-grid">
       {albumCards.map(card => (
@@ -83,7 +81,7 @@ const whomCards = sorted
   <section class="latest-magazine">
     <div class="section-header">
       <h2>MAGAZINE</h2>
-      <a class="more-link" href="/magazine">/ View All</a>
+      <a class="more-link" href="/magazine">MORE →</a>
     </div>
     <div class="magazine-columns">
       <div class="magazine-column">

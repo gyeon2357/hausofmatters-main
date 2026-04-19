@@ -6,7 +6,6 @@ import Separator from "../components/Separator.astro";
 const title = "Hausofmatters - Albums";
 
 const allAlbums = await getCollection("albums");
-const allArtists = await getCollection("artists");
 
 // category 필드 기준으로 분리, 날짜 내림차순
 const sorted = allAlbums.sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
@@ -15,9 +14,8 @@ const domesticAlbums = sorted.filter(a => a.data.category === "hom").slice(0, 6)
 const intlAlbums = sorted.filter(a => a.data.category === "w-hom").slice(0, 6);
 
 const makeCard = (album: (typeof allAlbums)[number]) => {
- const artist = allArtists.find(a => a.id === album.data.artist.id);
  return {
-  href: artist ? `/albums/${album.id}` : `/albums/${album.id}`,
+  href: `/albums/${album.id}`,
   name: album.data.name,
   imageSrc: album.data.image.src,
   imageAlt: album.data.image.alt,
@@ -40,7 +38,7 @@ const intlCards = intlAlbums.map(makeCard);
   <section>
    <div class="section-header">
     <h3 class="section-title">국내 리뷰</h3>
-    <a class="more-link" href="/albums/hom">/ View All</a>
+    <a class="more-link" href="/album/hom"> / View All </a>
    </div>
    <div class="album-grid">
     {
@@ -63,7 +61,7 @@ const intlCards = intlAlbums.map(makeCard);
     <section>
      <div class="section-header">
       <h3 class="section-title">해외 리뷰</h3>
-      <a class="more-link" href="/albums/w-hom">
+      <a class="more-link" href="/album/w-hom">
        / View All
       </a>
      </div>
@@ -91,8 +89,6 @@ const intlCards = intlAlbums.map(makeCard);
   gap: 4rem;
   margin: 2rem 0 10rem;
  }
-
-
 
  .section-title {
   margin: 0;
