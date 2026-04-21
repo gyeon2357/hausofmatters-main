@@ -19,7 +19,7 @@ const { albumsTotal, title = "Review" } = Astro.props;
  </div>
  <section>
   <div class="sort-group">
-   <span class="sort-label">Sort:</span>
+   <span class="sort-label"></span>
    <button data-sort><TextSlider content="A-Z" /></button>
    <button data-sort-date><TextSlider content="Date" /></button>
    <button data-recommended><TextSlider content="Pick" /></button>
@@ -28,7 +28,7 @@ const { albumsTotal, title = "Review" } = Astro.props;
    <div class="search-group">
     <button data-search class="search"><TextSlider content="Search" /></button>
     <button data-clear class="clear hidden" aria-label="Clear search">
-     <Cross width={14} height={14} />
+     <Cross width={16} height={16} />
     </button>
    </div>
   </div>

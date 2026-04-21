@@ -342,11 +342,9 @@ dd {
 .album-card {
  text-decoration: none;
  color: inherit;
- transition: transform 0.3s ease;
 }
 
 .album-card:hover {
- transform: translateY(-4px);
 }
 
 .album-img {

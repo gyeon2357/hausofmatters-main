@@ -11,36 +11,47 @@ const { title } = Astro.props;
  <button id="share-copy">Copy Link</button>
 </div>
 
-<script is:inline>
- const shareBtn = document.getElementById("share-native");
- const copyBtn = document.getElementById("share-copy");
+<script>
+ // astro:page-load는 View Transitions 첫 진입 및 페이지 전환 후 DOM 준비 완료 시 발생
+ // → DOM이 완전히 구성된 뒤 버튼에 이벤트를 붙이므로 새로고침 없이도 작동
+ function initShare() {
+  const shareBtn = document.getElementById("share-native");
+  const copyBtn = document.getElementById("share-copy");
 
- const url = window.location.href;
- const title = document.title;
+  if (!shareBtn || !copyBtn) return;
 
- // 네이티브 공유
- shareBtn?.addEventListener("click", async () => {
-  if (navigator.share) {
-   try {
-    await navigator.share({
-     title,
-     url,
-    });
-   } catch (e) {
-    // 사용자가 취소한 경우 등 → 무시
+  const url = window.location.href;
+  const title = document.title;
+
+  // 중복 등록 방지: 이미 초기화된 경우 스킵
+  if (shareBtn.dataset.initialized) return;
+  shareBtn.dataset.initialized = "true";
+  copyBtn.dataset.initialized = "true";
+
+  // 네이티브 공유
+  shareBtn.addEventListener("click", async () => {
+   if (navigator.share) {
+    try {
+     await navigator.share({ title, url });
+    } catch (e) {
+     // 사용자가 취소한 경우 등 → 무시
+    }
+   } else {
+    alert("이 브라우저에서는 공유 기능이 지원되지 않습니다.");
    }
-  } else {
-   alert("이 브라우저에서는 공유 기능이 지원되지 않습니다.");
-  }
- });
+  });
 
- // 링크 복사
- copyBtn?.addEventListener("click", async () => {
-  try {
-   await navigator.clipboard.writeText(url);
-   alert("복사되었습니다.");
-  } catch (e) {
-   alert("실패했습니다.");
-  }
- });
+  // 링크 복사
+  copyBtn.addEventListener("click", async () => {
+   try {
+    await navigator.clipboard.writeText(url);
+    alert("복사되었습니다.");
+   } catch (e) {
+    alert("실패했습니다.");
+   }
+  });
+ }
+
+ // 초기 로드 및 View Transitions 페이지 전환 모두 대응
+ document.addEventListener("astro:page-load", initShare);
 </script>
