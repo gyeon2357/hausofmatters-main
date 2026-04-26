@@ -33,7 +33,7 @@ const sorted = allMagazines.sort((a, b) => new Date(b.data.date).getTime() - new
 // ✅ category 기반, 각 최신 2개
 const homCards = sorted
  .filter(m => m.data.category === "hom")
- .slice(0, 2)
+ .slice(0, 1)
  .map(m => ({
   href: `/magazine/${m.data.slug ?? m.id}`,
   title: m.data.title ?? formatTitle(m.id),
@@ -44,7 +44,7 @@ const homCards = sorted
 
 const whomCards = sorted
  .filter(m => m.data.category === "w-hom")
- .slice(0, 2)
+ .slice(0, 1)
  .map(m => ({
   href: `/magazine/${m.data.slug ?? m.id}`,
   title: m.data.title ?? formatTitle(m.id),
@@ -62,7 +62,7 @@ const whomCards = sorted
 
  <section class="featured-albums">
   <div class="section-header">
-   <h2>Featured Review</h2>
+   <h2>Featured Album</h2>
    <a class="more-link" href="/albums">/ View All</a>
   </div>
   <div class="albums-grid">
