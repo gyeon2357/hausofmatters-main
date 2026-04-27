@@ -7,10 +7,13 @@ const title = "Hausofmatters";
 const allAlbums = await getCollection("albums");
 const allMagazines = await getCollection("magazine");
 
-const recentAlbums = allAlbums
- .sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime())
- .slice(0, 5)
- .sort(() => Math.random() - 0.5);
+const byDate = allAlbums.sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime());
+
+const picks = byDate.filter(a => a.data.recommended).slice(0, 3);
+const pickIds = new Set(picks.map(a => a.id));
+const latest = byDate.filter(a => !pickIds.has(a.id)).slice(0, 5 - picks.length);
+
+const recentAlbums = [...picks, ...latest];
 
 function formatTitle(id: string): string {
  if (/^w-hom-(\d+)$/.test(id)) return id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");
@@ -56,7 +59,10 @@ const whomCards = sorted
 
 <BaseLayout title={title}>
  <div class="content content--page">
-  <h1>HAUS OF MATTERS KHL KILL THEM ALL</h1>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
   <p></p>
  </div>
 
@@ -177,7 +183,6 @@ const whomCards = sorted
  .column-label {
   margin: 0 0 1.25rem;
   font-size: 1.25rem;
-
  }
 
  .magazine-list {

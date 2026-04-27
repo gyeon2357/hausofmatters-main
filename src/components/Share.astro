@@ -10,23 +10,29 @@ const { title } = Astro.props;
  <button id="share-native">Share</button>
  <button id="share-copy">Copy Link</button>
 </div>
+<div id="copy-toast" aria-live="polite">링크가 복사되었습니다</div>
 
 <script>
- // astro:page-load는 View Transitions 첫 진입 및 페이지 전환 후 DOM 준비 완료 시 발생
- // → DOM이 완전히 구성된 뒤 버튼에 이벤트를 붙이므로 새로고침 없이도 작동
+ function showToast(message) {
+  const toast = document.getElementById("copy-toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add("visible");
+  setTimeout(() => toast.classList.remove("visible"), 2000);
+ }
+
  function initShare() {
   const shareBtn = document.getElementById("share-native");
   const copyBtn = document.getElementById("share-copy");
 
   if (!shareBtn || !copyBtn) return;
-
-  const url = window.location.href;
-  const title = document.title;
-
-  // 중복 등록 방지: 이미 초기화된 경우 스킵
   if (shareBtn.dataset.initialized) return;
   shareBtn.dataset.initialized = "true";
   copyBtn.dataset.initialized = "true";
+
+  const url = window.location.href;
+  const title = document.title;
 
   // 네이티브 공유
   shareBtn.addEventListener("click", async () => {
@@ -34,10 +40,13 @@ const { title } = Astro.props;
     try {
      await navigator.share({ title, url });
     } catch (e) {
-     // 사용자가 취소한 경우 등 → 무시
+     // AbortError: 사용자가 직접 취소한 경우 → 토스트 없이 무시
+     if (e?.name !== "AbortError") {
+      showToast("공유에 실패했습니다.");
+     }
     }
    } else {
-    alert("이 브라우저에서는 공유 기능이 지원되지 않습니다.");
+    showToast("공유 기능이 지원되지 않는 브라우저입니다.");
    }
   });
 
@@ -45,13 +54,12 @@ const { title } = Astro.props;
   copyBtn.addEventListener("click", async () => {
    try {
     await navigator.clipboard.writeText(url);
-    alert("복사되었습니다.");
+    showToast("링크가 복사되었습니다.");
    } catch (e) {
-    alert("실패했습니다.");
+    showToast("복사에 실패했습니다.");
    }
   });
  }
 
- // 초기 로드 및 View Transitions 페이지 전환 모두 대응
  document.addEventListener("astro:page-load", initShare);
 </script>

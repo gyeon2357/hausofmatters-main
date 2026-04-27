@@ -3,14 +3,13 @@ import TextSlider from "../components/TextSlider.astro";
 import Separator from "../components/Separator.astro";
 
 const currentPath = Astro.url.pathname;
-
 const isAlbums = currentPath.startsWith("/albums");
 const isMagazine = currentPath.startsWith("/magazine");
 const isInterview = currentPath.startsWith("/interview");
 const isAbout = currentPath.startsWith("/about");
 ---
 
-<header>
+<header transition:persist>
  <h1>
   <a href="/"><TextSlider content="HAUSOFMATTERS" /></a>
  </h1>
@@ -19,19 +18,27 @@ const isAbout = currentPath.startsWith("/about");
 
  <ul>
   <li>
-   <a href="/albums/" class={isAlbums ? "current" : ""} data-astro-prefetch><TextSlider content="Album" /></a>
+   <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
   </li>
   <!-- <li>
       <a href="/artists/" class={isArtists ? "current" : ""} data-astro-prefetch><TextSlider content="Artists" /></a>
     </li> -->
   <li>
-   <a href="/interview/" class={isInterview ? "current" : ""} data-astro-prefetch><TextSlider content="Interview" /></a>
+   <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
   </li>
   <li>
-   <a href="/magazine/" class={isMagazine ? "current" : ""} data-astro-prefetch><TextSlider content="Magazine" /></a>
+   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
   </li>
   <li>
-   <a href="/about/" class={isAbout ? "current" : ""} data-astro-prefetch><TextSlider content="About" /></a>
+   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
+  </li>
+
+  <li>
+   <button id="theme-toggle" aria-label="Toggle dark mode">
+    <span class="toggle-track">
+     <span class="toggle-thumb"></span>
+    </span><TextSlider content="Dark" />
+   </button>
   </li>
  </ul>
 </header>
@@ -70,6 +77,47 @@ const isAbout = currentPath.startsWith("/about");
 
  ul li {
   font-size: 0.875rem;
-  line-height: 1.6;
  }
 </style>
+
+<script>
+ function initHeader() {
+  // active 링크 업데이트 (transition:persist라 재렌더링이 없으므로 JS로 처리)
+  const path = window.location.pathname;
+  document.querySelectorAll("header a[href]").forEach(a => {
+   const href = a.getAttribute("href");
+   a.classList.toggle("current", href !== "/" && path.startsWith(href));
+  });
+ }
+
+ function initTheme() {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn || btn.dataset.initialized) return;
+  btn.dataset.initialized = "true";
+
+  const inner = btn.querySelector(".oh__inner");
+  const thumb = btn.querySelector(".toggle-thumb");
+
+  const getEffective = () =>
+   document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+  const apply = (theme: string) => {
+   document.documentElement.setAttribute("data-theme", theme);
+   localStorage.setItem("theme", theme);
+   if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
+   if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
+  };
+
+  // 초기 상태 동기화
+  const initial = getEffective();
+  if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
+  if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
+
+  btn.addEventListener("click", () => {
+   apply(getEffective() === "dark" ? "light" : "dark");
+  });
+ }
+
+ document.addEventListener("astro:page-load", initHeader);
+ document.addEventListener("astro:page-load", initTheme);
+</script>

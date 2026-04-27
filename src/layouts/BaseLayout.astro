@@ -25,6 +25,13 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
 <!doctype html>
 <html lang="ko" data-page={currentPage}>
  <head>
+  <script is:inline>
+   const saved = localStorage.getItem("theme");
+   if (saved) {
+    document.documentElement.setAttribute("data-theme", saved);
+   }
+  </script>
+
   <SEO
    title={title}
    description={description}
@@ -33,7 +40,7 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
     basic: {
      title: title,
      type: "website",
-     image: "/og-image.jpg",
+     image: ogImageUrl,
     },
    }}
    twitter={{
@@ -92,10 +99,12 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
 </html>
 
 <script is:inline>
- document.addEventListener("astro:before-page-load", () => {
-  if (window.currentFlipbookInstance?.dispose) {
-   window.currentFlipbookInstance.dispose();
-   window.currentFlipbookInstance = null;
+ function applyTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved) {
+   document.documentElement.setAttribute("data-theme", saved);
   }
- });
+ }
+ applyTheme();
+ document.addEventListener("astro:after-swap", applyTheme);
 </script>

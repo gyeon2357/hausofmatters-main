@@ -15,7 +15,6 @@ let shuffleResetTimeout;
 
 const SORT_BUTTONS = () => [sortButton, sortDateButton, recommendedButton, shuffleButton].filter(Boolean);
 
-/* 활성 버튼 표시 — shuffle은 타임아웃 후 해제 */
 const setActive = (btn, isTemporary = false) => {
   SORT_BUTTONS().forEach(b => b.classList.remove('sort--active'));
   btn.classList.add('sort--active');
@@ -27,7 +26,6 @@ const setActive = (btn, isTemporary = false) => {
   }
 };
 
-/* Event handlers */
 const handleSortClick = () => { sortGrid(); setActive(sortButton); };
 const handleSortDateClick = () => { sortByDate(); setActive(sortDateButton); };
 const handleRecommendedClick = () => { recommendedGrid(); setActive(recommendedButton); };
@@ -56,7 +54,6 @@ const handleSearchInput = (e) => {
   searchButton.classList.toggle('search--active', searchTerm !== '');
 };
 
-/* Initialize DOM elements */
 const initializeVariables = () => {
   gridContainer = document.querySelector('[data-grid]');
   gridItems = Array.from(gridContainer?.children || []);
@@ -118,20 +115,58 @@ const sortByDate = () => {
   }
 };
 
+/* 검색어와 일치한 부분만 <mark>로 감싸서 반환 */
+const highlight = (text, query) => {
+  if (!query || !text) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+};
+
+/* 카드에 매치 정보 표시/제거 */
+const updateMatchInfo = (item, query) => {
+  // 이전에 삽입한 요소 제거
+  item.querySelectorAll('.match-info').forEach(el => el.remove());
+
+  if (!query) return;
+
+  const q = query.toLowerCase();
+
+  // 카드에 원래 표시되지 않는 필드만 체크 (editor, artist)
+  const HIDDEN_FIELDS = [
+    { key: 'data-editor', label: 'editor' },
+    { key: 'data-artist', label: 'artist' },
+  ];
+
+  HIDDEN_FIELDS.forEach(({ key, label }) => {
+    const value = item.getAttribute(key) || '';
+    if (value.toLowerCase().includes(q)) {
+      const el = document.createElement('p');
+      el.className = 'match-info';
+      // 매치된 부분 하이라이트
+      el.innerHTML = highlight(value, query);
+      item.appendChild(el);
+    }
+  });
+};
+
 const filterGrid = (searchValue) => {
-  const lowerCaseSearch = searchValue.toLowerCase();
+  const q = searchValue.toLowerCase();
   const items = Array.from(gridContainer?.children || []);
+
   items.forEach(item => {
-    const name     = (item.getAttribute('data-name')     || '').toLowerCase();
+    const name      = (item.getAttribute('data-name')      || '').toLowerCase();
     const stagename = (item.getAttribute('data-stagename') || '').toLowerCase();
-    const artist   = (item.getAttribute('data-artist')   || '').toLowerCase();
-    const editor   = (item.getAttribute('data-editor')   || '').toLowerCase();
-    item.style.display =
-      name.includes(lowerCaseSearch) ||
-      stagename.includes(lowerCaseSearch) ||
-      artist.includes(lowerCaseSearch) ||
-      editor.includes(lowerCaseSearch)
-        ? '' : 'none';
+    const artist    = (item.getAttribute('data-artist')    || '').toLowerCase();
+    const editor    = (item.getAttribute('data-editor')    || '').toLowerCase();
+
+    const isVisible = !q ||
+      name.includes(q) ||
+      stagename.includes(q) ||
+      artist.includes(q) ||
+      editor.includes(q);
+
+    item.style.display = isVisible ? '' : 'none';
+    updateMatchInfo(item, isVisible && q ? searchValue : '');
   });
 };
 
