@@ -9,9 +9,9 @@ const allMagazines = await getCollection("magazine");
 
 const byDate = allAlbums.sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime());
 
-const picks = byDate.filter(a => a.data.recommended).slice(0, 3);
+const picks = byDate.filter(a => a.data.recommended).slice(0, 5);
 const pickIds = new Set(picks.map(a => a.id));
-const latest = byDate.filter(a => !pickIds.has(a.id)).slice(0, 5 - picks.length);
+const latest = byDate.filter(a => !pickIds.has(a.id)).slice(0, 10 - picks.length);
 
 const recentAlbums = [...picks, ...latest];
 
@@ -96,7 +96,7 @@ const whomCards = sorted
    </div>
 
    <div class="magazine-column">
-    <h3 class="column-label">w/HOM</h3>
+    <h  3 class="column-label">w/HOM</h>
     <div class="magazine-list">
      {
       whomCards.map(card => (
@@ -105,7 +105,7 @@ const whomCards = sorted
          <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
         </div>
         <div class="magazine-info">
-         <p class="magazine-title">{card.title}</p>
+         <h3 class="magazine-title">{card.title}</h3>
          <p class="magazine-date">{card.date}</p>
         </div>
        </a>
