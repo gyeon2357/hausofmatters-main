@@ -18,6 +18,9 @@ const isAbout = currentPath.startsWith("/about");
 
  <ul>
   <li>
+   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
+  </li>
+  <li>
    <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
   </li>
   <!-- <li>
@@ -26,9 +29,7 @@ const isAbout = currentPath.startsWith("/about");
   <li>
    <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
   </li>
-  <li>
-   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
-  </li>
+
   <li>
    <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
   </li>
@@ -86,6 +87,7 @@ const isAbout = currentPath.startsWith("/about");
   const path = window.location.pathname;
   document.querySelectorAll("header a[href]").forEach(a => {
    const href = a.getAttribute("href");
+   if (!href) return;
    a.classList.toggle("current", href !== "/" && path.startsWith(href));
   });
  }

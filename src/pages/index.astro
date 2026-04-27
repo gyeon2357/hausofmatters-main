@@ -63,32 +63,16 @@ const whomCards = sorted
   <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
   <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
   <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
+  <h2>HAUS OF MATTERS KHL KILL THEM ALL</h2>
   <p></p>
  </div>
 
- <section class="featured-albums">
-  <div class="section-header">
-   <h2>Featured Album</h2>
-   <a class="more-link" href="/albums">/ View All</a>
-  </div>
-  <div class="albums-grid">
-   {
-    albumCards.map(card => (
-     <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
-      <div class="album-img">
-       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
-      </div>
-      <h3>{card.name}</h3>
-      <p class="album-year">{card.year}</p>
-     </a>
-    ))
-   }
-  </div>
- </section>
-
  <section class="latest-magazine">
   <div class="section-header">
-   <h2>MAGAZINE</h2>
+   <h2>Latest Magazine</h2>
    <a class="more-link" href="/magazine">/ View All</a>
   </div>
   <div class="magazine-columns">
@@ -102,7 +86,7 @@ const whomCards = sorted
          <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
         </div>
         <div class="magazine-info">
-         <p class="magazine-title">{card.title}</p>
+         <h3 class="magazine-title">{card.title}</h3>
          <p class="magazine-date">{card.date}</p>
         </div>
        </a>
@@ -131,6 +115,26 @@ const whomCards = sorted
    </div>
   </div>
  </section>
+
+ <section class="featured-albums">
+  <div class="section-header">
+   <h2>Featured Album</h2>
+   <a class="more-link" href="/albums">/ View All</a>
+  </div>
+  <div class="albums-grid">
+   {
+    albumCards.map(card => (
+     <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
+      <div class="album-img">
+       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
+      </div>
+      <h3>{card.name}</h3>
+      <p class="album-year">{card.year}</p>
+     </a>
+    ))
+   }
+  </div>
+ </section>
 </BaseLayout>
 
 <style>
@@ -148,7 +152,6 @@ const whomCards = sorted
  .album-img {
   aspect-ratio: 1;
   overflow: hidden;
-  border-radius: 0.25rem;
   background: var(--color-placeholder);
   margin-bottom: 0.75rem;
  }
@@ -218,20 +221,18 @@ const whomCards = sorted
  .magazine-info {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
  }
 
  .magazine-title {
   margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.95rem;
   line-height: 1.3;
  }
 
  .magazine-date {
   margin: 0;
-  font-size: 0.8rem;
-  opacity: 0.5;
+  font-size: 0.85rem;
+  line-height: 1.3;
  }
 
  .section-header {

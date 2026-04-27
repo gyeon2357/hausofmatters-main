@@ -81,11 +81,11 @@ const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").sli
           <div class="meta">
            <span class="meta-title">{t}</span>
            {(() => {
-  const d = new Date(entry.data.date);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}. ${m}.`;
-})()}
+            const d = new Date(entry.data.date);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, "0");
+            return `${y}. ${m}.`;
+           })()}
           </div>
          </a>
         </li>
