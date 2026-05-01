@@ -51,6 +51,7 @@ const isAbout = currentPath.startsWith("/about");
  </ul>
  <Separator />
 </header>
+<button id="top-btn" aria-label="Scroll to top">TOP</button>
 
 <style>
  header {
@@ -154,6 +155,31 @@ const isAbout = currentPath.startsWith("/about");
    font-size: 0.825rem;
   }
  }
+
+ #top-btn {
+  display: none; /* JS로 제어 */
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1rem;
+  z-index: 200;
+
+  background: var(--color-bg);
+  color: var(--color-text, currentColor);
+  border: 1px solid currentColor;
+  font-family: inherit;
+
+  font-size: 0.875rem;
+  padding: 0.375rem 0.5rem;
+  cursor: pointer;
+
+  opacity: 0;
+  transition: opacity 0.25s ease;
+ }
+
+ #top-btn.visible {
+  display: block;
+  opacity: 1;
+ }
 </style>
 <script>
  function initHeader() {
@@ -201,6 +227,7 @@ const isAbout = currentPath.startsWith("/about");
 
  document.addEventListener("astro:page-load", initHeader);
  document.addEventListener("astro:page-load", initTheme);
+ document.addEventListener("astro:page-load", initTopBtn);
 
  // 스크롤 방향 감지: Lenis 인스턴스를 우선 사용, 없으면 native scroll fallback
  (function initScrollNav() {
@@ -281,4 +308,27 @@ const isAbout = currentPath.startsWith("/about");
    );
   }, 200);
  })();
+
+ // to-top-btn
+ function initTopBtn() {
+  const btn = document.getElementById("top-btn");
+  if (!btn) return;
+
+  const THRESHOLD = window.innerHeight;
+
+  function onScroll() {
+   btn!.classList.toggle("visible", window.scrollY > THRESHOLD); // ! 추가
+  }
+
+  btn.addEventListener("click", () => {
+   if ((window as any).__lenis) {
+    (window as any).__lenis.scrollTo(0, { duration: 1.2 });
+   } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+   }
+  });
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+ }
 </script>

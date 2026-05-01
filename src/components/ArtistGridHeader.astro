@@ -5,76 +5,74 @@ import Search from "../components/Search.astro";
 import Cross from "../assets/images/cross.svg";
 
 type Props = {
-  artistsTotal: number;
+ artistsTotal: number;
 };
 
-const {artistsTotal} = Astro.props;
+const { artistsTotal } = Astro.props;
 ---
 
 <header class="title-header title-header--initial">
-  <h2><TextSlider content="Artists" /></h2>
+ <h2><TextSlider content="Artists" /></h2>
 
-  <section>
-    <div>
-      <button data-sort><TextSlider content="Sort" /></button>
-      <button data-shuffle><TextSlider content="Shuffle" /></button>
-      <div>
-        <button data-search class="search"
-          ><TextSlider content="Search" /></button
-        >
-        <button data-clear class="clear hidden" aria-label="Clear search">
-          <Cross width={16} height={16} />
-        </button>
-      </div>
-    </div>
-    <span class="total-num"
-      ><TextSlider content={"(" + artistsTotal + ")"} /></span
-    >
-  </section>
+ <section>
+  <div>
+   <button data-sort><TextSlider content="Sort" /></button>
+   <button data-shuffle><TextSlider content="Shuffle" /></button>
+   <div>
+    <button data-search class="search"><TextSlider content="Search" /></button>
+    <button data-clear class="clear hidden" aria-label="Clear search">
+     <Cross width={16} height={16} />
+    </button>
+   </div>
+  </div>
+  <span class="total-num"><TextSlider content={"(" + artistsTotal + ")"} /></span>
+ </section>
 </header>
 
 <Separator />
 <Search />
 
 <style>
-  section {
-    display: flex;
-    justify-content: space-between;
-  }
+ section {
+  display: flex;
+  justify-content: space-between;
+ }
 
-  div {
-    display: flex;
-    list-style: none;
-    align-items: center;
-    gap: 1rem;
-    margin: 0;
-    padding: 0;
+ div {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+ }
+ div:has(> .search) {
+  position: relative;
+ }
+ div:has(> .search--active) {
+  margin-left: 1rem;
+ }
+ div:has(> .search--active)::before {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  left: -1rem;
+  right: -1rem;
+  top: -0.5rem;
+  bottom: -0.5rem;
+  border: 1px solid;
+  border-radius: 2rem;
+ }
+ .search--active {
+  &:focus-visible {
+   color: inherit;
   }
-  div:has(> .search) {
-    position: relative;
-  }
-  div:has(> .search--active) {
-    margin-left: 1rem;
-  }
-  div:has(> .search--active)::before {
-    pointer-events: none;
-    content: "";
-    position: absolute;
-    left: -1rem;
-    right: -1rem;
-    top: -0.5rem;
-    bottom: -0.5rem;
-    border: 1px solid;
-    border-radius: 2rem;
-  }
-  .search--active {
-    &:focus-visible {
-      color: inherit;
-    }
-  }
+ }
 
-  .total-num {
-    font-size: 75%;
-  }
+ .total-num {
+  font-size: 82.5%;
+  font-weight: 700;
+  vertical-align: text-top;
+ }
 </style>
 <script src="../scripts/gridActions.js"></script>

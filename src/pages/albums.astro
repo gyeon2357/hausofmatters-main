@@ -17,14 +17,14 @@ const makeCard = (album: (typeof allAlbums)[number]) => {
  return {
   href: `/albums/${album.id}`,
   name: album.data.name,
-  imageSrc: (album.data.image?.src ?? `/images/albums/${album.id}.jpg`),
-  imageAlt: (album.data.image?.alt ?? album.id.replace(/-/g, " ")),
+  imageSrc: album.data.image?.src ?? `/images/albums/${album.id}.jpg`,
+  imageAlt: album.data.image?.alt ?? album.id.replace(/-/g, " "),
   year: (() => {
-  const d = new Date(album.data.release);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}. ${m}.`;
-})(),
+   const d = new Date(album.data.release);
+   const y = d.getFullYear();
+   const m = String(d.getMonth() + 1).padStart(2, "0");
+   return `${y}. ${m}.`;
+  })(),
  };
 };
 
@@ -42,7 +42,7 @@ const intlCards = intlAlbums.map(makeCard);
   <!-- 국내 섹션 -->
   <section>
    <div class="section-header">
-    <h3 class="section-title">국내 리뷰</h3>
+    <h3 class="section-title">국내리뷰</h3>
     <a class="more-link" href="/albums/hom"> / View All </a>
    </div>
    <div class="album-grid">
@@ -65,7 +65,7 @@ const intlCards = intlAlbums.map(makeCard);
    intlCards.length > 0 && (
     <section>
      <div class="section-header">
-      <h3 class="section-title">해외 리뷰</h3>
+      <h3 class="section-title">해외리뷰</h3>
       <a class="more-link" href="/albums/w-hom">
        / View All
       </a>
@@ -91,17 +91,17 @@ const intlCards = intlAlbums.map(makeCard);
  .albums-page {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  margin: 2rem 0 10rem;
+  margin: 2rem 0 8rem;
+  gap: 2rem;
+ }
+
+ .album-grid {
+  margin: 2rem 0;
  }
 
  .section-title {
   margin: 0;
  }
-
- 
-
-
 </style>
 
 <script src="../scripts/index.js"></script>
