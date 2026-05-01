@@ -81,9 +81,28 @@ const interview = defineCollection({
  }),
 });
 
+const feature = defineCollection({
+ loader: glob({ pattern: "**/*.md", base: "./src/data/feature" }),
+ schema: z.object({
+  // title 없음 → 파일명(id)이 URL이자 제목
+  artist: z.string().optional(),          // 선택 입력
+  date: z.date(),
+  category: z.string(),
+  coverImage: z
+   .object({
+    src: z.string(),
+    alt: z.string(),
+   })
+   .optional(),
+  link: z.string().optional(),            // 앨범 ID (ex. 6seoul) 또는 매거진 ID (ex. hom-35)
+  published: z.boolean().default(true),
+ }),
+});
+
 export const collections = {
  artists,
  albums,
  magazine,
  interview,
+ feature,
 };

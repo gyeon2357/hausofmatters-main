@@ -10,11 +10,22 @@ const isAbout = currentPath.startsWith("/about");
 ---
 
 <header transition:persist>
- <h1>
-  <a href="/"><TextSlider content="HAUSOFMATTERS" /></a>
- </h1>
+ <section>
+  <div>
+   <h1>
+    <a href="/">
+     <TextSlider content="HAUSOFMATTERS" />
+    </a>
+   </h1>
+   <img id="logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
+  </div>
 
- <span><TextSlider content="by KHL" /></span>
+  <button id="theme-toggle" aria-label="Toggle dark mode">
+   <span class="toggle-track">
+    <span class="toggle-thumb"></span>
+   </span><TextSlider content="Dark" />
+  </button>
+ </section>
 
  <ul>
   <li>
@@ -31,15 +42,11 @@ const isAbout = currentPath.startsWith("/about");
   </li>
 
   <li>
-   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
+   <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
   </li>
 
   <li>
-   <button id="theme-toggle" aria-label="Toggle dark mode">
-    <span class="toggle-track">
-     <span class="toggle-thumb"></span>
-    </span><TextSlider content="Dark" />
-   </button>
+   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
   </li>
  </ul>
 </header>
@@ -47,13 +54,32 @@ const isAbout = currentPath.startsWith("/about");
 
 <style>
  header {
-  position: relative;
-  display: grid;
-  grid-template-columns: min-content auto;
-  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-bg);
+
   padding: 0.5rem 0;
   gap: 1rem;
  }
+
+ header section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+ }
+
+ header section div {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+ }
+
  header a.current {
   opacity: 0.4;
  }
@@ -67,6 +93,22 @@ const isAbout = currentPath.startsWith("/about");
   font-weight: inherit;
   margin: 0;
  }
+
+ header section a {
+  display: flex;
+  align-items: center;
+ }
+
+ header section h1 {
+  margin-right: 1rem;
+ }
+
+ .logo {
+  display: block;
+  height: 0.875rem;
+  width: auto;
+ }
+
  ul {
   display: flex;
   list-style: none;
@@ -74,10 +116,34 @@ const isAbout = currentPath.startsWith("/about");
   margin: 0;
   padding: 0;
   grid-column: auto / span 2;
+  /* 스크롤 숨김 트랜지션 */
+  overflow: hidden;
+  max-height: 4rem;
+  transition:
+   max-height 0.3s ease,
+   opacity 0.3s ease,
+   padding 0.3s ease;
+  opacity: 1;
+ }
+
+ ul.nav-hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+ }
+
+ .oh {
  }
 
  ul li {
   font-size: 0.875rem;
+ }
+
+ @media screen and (max-width: 768px) {
+  ul li,
+  header {
+   font-size: 0.825rem;
+  }
  }
 </style>
 
@@ -108,12 +174,17 @@ const isAbout = currentPath.startsWith("/about");
    localStorage.setItem("theme", theme);
    if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
    if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
+   // 로고 전환
+   const logo = document.getElementById("logo") as HTMLImageElement | null;
+   if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
   };
 
   // 초기 상태 동기화
   const initial = getEffective();
   if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
   if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
+  const logoInit = document.getElementById("logo") as HTMLImageElement | null;
+  if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
   btn.addEventListener("click", () => {
    apply(getEffective() === "dark" ? "light" : "dark");
@@ -122,4 +193,69 @@ const isAbout = currentPath.startsWith("/about");
 
  document.addEventListener("astro:page-load", initHeader);
  document.addEventListener("astro:page-load", initTheme);
+
+ // 스크롤 방향 감지: Lenis 인스턴스를 우선 사용, 없으면 native scroll fallback
+ (function initScrollNav() {
+  function attachLenis(lenis: any) {
+   lenis.on("scroll", ({ scroll, velocity }: { scroll: number; velocity: number }) => {
+    const nav = document.querySelector("header ul");
+    if (!nav) return;
+
+    if (scroll < 80) {
+     nav.classList.remove("nav-hidden");
+    } else if (velocity > 0) {
+     // 아래로 스크롤
+     nav.classList.add("nav-hidden");
+    } else if (velocity < 0) {
+     // 위로 스크롤
+     nav.classList.remove("nav-hidden");
+    }
+   });
+  }
+
+  // Lenis가 이미 초기화된 경우 즉시 연결
+  if ((window as any).__lenis) {
+   attachLenis((window as any).__lenis);
+   return;
+  }
+
+  // SmoothScroll이 약간 늦게 초기화될 수 있으므로 짧게 대기 후 재시도
+  // 그래도 없으면 native scroll fallback 사용
+  setTimeout(() => {
+   if ((window as any).__lenis) {
+    attachLenis((window as any).__lenis);
+    return;
+   }
+
+   // Lenis 없음 → native scroll (delta 임계값으로 미세 토글 방지)
+   let lastY = window.scrollY;
+   let accumulated = 0;
+   const THRESHOLD = 12;
+
+   window.addEventListener(
+    "scroll",
+    () => {
+     const currentY = window.scrollY;
+     const delta = currentY - lastY;
+     accumulated += delta;
+     lastY = currentY;
+
+     const nav = document.querySelector("header ul");
+     if (!nav) return;
+
+     if (currentY < 80) {
+      nav.classList.remove("nav-hidden");
+      accumulated = 0;
+     } else if (accumulated > THRESHOLD) {
+      nav.classList.add("nav-hidden");
+      accumulated = 0;
+     } else if (accumulated < -THRESHOLD) {
+      nav.classList.remove("nav-hidden");
+      accumulated = 0;
+     }
+    },
+    { passive: true }
+   );
+  }, 200);
+ })();
 </script>

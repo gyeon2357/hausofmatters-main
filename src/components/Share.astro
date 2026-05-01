@@ -55,11 +55,33 @@ const { title } = Astro.props;
    try {
     await navigator.clipboard.writeText(url);
     showToast("링크가 복사되었습니다.");
-   } catch (e) {
-    showToast("복사에 실패했습니다.");
+   } catch {
+    // clipboard API 미지원 환경 fallback (일부 모바일 브라우저)
+    try {
+     const el = document.createElement("textarea");
+     el.value = url;
+     el.style.position = "fixed";
+     el.style.opacity = "0";
+     document.body.appendChild(el);
+     el.focus();
+     el.select();
+     document.execCommand("copy");
+     document.body.removeChild(el);
+     showToast("링크가 복사되었습니다.");
+    } catch {
+     showToast("복사에 실패했습니다.");
+    }
    }
   });
  }
 
+ // astro:page-load: View Transitions 이후 네비게이션마다 발화
  document.addEventListener("astro:page-load", initShare);
+
+ // 첫 페이지 로드(모바일 직접 진입) 대응: DOMContentLoaded 또는 즉시 실행
+ if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initShare);
+ } else {
+  initShare();
+ }
 </script>

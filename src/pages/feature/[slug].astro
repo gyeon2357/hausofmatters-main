@@ -1,0 +1,167 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Separator from "../../components/Separator.astro";
+import Share from "../../components/Share.astro";
+
+export async function getStaticPaths() {
+  const allFeature = await getCollection("feature");
+  return allFeature
+    .filter(f => f.data.published)
+    .map(feature => ({
+      params: { slug: feature.id },
+      props: { feature },
+    }));
+}
+
+const { feature } = Astro.props;
+const { Content } = await render(feature);
+
+const dateStr = new Date(feature.data.date).toLocaleDateString("ko-KR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const coverSrc = feature.data.coverImage?.src ?? "";
+const coverAlt = feature.data.coverImage?.alt ?? feature.id;
+// 파일명이 title: 하이픈을 공백으로, 단어 첫 글자 대문자
+const displayTitle = feature.id
+  .replace(/-/g, " ")
+  .replace(/\b\w/g, c => c.toUpperCase());
+const pageTitle = `Hausofmatters - Feature: ${displayTitle}`;
+
+// link 필드 → album 또는 magazine 링크 결정
+let linkHref: string | undefined;
+let linkLabel: string | undefined;
+if (feature.data.link) {
+  const raw = feature.data.link.trim();
+  // hom- 또는 w-hom- 으로 시작하면 magazine, 아니면 album
+  if (/^(w-)?hom-/i.test(raw)) {
+    linkHref = `/magazine/${raw.toLowerCase()}`;
+    linkLabel = `/ ${raw.toUpperCase()}`;
+  } else {
+    linkHref = `/albums/${raw.toLowerCase()}`;
+    linkLabel = `/ ${raw.toUpperCase()}`;
+  }
+}
+---
+
+<BaseLayout title={pageTitle} ogImage={coverSrc || undefined}>
+  {
+    coverSrc && (
+      <div class="feature-cover">
+        <img src={coverSrc} alt={coverAlt} />
+      </div>
+    )
+  }
+
+  <header class="feature-header">
+    <p class="feature-label">HAUS OF Feature</p>
+    <h1>{displayTitle}</h1>
+    <p class="feature-meta">
+      {feature.data.artist && <span>{feature.data.artist}</span>}
+      {feature.data.artist && <span class="sep">·</span>}
+      <span>{feature.data.category}</span>
+      <span class="sep">·</span>
+      <span>{dateStr}</span>
+    </p>
+  </header>
+
+  <Separator />
+
+  <div class="feature-body">
+    <Content />
+
+    <div class="feature-footer">
+      {
+        linkHref && (
+          <a class="link-btn" href={linkHref}>
+            {linkLabel}
+          </a>
+        )
+      }
+      <Share title={displayTitle} />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .feature-cover {
+    width: 100%;
+    max-height: 70vh;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .feature-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .feature-header {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .feature-label {
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  .feature-header h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+  }
+
+  .feature-meta {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  .sep {
+    opacity: 0.5;
+  }
+
+  .feature-body {
+    margin: 1rem auto 6rem;
+    max-width: 720px;
+    line-height: 1.8;
+    word-break: keep-all;
+  }
+
+  .feature-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .link-btn {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    opacity: 0.8;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .link-btn:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 480px) {
+    .feature-header h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>

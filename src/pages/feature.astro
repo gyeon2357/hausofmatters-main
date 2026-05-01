@@ -1,0 +1,128 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Separator from "../components/Separator.astro";
+
+const title = "Hausofmatters - Feature";
+
+const allFeature = await getCollection("feature");
+
+const featureCards = allFeature
+  .filter(f => f.data.published)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<BaseLayout title={title}>
+  <header class="title-header title-header--initial">
+    <h2>Feature</h2>
+  </header>
+  <Separator />
+
+  <div class="feature-page">
+    <ul class="grid">
+      {
+        featureCards.map(card => (
+          <li>
+            <a href={`/feature/${card.id}`} data-astro-prefetch>
+              <div class="cover">
+                {card.data.coverImage?.src && (
+                  <img
+                    class="fade-in"
+                    src={card.data.coverImage.src}
+                    alt={card.data.coverImage.alt}
+                    loading="lazy"
+                  />
+                )}
+              </div>
+              <div class="meta">
+                <span class="meta-title">{card.id}</span>
+                <span class="meta-artist">{card.data.artist}</span>
+                <span class="meta-category">{card.data.category}</span>
+                <span class="meta-date">
+                  {new Date(card.data.date).toLocaleDateString("ko-KR")}
+                </span>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .feature-page {
+    margin: 2rem 0 8rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 30em) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 50em) {
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  li a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  li a:hover {
+    opacity: 0.7;
+  }
+
+  .cover {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--color-placeholder);
+  }
+
+  .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .meta-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .meta-artist {
+    font-size: 0.8rem;
+  }
+
+  .meta-category {
+    font-size: 0.8rem;
+  }
+
+  .meta-date {
+    font-size: 0.8rem;
+    color: var(--color-faded);
+  }
+</style>

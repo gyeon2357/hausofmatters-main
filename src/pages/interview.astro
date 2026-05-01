@@ -21,7 +21,7 @@ const interviewCards = allinterview
    stageName: artist?.data.stage_name ?? interview.id,
    genre: artist?.data.genre ?? "",
    date: new Date(interview.data.date).toLocaleDateString("ko-KR"),
-   coverSrc: interview.data.coverImage?.src ?? artist?.data.image.src ?? "",
+   coverSrc: interview.data.coverImage?.src ?? artist?.data.image?.src ?? "",
    coverAlt: interview.data.coverImage?.alt ?? artist?.data.stage_name ?? "",
   };
  });
@@ -29,7 +29,7 @@ const interviewCards = allinterview
 
 <BaseLayout title={title}>
  <header class="title-header title-header--initial">
-  <h2>Interview</h2>
+  <h2>Haus of Interview</h2>
  </header>
  <Separator />
 
