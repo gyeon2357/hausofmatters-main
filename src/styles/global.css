@@ -319,6 +319,7 @@ img {
  font-size: 1rem;
  line-height: 1.55;
  word-break: keep-all;
+ text-wrap: pretty;
 }
 
 .content p:last-of-type {

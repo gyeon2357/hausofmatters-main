@@ -27,13 +27,14 @@ const dateStr = new Date(interview.data.date).toLocaleDateString("ko-KR", {
  month: "long",
  day: "numeric",
 });
-const coverSrc = interview.data.coverImage?.src ?? artist?.data.image.src ?? "";
+const coverSrc = interview.data.coverImage?.src ?? artist?.data.image?.src ?? "";
 const coverAlt = interview.data.coverImage?.alt ?? stageName;
 
 const title = `Hausofmatters - Interview: ${stageName}`;
+const seoDescription = `${stageName} | ${dateStr}`;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={seoDescription} ogImage={coverSrc || undefined}>
  <!-- 커버 이미지 -->
  {
   coverSrc && (
@@ -161,6 +162,7 @@ const title = `Hausofmatters - Interview: ${stageName}`;
 
   white-space: pre-line;
   word-break: keep-all;
+  text-wrap: pretty;
  }
 
  /* 이미지 그룹 */

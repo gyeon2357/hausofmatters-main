@@ -1,5 +1,5 @@
 ---
-artist: "dj-pool"
+artist: "dj pool"
 date: 2026-04-01
 published: true
 coverImage:

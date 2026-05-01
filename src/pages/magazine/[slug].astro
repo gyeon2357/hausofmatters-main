@@ -51,9 +51,13 @@ const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 
 // 목록으로 돌아가는 링크 (category 기반)
 const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazine/hom";
+const seoDescription =
+ issue.data.category === "w-hom"
+  ? "해외힙합 매거진 w/HOM"
+  : "한국힙합 매거진 HOM";
 ---
 
-<BaseLayout title={title} ogImage={image.src}>
+<BaseLayout title={title} description={seoDescription} ogImage={image.src}>
  <link rel="stylesheet" href="/styles/flipbook.style.css" />
  <link rel="stylesheet" href="/styles/font-awesome.css" />
 

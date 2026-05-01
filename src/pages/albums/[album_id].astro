@@ -54,9 +54,10 @@ if (album.data.magazine) {
   magazineHref = `/magazine/${album.data.magazine}`;
  }
 }
+const seoDescription = artistName ? `${artistName} — ${album.data.name}` : album.data.name;
 ---
 
-<BaseLayout title={album.data.name} ogImage={album.data.image?.src ?? `/images/albums/${album.id}.jpg`}>
+<BaseLayout title={album.data.name} description={seoDescription} ogImage={album.data.image?.src ?? `/images/albums/${album.id}.jpg`}>
  <section>
   <header class="title-header">
    <h2>

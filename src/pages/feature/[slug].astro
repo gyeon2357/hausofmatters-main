@@ -25,13 +25,13 @@ const dateStr = new Date(feature.data.date).toLocaleDateString("ko-KR", {
 
 const coverSrc = feature.data.coverImage?.src ?? "";
 const coverAlt = feature.data.coverImage?.alt ?? feature.id;
-// 파일명이 title: 하이픈을 공백으로, 단어 첫 글자 대문자
+
 const displayTitle = feature.id
   .replace(/-/g, " ")
   .replace(/\b\w/g, c => c.toUpperCase());
 const pageTitle = `Hausofmatters - Feature: ${displayTitle}`;
 
-// link 필드 → album 또는 magazine 링크 결정
+
 let linkHref: string | undefined;
 let linkLabel: string | undefined;
 if (feature.data.link) {
@@ -45,9 +45,12 @@ if (feature.data.link) {
     linkLabel = `/ ${raw.toUpperCase()}`;
   }
 }
+const seoDescription = feature.data.artist
+  ? `${feature.data.artist} | ${dateStr}`
+  : `${feature.data.category} | ${dateStr}`;
 ---
 
-<BaseLayout title={pageTitle} ogImage={coverSrc || undefined}>
+<BaseLayout title={pageTitle} description={seoDescription} ogImage={coverSrc || undefined}>
   {
     coverSrc && (
       <div class="feature-cover">
@@ -133,6 +136,7 @@ if (feature.data.link) {
     max-width: 720px;
     line-height: 1.8;
     word-break: keep-all;
+    text-wrap: pretty;
   }
 
   .feature-footer {
