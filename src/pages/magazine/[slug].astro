@@ -51,10 +51,7 @@ const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 
 // 목록으로 돌아가는 링크 (category 기반)
 const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazine/hom";
-const seoDescription =
- issue.data.category === "w-hom"
-  ? "해외힙합 매거진 w/HOM"
-  : "한국힙합 매거진 HOM";
+const seoDescription = issue.data.category === "w-hom" ? "해외힙합 매거진 w/HOM" : "한국힙합 매거진 HOM";
 ---
 
 <BaseLayout title={title} description={seoDescription} ogImage={image.src}>
@@ -67,7 +64,7 @@ const seoDescription =
    <div>
     <a class="back" href={backHref}>View All</a>
     <span class="faded">/</span>
-    <a href={`/magazine/${nextSlug}`} data-astro-prefetch>Prev Issue</a>
+    <a class="back" href={`/magazine/${nextSlug}`} data-astro-prefetch>Prev Issue</a>
    </div>
   </header>
 
@@ -77,6 +74,8 @@ const seoDescription =
    {image && <img class="fade-in" src={image.src} alt={image.alt} />}
 
    <div class="content">
+    <div><Flipbook pdfPath={pdfPath} /> <Share title={title} /></div>
+
     <h5>Description</h5>
     <Content />
 
@@ -92,15 +91,12 @@ const seoDescription =
       }
      </dd>
     </dl>
-    <Flipbook pdfPath={pdfPath} />
-    <Share title={title} />
    </div>
   </div>
  </section>
 </BaseLayout>
 
 <style>
-
  h3 {
   margin: 0;
  }
@@ -129,15 +125,24 @@ const seoDescription =
   grid-area: content;
  }
 
+ .content > div {
+  margin-bottom: 3rem;
+ }
+
  dl {
   margin-top: 1rem;
  }
 
  dt {
-  font-weight: 700;
+  font-weight: 400;
  }
 
  dd {
   margin: 0 0 1rem;
  }
+
+ .share {
+  margin: 0;
+ }
 </style>
+  
