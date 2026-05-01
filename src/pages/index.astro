@@ -121,7 +121,7 @@ const whomCards = sorted
       <div class="album-img">
        <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
       </div>
-      <h3>{card.name}</h3>
+      <p class="album-name">{card.name}</p>
       <p class="album-year">{card.year}</p>
      </a>
     ))
@@ -142,24 +142,6 @@ const whomCards = sorted
   margin-bottom: 4rem;
  }
 
- .album-img {
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: var(--color-placeholder);
-  margin-bottom: 0.75rem;
- }
-
- .album-img img {
-  width: 100%;
-  object-fit: cover;
-  display: block;
- }
-
- .album-card h3 {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.3;
- }
 
  .album-year {
   margin: 0;

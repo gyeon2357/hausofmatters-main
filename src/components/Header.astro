@@ -49,8 +49,8 @@ const isAbout = currentPath.startsWith("/about");
    <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
   </li>
  </ul>
+ <Separator />
 </header>
-<Separator />
 
 <style>
  header {
@@ -62,8 +62,13 @@ const isAbout = currentPath.startsWith("/about");
   z-index: 100;
   background: var(--color-bg);
 
-  padding: 0.5rem 0;
-  gap: 1rem;
+  font-weight: 700;
+
+  padding: 0.5rem 0.5rem 0; /* body padding 만큼 좌우 확보 */
+  gap: 0.75rem;
+  /* body padding(0.5rem) 을 상쇄해서 header를 뷰포트 끝까지 확장 */
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
  }
 
  header section {
@@ -118,11 +123,11 @@ const isAbout = currentPath.startsWith("/about");
   grid-column: auto / span 2;
   /* 스크롤 숨김 트랜지션 */
   overflow: hidden;
-  max-height: 4rem;
+  max-height: 2rem;
   transition:
-   max-height 0.3s ease,
-   opacity 0.3s ease,
-   padding 0.3s ease;
+   max-height 0.25s ease,
+   opacity 0.25s ease,
+   padding 0.25s ease;
   opacity: 1;
  }
 
@@ -140,13 +145,16 @@ const isAbout = currentPath.startsWith("/about");
  }
 
  @media screen and (max-width: 768px) {
+  header {
+   gap: 0.625rem;
+  }
+
   ul li,
   header {
    font-size: 0.825rem;
   }
  }
 </style>
-
 <script>
  function initHeader() {
   // active 링크 업데이트 (transition:persist라 재렌더링이 없으므로 JS로 처리)
@@ -175,7 +183,7 @@ const isAbout = currentPath.startsWith("/about");
    if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
    if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
    // 로고 전환
-   const logo = document.getElementById("logo") as HTMLImageElement | null;
+   const logo = document.getElementById("site-logo") as HTMLImageElement | null;
    if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
   };
 
@@ -183,7 +191,7 @@ const isAbout = currentPath.startsWith("/about");
   const initial = getEffective();
   if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
   if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
-  const logoInit = document.getElementById("logo") as HTMLImageElement | null;
+  const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
   if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
   btn.addEventListener("click", () => {
@@ -196,19 +204,35 @@ const isAbout = currentPath.startsWith("/about");
 
  // 스크롤 방향 감지: Lenis 인스턴스를 우선 사용, 없으면 native scroll fallback
  (function initScrollNav() {
+  const COOLDOWN = 200; // ms — 토글 후 이 시간 동안 재토글 차단
+  let lastToggle = 0;
+  let isHidden = false;
+
+  function isNearBottom(margin = 200) {
+   return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - margin;
+  }
+
+  function setNav(hide: boolean) {
+   const now = Date.now();
+   // 상태가 같거나 쿨다운 중이면 무시
+   if (hide === isHidden || now - lastToggle < COOLDOWN) return;
+   const nav = document.querySelector("header ul");
+   if (!nav) return;
+   isHidden = hide;
+   lastToggle = now;
+   nav.classList.toggle("nav-hidden", hide);
+  }
+
   function attachLenis(lenis: any) {
    lenis.on("scroll", ({ scroll, velocity }: { scroll: number; velocity: number }) => {
-    const nav = document.querySelector("header ul");
-    if (!nav) return;
-
-    if (scroll < 80) {
-     nav.classList.remove("nav-hidden");
-    } else if (velocity > 0) {
-     // 아래로 스크롤
-     nav.classList.add("nav-hidden");
-    } else if (velocity < 0) {
-     // 위로 스크롤
-     nav.classList.remove("nav-hidden");
+    if (scroll < 80 || isNearBottom()) {
+     setNav(false);
+     return; // ← 핵심: 이후 velocity 로직 진입 차단
+    }
+    if (velocity > 0.3) {
+     setNav(true);
+    } else if (velocity < -0.3) {
+     setNav(false);
     }
    });
   }
@@ -236,21 +260,20 @@ const isAbout = currentPath.startsWith("/about");
     "scroll",
     () => {
      const currentY = window.scrollY;
-     const delta = currentY - lastY;
-     accumulated += delta;
+     accumulated += currentY - lastY;
      lastY = currentY;
 
-     const nav = document.querySelector("header ul");
-     if (!nav) return;
-
-     if (currentY < 80) {
-      nav.classList.remove("nav-hidden");
+     if (currentY < 80 || isNearBottom()) {
+      setNav(false);
       accumulated = 0;
-     } else if (accumulated > THRESHOLD) {
-      nav.classList.add("nav-hidden");
+      return; // ← 추가
+     }
+
+     if (accumulated > THRESHOLD) {
+      setNav(true);
       accumulated = 0;
      } else if (accumulated < -THRESHOLD) {
-      nav.classList.remove("nav-hidden");
+      setNav(false);
       accumulated = 0;
      }
     },

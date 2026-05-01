@@ -431,7 +431,7 @@
   justify-content: center;
   align-items: center;
 
-  font-family: "Wanted Sans", "Helvetica Neue", Arial, sans-serif !important;
+  font-family: "Helvetica Neue", Arial, sans-serif !important;
   font-size: 0.65rem;
   letter-spacing: 0.25px;
 
@@ -642,7 +642,7 @@
   z-index: 9;
   width: 160px;
 
-  font-family: "Wanted Sans", "Helvetica Neue", Arial, sans-serif !important;
+  font-family: "Helvetica Neue", Arial, sans-serif !important;
   letter-spacing: 0.25px;
 }
 

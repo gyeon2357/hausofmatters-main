@@ -46,10 +46,10 @@ const domesticCards = allAlbums
      <div class="album-img">
       <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
      </div>
-     <h3 class="album-name">
+     <p class="album-name">
       {card.recommended && <span class="pick-badge">pick</span>}
       {card.name}
-     </h3>
+     </p>
      <p class="album-year">{card.year}</p>
     </a>
    ))
@@ -58,31 +58,6 @@ const domesticCards = allAlbums
 </BaseLayout>
 
 <style>
- .album-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-  margin: 2rem 0 10rem;
- }
-
- @media (min-width: 30em) {
-  .album-grid {
-   grid-template-columns: repeat(3, 1fr);
-  }
- }
- @media (min-width: 50em) {
-  .album-grid {
-   grid-template-columns: repeat(5, 1fr);
-  }
- }
-
- .album-name {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.3;
- }
-
  .faded {
   opacity: 0.5;
  }
