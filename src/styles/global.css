@@ -7,6 +7,52 @@
  }
 }
 
+@font-face {
+ font-family: "iAWriterQuattroS";
+ src:
+  url("/fonts/iAWriterQuattroS-Regular.woff2") format("woff2"),
+  url("/fonts/iAWriterQuattroS-Regular.woff") format("woff");
+ unicode-range: U+0020-007E;
+ font-weight: 400;
+ font-style: normal;
+ font-display: swap;
+}
+
+@font-face {
+ font-family: "iAWriterQuattroS";
+ src:
+  url("/fonts/iAWriterQuattroS-Bold.woff2") format("woff2"),
+  url("/fonts/iAWriterQuattroS-Bold.woff") format("woff");
+ unicode-range: U+0020-007E;
+ font-weight: 700;
+ font-style: normal;
+ font-display: swap;
+}
+
+@font-face {
+ font-family: "SpoqaHanSansNeo";
+ font-weight: 400;
+ font-style: normal;
+ font-display: swap;
+ src: url("/fonts/SpoqaHanSansNeo-Regular.eot");
+ src:
+  url("/fonts/SpoqaHanSansNeo-Regular.eot?#iefix") format("embedded-opentype"),
+  url("/fonts/SpoqaHanSansNeo-Regular.woff2") format("woff2"),
+  url("/fonts/SpoqaHanSansNeo-Regular.woff") format("woff");
+}
+
+@font-face {
+ font-family: "SpoqaHanSansNeo";
+ font-weight: 700;
+ font-style: normal;
+ font-display: swap;
+ src: url("/fonts/SpoqaHanSansNeo-Bold.eot");
+ src:
+  url("/fonts/SpoqaHanSansNeo-Bold.eot?#iefix") format("embedded-opentype"),
+  url("/fonts/SpoqaHanSansNeo-Bold.woff2") format("woff2"),
+  url("/fonts/SpoqaHanSansNeo-Bold.woff") format("woff");
+}
+
 :root {
  font-size: 16px;
  --color-text: #000;
@@ -17,6 +63,14 @@
  --color-link: #000;
  --color-link-hover: #999;
  --color-placeholder: #f8f8f8;
+
+ --info-font:
+  "iAWriterQuattroS", "SpoqaHanSansNeo", BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
+  "Helvetica Neue", Helvetica, Arial, sans-serif;
+ --main-font:
+  "SpoqaHanSansNeo", BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica,
+  Arial, sans-serif;
+
  --font-size-s: 0.875rem;
  --font-size-l: clamp(1rem, 3vw, 1.5rem);
  --font-size-xl: clamp(1.25rem, 4vw, 2rem);
@@ -57,91 +111,9 @@
  --color-placeholder: #f8f8f8;
 }
 
-/* @font-face {
- font-family: "iAWriterQuattroS";
- src:
-  url("/fonts/iAWriterQuattroS-Regular.woff2") format("woff2"),
-  url("/fonts/iAWriterQuattroS-Regular.woff") format("woff");
- unicode-range: U+0020-007E;
- font-weight: 400;
- font-style: normal;
- font-display: swap;
-}
-
-@font-face {
- font-family: "iAWriterQuattroS";
- src:
-  url("/fonts/iAWriterQuattroS-Bold.woff2") format("woff2"),
-  url("/fonts/iAWriterQuattroS-Bold.woff") format("woff");
- unicode-range: U+0020-007E;
- font-weight: 700;
- font-style: normal;
- font-display: swap;
-} */
-
-@font-face {
- font-family: "SpoqaHanSansNeo";
- font-weight: 400;
- font-style: normal;
- font-display: swap;
- src: url("/fonts/SpoqaHanSansNeo-Regular.eot");
- src:
-  url("/fonts/SpoqaHanSansNeo-Regular.eot?#iefix") format("embedded-opentype"),
-  url("/fonts/SpoqaHanSansNeo-Regular.woff2") format("woff2"),
-  url("/fonts/SpoqaHanSansNeo-Regular.woff") format("woff");
-}
-
-@font-face {
- font-family: "SpoqaHanSansNeo";
- font-weight: 700;
- font-style: normal;
- font-display: swap;
- src: url("/fonts/SpoqaHanSansNeo-Bold.eot");
- src:
-  url("/fonts/SpoqaHanSansNeo-Bold.eot?#iefix") format("embedded-opentype"),
-  url("/fonts/SpoqaHanSansNeo-Bold.woff2") format("woff2"),
-  url("/fonts/SpoqaHanSansNeo-Bold.woff") format("woff");
-}
-
-@font-face {
- font-family: "Pretendard";
- font-weight: 400;
- font-style: normal;
- font-display: swap;
- unicode-range: U+0020-007E;
- src:
-  url("/fonts/Pretendard-Regular.subset.woff2") format("woff2"),
-  url("/fonts/Pretendard-Regular.subset.woff") format("woff");
-}
-
-@font-face {
- font-family: "Pretendard";
- font-weight: 700;
- font-style: normal;
- font-display: swap;
- unicode-range: U+0020-007E;
- src:
-  url("/fonts/Pretendard-SemiBold.subset.woff2") format("woff2"),
-  url("/fonts/Pretendard-SemiBold.subset.woff") format("woff");
-}
-
 body {
- /* font-family: "Pretendard", sans-serif; */
- font-family:
-  "SpoqaHanSansNeo",
-  BlinkMacSystemFont,
-  -apple-system,
-  "Segoe UI",
-  Roboto,
-  Oxygen,
-  Ubuntu,
-  Cantarell,
-  "Fira Sans",
-  "Droid Sans",
-  "Helvetica Neue",
-  Helvetica,
-  Arial,
-  sans-serif;
+ font-family: var(--main-font);
+
  font-variant-ligatures: none;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
@@ -298,6 +270,8 @@ img {
 }
 
 .section-header {
+ font-family: var(--info-font);
+
  display: flex;
  flex-direction: row;
  align-items: center;
@@ -392,6 +366,7 @@ dd {
  display: grid;
  grid-template-columns: 100%;
 
+ font-family: var(--info-font);
  font-weight: 700;
  line-height: 1.4;
 
