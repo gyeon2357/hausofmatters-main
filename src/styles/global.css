@@ -599,3 +599,159 @@ mark {
 [data-theme="light"] .toggle-thumb {
  transform: translateX(0);
 }
+
+/* search */
+
+.search-page {
+ max-width: 720px;
+ margin: 0 auto;
+ padding: 2rem 0 8rem;
+}
+
+.search-meta {
+ margin-bottom: 1rem;
+ min-height: 1.2em;
+}
+
+.search-status {
+ font-size: 0.8rem;
+ opacity: 0.5;
+}
+
+/* ── States ── */
+.initial-state,
+.empty-state {
+ text-align: center;
+ opacity: 0.4;
+ font-size: 0.9rem;
+ margin-top: 4rem;
+}
+
+/* ── Results ── */
+.results {
+ display: flex;
+ flex-direction: column;
+
+ gap: 2.5rem;
+}
+
+.results a {
+}
+
+.result-item {
+ display: grid;
+ grid-template-columns: 6rem 1fr 8rem;
+ align-items: start;
+ gap: 1rem;
+ padding: 1rem 0;
+ border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+ text-decoration: none;
+ color: inherit;
+ transition: opacity 0.15s;
+}
+
+.result-item:hover {
+ opacity: 0.6;
+}
+.result-item:first-child {
+ border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.result-type {
+ text-transform: uppercase;
+
+ opacity: 0.45;
+ padding-top: 0.15rem;
+ white-space: nowrap;
+}
+
+.result-main {
+ display: flex;
+ flex-direction: column;
+ gap: 0.5rem;
+ min-width: 0;
+}
+
+.result-title {
+ font-size: 1rem;
+}
+
+/* ── 이미지 ── */
+.result-image {
+ width: 8rem;
+
+ flex-shrink: 0;
+ overflow: hidden;
+}
+
+.result-image img {
+ width: 100%;
+
+ object-fit: cover;
+ display: block;
+}
+
+.result-image--empty {
+ background: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+/* ── Match badges — block 구분 ── */
+.result-fields {
+ display: flex;
+ flex-direction: column; /* block 줄바꿈 */
+ gap: 0.3rem;
+}
+
+.match-badge {
+ display: flex;
+ gap: 0.4rem;
+
+ align-items: baseline;
+ max-width: 100%;
+ overflow: hidden;
+}
+
+.match-label {
+ opacity: 0.75;
+ flex-shrink: 0;
+ font-weight: 600;
+
+ text-transform: uppercase;
+ letter-spacing: 0.05em;
+}
+
+.match-value {
+ opacity: 0.8;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+ max-width: 32ch;
+}
+
+/* ── Highlight mark ── */
+:global(mark) {
+ background: none;
+ color: inherit;
+
+ text-decoration: underline;
+ text-decoration-thickness: 1.5px;
+ text-underline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+ .result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+ }
+
+ .result-type {
+ }
+ .result-title {
+ }
+
+ .result-image {
+  width: 6rem;
+  height: 6rem;
+ }
+}
