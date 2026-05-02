@@ -12,19 +12,27 @@ const isAbout = currentPath.startsWith("/about");
 <header transition:persist>
  <section>
   <div>
+   <img id="logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
    <h1>
     <a href="/">
      <TextSlider content="HAUSOFMATTERS" />
     </a>
    </h1>
-   <img id="logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
   </div>
 
-  <button id="theme-toggle" aria-label="Toggle dark mode">
-   <span class="toggle-track">
-    <span class="toggle-thumb"></span>
-   </span><TextSlider content="Dark" />
-  </button>
+  <li>
+   <a href="/search" aria-label="검색" class="search-btn" data-astro-prefetch>
+    <TextSlider content="Search" />
+   </a>
+  </li>
+
+  <li>
+   <button id="theme-toggle" aria-label="Toggle dark mode">
+    <span class="toggle-track">
+     <span class="toggle-thumb"></span>
+    </span><TextSlider content="Dark" />
+   </button>
+  </li>
  </section>
 
  <ul>
@@ -49,286 +57,286 @@ const isAbout = currentPath.startsWith("/about");
    <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
   </li>
  </ul>
+ <button id="top-btn" aria-label="Scroll to top">/ TOP</button>
  <Separator />
-</header>
-<button id="top-btn" aria-label="Scroll to top">/ TOP</button>
 
-<style>
- header {
-  display: flex;
-  flex-direction: column;
-
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--color-bg);
-
-  font-family: var(--info-font);
-
-  padding: 0.5rem 0.5rem 0; /* body padding 만큼 좌우 확보 */
-  gap: 0.75rem;
-  /* body padding(0.5rem) 을 상쇄해서 header를 뷰포트 끝까지 확장 */
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
- }
-
- header section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
- }
-
- header section div {
-  display: flex;
-  justify-content: start;
-  align-items: center;
- }
-
- header a.current {
-  opacity: 0.4;
- }
-
- header h1 a.current {
-  color: inherit;
- }
-
- h1 {
-  font-size: 1rem;
-  font-weight: inherit;
-  margin: 0;
- }
-
- header section a {
-  display: flex;
-  align-items: center;
- }
-
- header section h1 {
-  margin-right: 1rem;
- }
-
- .logo {
-  display: block;
-  height: 0.875rem;
-  width: auto;
- }
-
- ul {
-  display: flex;
-  list-style: none;
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0;
-  grid-column: auto / span 2;
-  /* 스크롤 숨김 트랜지션 */
-  overflow: hidden;
-  max-height: 2rem;
-  transition:
-   max-height 0.25s ease,
-   opacity 0.25s ease,
-   padding 0.25s ease;
-  opacity: 1;
- }
-
- ul.nav-hidden {
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
- }
-
- .oh {
- }
-
- ul li {
-  font-size: 0.875rem;
- }
-
- @media screen and (max-width: 768px) {
+ <style>
   header {
-   gap: 0.625rem;
+   display: flex;
+   flex-direction: column;
+
+   position: sticky;
+   top: 0;
+   z-index: 100;
+   background: var(--color-bg);
+
+   font-family: var(--info-font);
+
+   padding: 0.5rem 0.5rem 0; /* body padding 만큼 좌우 확보 */
+   gap: 0.75rem;
+   /* body padding(0.5rem) 을 상쇄해서 header를 뷰포트 끝까지 확장 */
+   margin-left: -0.5rem;
+   margin-right: -0.5rem;
   }
 
-  ul li,
-  header {
-   font-size: 0.825rem;
-  }
- }
+  header section {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
 
- #top-btn {
-  display: none; /* JS로 제어 */
-  position: fixed;
-  bottom: 1.25rem;
-  right: 1rem;
-  z-index: 200;
-
-  background: var(--color-bg);
-  color: var(--color-text, currentColor);
-
-  font-family: inherit;
-
-  font-size: 0.875rem;
-  padding: 0.375rem 0.5rem;
-  cursor: pointer;
-
-  opacity: 0;
-  transition: opacity 0.25s ease;
- }
-
- #top-btn.visible {
-  display: block;
-  opacity: 1;
- }
-</style>
-<script>
- function initHeader() {
-  // active 링크 업데이트 (transition:persist라 재렌더링이 없으므로 JS로 처리)
-  const path = window.location.pathname;
-  document.querySelectorAll("header a[href]").forEach(a => {
-   const href = a.getAttribute("href");
-   if (!href) return;
-   a.classList.toggle("current", href !== "/" && path.startsWith(href));
-  });
- }
-
- function initTheme() {
-  const btn = document.getElementById("theme-toggle");
-  if (!btn || btn.dataset.initialized) return;
-  btn.dataset.initialized = "true";
-
-  const inner = btn.querySelector(".oh__inner");
-  const thumb = btn.querySelector(".toggle-thumb");
-
-  const getEffective = () =>
-   document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-
-  const apply = (theme: string) => {
-   document.documentElement.setAttribute("data-theme", theme);
-   localStorage.setItem("theme", theme);
-   if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
-   if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
-   // 로고 전환
-   const logo = document.getElementById("site-logo") as HTMLImageElement | null;
-   if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
-  };
-
-  // 초기 상태 동기화
-  const initial = getEffective();
-  if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
-  if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
-  const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
-  if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
-
-  btn.addEventListener("click", () => {
-   apply(getEffective() === "dark" ? "light" : "dark");
-  });
- }
-
- document.addEventListener("astro:page-load", initHeader);
- document.addEventListener("astro:page-load", initTheme);
- document.addEventListener("astro:page-load", initTopBtn);
-
- // 스크롤 방향 감지: Lenis 인스턴스를 우선 사용, 없으면 native scroll fallback
- (function initScrollNav() {
-  const COOLDOWN = 200; // ms — 토글 후 이 시간 동안 재토글 차단
-  let lastToggle = 0;
-  let isHidden = false;
-
-  function isNearBottom(margin = 200) {
-   return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - margin;
+   width: 100%;
   }
 
-  function setNav(hide: boolean) {
-   const now = Date.now();
-   // 상태가 같거나 쿨다운 중이면 무시
-   if (hide === isHidden || now - lastToggle < COOLDOWN) return;
-   const nav = document.querySelector("header ul");
-   if (!nav) return;
-   isHidden = hide;
-   lastToggle = now;
-   nav.classList.toggle("nav-hidden", hide);
+  header section div {
+   display: flex;
+   justify-content: start;
+   align-items: center;
   }
 
-  function attachLenis(lenis: any) {
-   lenis.on("scroll", ({ scroll, velocity }: { scroll: number; velocity: number }) => {
-    if (scroll < 80 || isNearBottom()) {
-     setNav(false);
-     return; // ← 핵심: 이후 velocity 로직 진입 차단
-    }
-    if (velocity > 0.3) {
-     setNav(true);
-    } else if (velocity < -0.3) {
-     setNav(false);
-    }
+  header a.current {
+   opacity: 0.4;
+  }
+
+  header h1 a.current {
+   color: inherit;
+  }
+
+  h1 {
+   font-size: 1rem;
+   font-weight: inherit;
+   margin: 0;
+  }
+
+  header section a {
+   display: flex;
+   align-items: center;
+  }
+
+  header section h1 {
+   margin-left: 0.5rem;
+  }
+
+  .logo {
+   display: block;
+   height: 0.875rem;
+   width: auto;
+  }
+
+  ul {
+   display: flex;
+   list-style: none;
+   gap: 0.75rem;
+   margin: 0;
+   padding: 0;
+   grid-column: auto / span 2;
+   /* 스크롤 숨김 트랜지션 */
+   overflow: hidden;
+   max-height: 2rem;
+   transition:
+    max-height 0.25s ease,
+    opacity 0.25s ease,
+    padding 0.25s ease;
+   opacity: 1;
+  }
+
+  ul.nav-hidden {
+   max-height: 0;
+   opacity: 0;
+   pointer-events: none;
+  }
+
+  .oh {
+  }
+
+  ul li {
+   font-size: 0.875rem;
+  }
+
+  @media screen and (max-width: 768px) {
+   header {
+    gap: 0.625rem;
+   }
+
+   ul li,
+   header {
+    font-size: 0.825rem;
+   }
+  }
+
+  #top-btn {
+   display: none; /* JS로 제어 */
+   position: fixed;
+   bottom: 1.25rem;
+   right: 1rem;
+   z-index: 200;
+
+   background: var(--color-bg);
+   color: var(--color-text, currentColor);
+
+   font-family: inherit;
+
+   font-size: 0.875rem;
+   padding: 0.375rem 0.5rem;
+   cursor: pointer;
+
+   opacity: 0;
+   transition: opacity 0.25s ease;
+  }
+
+  #top-btn.visible {
+   display: block;
+   opacity: 1;
+  }
+ </style>
+ <script>
+  function initHeader() {
+   // active 링크 업데이트 (transition:persist라 재렌더링이 없으므로 JS로 처리)
+   const path = window.location.pathname;
+   document.querySelectorAll("header a[href]").forEach(a => {
+    const href = a.getAttribute("href");
+    if (!href) return;
+    a.classList.toggle("current", href !== "/" && path.startsWith(href));
    });
   }
 
-  // Lenis가 이미 초기화된 경우 즉시 연결
-  if ((window as any).__lenis) {
-   attachLenis((window as any).__lenis);
-   return;
+  function initTheme() {
+   const btn = document.getElementById("theme-toggle");
+   if (!btn || btn.dataset.initialized) return;
+   btn.dataset.initialized = "true";
+
+   const inner = btn.querySelector(".oh__inner");
+   const thumb = btn.querySelector(".toggle-thumb");
+
+   const getEffective = () =>
+    document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+   const apply = (theme: string) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
+    if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
+    // 로고 전환
+    const logo = document.getElementById("site-logo") as HTMLImageElement | null;
+    if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
+   };
+
+   // 초기 상태 동기화
+   const initial = getEffective();
+   if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
+   if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
+   const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
+   if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
+
+   btn.addEventListener("click", () => {
+    apply(getEffective() === "dark" ? "light" : "dark");
+   });
   }
 
-  // SmoothScroll이 약간 늦게 초기화될 수 있으므로 짧게 대기 후 재시도
-  // 그래도 없으면 native scroll fallback 사용
-  setTimeout(() => {
+  document.addEventListener("astro:page-load", initHeader);
+  document.addEventListener("astro:page-load", initTheme);
+  document.addEventListener("astro:page-load", initTopBtn);
+
+  // 스크롤 방향 감지: Lenis 인스턴스를 우선 사용, 없으면 native scroll fallback
+  (function initScrollNav() {
+   const COOLDOWN = 200; // ms — 토글 후 이 시간 동안 재토글 차단
+   let lastToggle = 0;
+   let isHidden = false;
+
+   function isNearBottom(margin = 200) {
+    return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - margin;
+   }
+
+   function setNav(hide: boolean) {
+    const now = Date.now();
+    // 상태가 같거나 쿨다운 중이면 무시
+    if (hide === isHidden || now - lastToggle < COOLDOWN) return;
+    const nav = document.querySelector("header ul");
+    if (!nav) return;
+    isHidden = hide;
+    lastToggle = now;
+    nav.classList.toggle("nav-hidden", hide);
+   }
+
+   function attachLenis(lenis: any) {
+    lenis.on("scroll", ({ scroll, velocity }: { scroll: number; velocity: number }) => {
+     if (scroll < 80 || isNearBottom()) {
+      setNav(false);
+      return; // ← 핵심: 이후 velocity 로직 진입 차단
+     }
+     if (velocity > 0.3) {
+      setNav(true);
+     } else if (velocity < -0.3) {
+      setNav(false);
+     }
+    });
+   }
+
+   // Lenis가 이미 초기화된 경우 즉시 연결
    if ((window as any).__lenis) {
     attachLenis((window as any).__lenis);
     return;
    }
 
-   // Lenis 없음 → native scroll (delta 임계값으로 미세 토글 방지)
-   let lastY = window.scrollY;
-   let accumulated = 0;
-   const THRESHOLD = 12;
+   // SmoothScroll이 약간 늦게 초기화될 수 있으므로 짧게 대기 후 재시도
+   // 그래도 없으면 native scroll fallback 사용
+   setTimeout(() => {
+    if ((window as any).__lenis) {
+     attachLenis((window as any).__lenis);
+     return;
+    }
 
-   window.addEventListener(
-    "scroll",
-    () => {
-     const currentY = window.scrollY;
-     accumulated += currentY - lastY;
-     lastY = currentY;
+    // Lenis 없음 → native scroll (delta 임계값으로 미세 토글 방지)
+    let lastY = window.scrollY;
+    let accumulated = 0;
+    const THRESHOLD = 12;
 
-     if (currentY < 80 || isNearBottom()) {
-      setNav(false);
-      accumulated = 0;
-      return; // ← 추가
-     }
+    window.addEventListener(
+     "scroll",
+     () => {
+      const currentY = window.scrollY;
+      accumulated += currentY - lastY;
+      lastY = currentY;
 
-     if (accumulated > THRESHOLD) {
-      setNav(true);
-      accumulated = 0;
-     } else if (accumulated < -THRESHOLD) {
-      setNav(false);
-      accumulated = 0;
-     }
-    },
-    { passive: true }
-   );
-  }, 200);
- })();
+      if (currentY < 80 || isNearBottom()) {
+       setNav(false);
+       accumulated = 0;
+       return; // ← 추가
+      }
 
- // to-top-btn
- function initTopBtn() {
-  const btn = document.getElementById("top-btn");
-  if (!btn) return;
+      if (accumulated > THRESHOLD) {
+       setNav(true);
+       accumulated = 0;
+      } else if (accumulated < -THRESHOLD) {
+       setNav(false);
+       accumulated = 0;
+      }
+     },
+     { passive: true }
+    );
+   }, 200);
+  })();
 
-  const THRESHOLD = window.innerHeight;
+  // to-top-btn
+  function initTopBtn() {
+   const btn = document.getElementById("top-btn");
+   if (!btn) return;
 
-  function onScroll() {
-   btn!.classList.toggle("visible", window.scrollY > THRESHOLD); // ! 추가
-  }
+   const THRESHOLD = window.innerHeight;
 
-  btn.addEventListener("click", () => {
-   if ((window as any).__lenis) {
-    (window as any).__lenis.scrollTo(0, { duration: 1.2 });
-   } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+   function onScroll() {
+    btn!.classList.toggle("visible", window.scrollY > THRESHOLD); // ! 추가
    }
-  });
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
- }
-</script>
+   btn.addEventListener("click", () => {
+    if ((window as any).__lenis) {
+     (window as any).__lenis.scrollTo(0, { duration: 1.2 });
+    } else {
+     window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+   });
+
+   window.addEventListener("scroll", onScroll, { passive: true });
+   onScroll();
+  }
+ </script>
+</header>

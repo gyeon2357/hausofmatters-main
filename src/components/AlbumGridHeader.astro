@@ -1,8 +1,6 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
 import Separator from "../components/Separator.astro";
-import Search from "../components/Search.astro";
-import Cross from "../assets/images/cross.svg";
 
 type Props = {
  albumsTotal: number;
@@ -23,20 +21,12 @@ const { albumsTotal, title = "Review" } = Astro.props;
    <button data-sort-date><TextSlider content="Date" /></button>
    <button data-recommended><TextSlider content="Pick" /></button>
    <button data-shuffle><TextSlider content="Shuffle" /></button>
-
-   <div class="search-group">
-    <button data-search class="search"><TextSlider content="Search" /></button>
-    <button data-clear class="clear hidden" aria-label="Clear search">
-     <Cross width={16} height={16} />
-    </button>
-   </div>
   </div>
  </section>
  <a class="back" href="/albums">/ Back</a>
 </header>
 
 <Separator />
-<Search />
 
 <style>
  .title-row {
