@@ -11,11 +11,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <div id="results" class="results" role="list"></div>
 
   <div id="empty-state" class="empty-state" hidden>
-   <p>No results found.</p>
+   <p>검색결과가 없습니다.</p>
   </div>
 
   <div id="initial-state" class="initial-state">
-   <p>Album · Magazine · Interview · Feature</p>
+   <p>아티스트 · 앨범 · 인터뷰 · 공연정보</p>
   </div>
  </div>
 </BaseLayout>
@@ -42,6 +42,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
  let index: SearchItem[] = [];
 
  async function loadIndex() {
+  // Header의 전역 캐시가 있으면 재사용, 없으면 fetch
+  const cache = (window as any).__searchCache as { index: any[]; loaded: boolean; promise: Promise<void> | null } | undefined;
+  if (cache?.loaded) {
+   index = cache.index;
+   return;
+  }
+  if (cache?.promise) {
+   await cache.promise;
+   index = cache?.index ?? [];
+   return;
+  }
   const res = await fetch("/search-index.json");
   index = await res.json();
  }
@@ -138,7 +149,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     return `<a class="result-item" href="${item.url}" role="listitem" data-astro-prefetch>
           <div class="result-type">${typeLabel}</div>
           <div class="result-main">
-            <h2 class="result-title">${titleDisplay}</h2>
+            <span class="result-title">${titleDisplay}</span>
             ${badges ? `<div class="result-fields">${badges}</div>` : ""}
           </div>
           ${imageHtml}
@@ -154,13 +165,22 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   const status = document.getElementById("search-status")!;
 
   const urlQuery = new URLSearchParams(window.location.search).get("q") ?? "";
+  if (!urlQuery) return;
 
-  if (!urlQuery) return; // 쿼리 없으면 initial-state 그대로
+  // Header와 동일한 전역 캐시 공유 → 이미 로드됐으면 즉시 렌더링
+  const cache = (window as any).__searchCache as { index: any[]; loaded: boolean; promise: Promise<void> | null } | undefined;
 
-  loadIndex().then(() => {
+  function run() {
+   index = cache?.index ?? index;
    const results = search(urlQuery);
    renderResults(results, urlQuery);
-  });
+  }
+
+  if (cache?.loaded) {
+   run(); // 캐시 있으면 즉시
+  } else {
+   loadIndex().then(run); // 없으면 fetch 후 렌더링
+  }
  }
 
  document.addEventListener("astro:page-load", init);

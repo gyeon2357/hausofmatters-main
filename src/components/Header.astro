@@ -7,7 +7,7 @@ import Search from "../components/Search.astro";
 <header transition:persist>
  <section>
   <div>
-   <img id="logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
+   <img id="site-logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
    <h1>
     <a href="/">
      <TextSlider content="HAUSOFMATTERS" />
@@ -224,8 +224,27 @@ import Search from "../components/Search.astro";
    });
   }
 
+  // ── Search 인덱스 전역 캐시 ─────────────────────────────
+  if (!(window as any).__searchCache) {
+   (window as any).__searchCache = { index: [] as any[], loaded: false, promise: null as Promise<void> | null };
+  }
+  const searchCache = (window as any).__searchCache as { index: any[]; loaded: boolean; promise: Promise<void> | null };
+
+  function loadSearchIndex(): Promise<void> {
+   if (searchCache.loaded) return Promise.resolve();
+   if (searchCache.promise) return searchCache.promise;
+   searchCache.promise = fetch("/search-index.json")
+    .then(r => r.json())
+    .then(data => {
+     searchCache.index = data;
+     searchCache.loaded = true;
+    });
+   return searchCache.promise;
+  }
+
   // ── Search 모달 ──────────────────────────────────────────
   function initSearch() {
+   // dialog는 페이지마다 새로 렌더링 → 매번 fresh하게 조회
    const openBtn = document.getElementById("search-open-btn");
    const dialog = document.getElementById("search-dialog") as HTMLDialogElement | null;
    const input = document.getElementById("search-input") as HTMLInputElement | null;
@@ -235,65 +254,74 @@ import Search from "../components/Search.astro";
 
    if (!openBtn || !dialog || !input) return;
 
-   // 이미 이벤트 바인딩된 경우 중복 방지
-   if (openBtn.dataset.initialized) return;
-   openBtn.dataset.initialized = "true";
-
-   let index: any[] = [];
-   let loaded = false;
-
-   async function loadIndex() {
-    if (loaded) return;
-    const res = await fetch("/search-index.json");
-    index = await res.json();
-    loaded = true;
-   }
+   // AbortController로 이전 페이지의 리스너를 정리하고 새로 바인딩
+   const ac = new AbortController();
+   const sig = ac.signal;
+   const prev = (openBtn as any).__searchAC as AbortController | undefined;
+   prev?.abort();
+   (openBtn as any).__searchAC = ac;
 
    function openDialog() {
     dialog!.showModal();
+    input!.value = "";
+    hint!.textContent = "아티스트 · 앨범 · 인터뷰 · 공연정보";
     setTimeout(() => input!.focus(), 50);
-    loadIndex(); // 미리 로드
    }
 
    function closeDialog() {
     dialog!.close();
    }
 
-   openBtn.addEventListener("click", openDialog);
-   closeBtn?.addEventListener("click", closeDialog);
+   openBtn.addEventListener("click", openDialog, { signal: sig });
+   closeBtn?.addEventListener("click", closeDialog, { signal: sig });
 
-   // backdrop 클릭으로 닫기
-   dialog.addEventListener("click", e => {
-    if (e.target === dialog) closeDialog();
-   });
+   dialog.addEventListener(
+    "click",
+    e => {
+     if (e.target === dialog) closeDialog();
+    },
+    { signal: sig }
+   );
 
-   // 입력 중 결과 수 표시
    let debounce: ReturnType<typeof setTimeout>;
-   input.addEventListener("input", () => {
-    clearTimeout(debounce);
-    debounce = setTimeout(async () => {
-     const q = input!.value.trim().toLowerCase();
-     if (!q) {
-      hint!.textContent = "Album · Magazine · Interview · Feature";
-      return;
-     }
-     await loadIndex();
-     const count = index.filter(item => {
-      if (item.displayTitle.toLowerCase().includes(q)) return true;
-      return Object.values(item.fields as Record<string, string>).some(v => v.toLowerCase().includes(q));
-     }).length;
-     hint!.textContent = count > 0 ? `${count} result${count > 1 ? "s" : ""}` : "No results";
-    }, 100);
-   });
+   input.addEventListener(
+    "input",
+    () => {
+     clearTimeout(debounce);
+     debounce = setTimeout(async () => {
+      const q = input!.value.trim().toLowerCase();
+      const submitBtn = document.getElementById("search-submit");
+      if (!q) {
+       hint!.textContent = "아티스트 · 앨범 · 인터뷰 · 공연정보";
+       submitBtn?.classList.remove("has-results");
+       return;
+      }
+      await loadSearchIndex();
+      const count = searchCache.index.filter((item: any) => {
+       if (item.displayTitle.toLowerCase().includes(q)) return true;
+       return Object.values(item.fields as Record<string, string>).some(v => v.toLowerCase().includes(q));
+      }).length;
+      hint!.textContent = count > 0 ? `${count} result${count > 1 ? "s" : ""}` : "검색결과가 없습니다";
+      submitBtn?.classList.toggle("has-results", count > 0);
+     }, 100);
+    },
+    { signal: sig }
+   );
 
-   // 검색 제출 → /search?q=... 이동
-   form?.addEventListener("submit", e => {
-    e.preventDefault();
-    const q = input!.value.trim();
-    if (!q) return;
-    closeDialog();
-    window.location.href = `/search?q=${encodeURIComponent(q)}`;
-   });
+   form?.addEventListener(
+    "submit",
+    e => {
+     e.preventDefault();
+     const q = input!.value.trim();
+     if (!q) return;
+     closeDialog();
+     window.location.href = `/search?q=${encodeURIComponent(q)}`;
+    },
+    { signal: sig }
+   );
+
+   // 페이지 로드마다 인덱스 백그라운드 프리패치
+   loadSearchIndex();
   }
 
   document.addEventListener("astro:page-load", initHeader);

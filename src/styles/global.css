@@ -632,7 +632,7 @@ mark {
  display: flex;
  flex-direction: column;
 
- gap: 2.5rem;
+ gap: 2rem;
 }
 
 .results a {
@@ -673,7 +673,7 @@ mark {
 }
 
 .result-title {
- font-size: 1rem;
+ font-weight: 700;
 }
 
 /* ── 이미지 ── */
@@ -704,6 +704,7 @@ mark {
 
 .match-badge {
  display: flex;
+ flex-direction: column;
  gap: 0.4rem;
 
  align-items: baseline;
@@ -714,18 +715,21 @@ mark {
 .match-label {
  opacity: 0.75;
  flex-shrink: 0;
- font-weight: 600;
 
+ font-size: 0.875rem;
+ font-weight: 700;
  text-transform: uppercase;
- letter-spacing: 0.05em;
 }
 
 .match-value {
- opacity: 0.8;
+ font-size: 0.875rem;
+
  overflow: hidden;
- text-overflow: ellipsis;
- white-space: nowrap;
- max-width: 32ch;
+ display: -webkit-box;
+ -webkit-line-clamp: 3;
+ -webkit-box-orient: vertical;
+ white-space: normal;
+ word-break: break-all;
 }
 
 /* ── Highlight mark ── */
@@ -739,6 +743,10 @@ mark {
 }
 
 @media (max-width: 768px) {
+ .results {
+  gap: 1rem;
+ }
+
  .result-item {
   display: flex;
   flex-direction: column;
