@@ -7,6 +7,10 @@ magazine: hom-32
 editor: zamso
 image:
   src: /images/albums/ipsum.jpg
+tracks:
+  - '1'
+  - '2'
+  - '3'
 ---
 
 body
