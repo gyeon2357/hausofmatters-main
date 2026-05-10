@@ -89,7 +89,7 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
 
     <h5>Track List</h5>
     <ol>
-     {album.data.tracks.map(track => <li>{track}</li>)}
+     {album.data.tracks?.map(track => <li>{track}</li>)}
     </ol>
 
     <Content />
