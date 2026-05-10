@@ -6,7 +6,6 @@ release: 2026-02-25T00:00:00.000Z
 category: hom
 magazine: hom-35
 editor: 산소
-image: ''
 tracks:
   - 2AM in ITW
   - 느끼는척하지마
