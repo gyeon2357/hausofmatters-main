@@ -38,8 +38,8 @@ const albums = defineCollection({
  schema: z.object({
   name: z.string(),
   image: z.object({ src: z.string(), alt: z.string().optional() }).optional(),
-  release: z.date(),
-  tracks: z.array(z.string()),
+  release: z.date().optional(),
+  tracks: z.array(z.string()).optional(),
   artist: z.string().optional(),
   category: z.enum(["hom", "w-hom"]).default("hom"), // ← 추가
   editor: z.string().optional(), // ← 추가
@@ -69,7 +69,7 @@ const feature = defineCollection({
  loader: glob({ pattern: "**/*.md", base: "./src/data/feature" }),
  schema: z.object({
   // title 없음 → 파일명(id)이 URL이자 제목
-  artist: z.string().optional(),          // 선택 입력
+  artist: z.string().optional(), // 선택 입력
   date: z.date(),
   category: z.string(),
   coverImage: z
@@ -78,7 +78,7 @@ const feature = defineCollection({
     alt: z.string(),
    })
    .optional(),
-  link: z.string().optional(),            // 앨범 ID (ex. 6seoul) 또는 매거진 ID (ex. hom-35)
+  link: z.string().optional(), // 앨범 ID (ex. 6seoul) 또는 매거진 ID (ex. hom-35)
   published: z.boolean().default(true),
  }),
 });
