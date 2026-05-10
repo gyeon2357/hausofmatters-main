@@ -6,6 +6,10 @@ category: hom
 magazine: hom-32
 editor: zamso
 image: /images/albums/lorem.jpg
+tracks:
+  - '1'
+  - '2'
+  - '3'
 ---
 
 lorem ipsum
