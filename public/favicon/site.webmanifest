@@ -1,6 +1,6 @@
 {
-  "name": "Hausofmatters",
-  "short_name": "KHL",
+  "name": "HAUSOFMATTERS",
+  "short_name": "HOM",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone"
 }

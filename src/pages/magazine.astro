@@ -21,8 +21,8 @@ const resolve = (entry: (typeof magazineEntries)[number]) => ({
 });
 
 // ✅ category 기반, 각 최신 3개
-const homEntries = magazineEntries.filter(e => e.data.category === "hom").slice(0, 2);
-const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").slice(0, 2);
+const homEntries = magazineEntries.filter(e => e.data.category === "hom").slice(0, 4);
+const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").slice(0, 4);
 ---
 
 <BaseLayout title={title}>

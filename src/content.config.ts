@@ -60,24 +60,8 @@ const interview = defineCollection({
     alt: z.string(),
    })
    .optional(),
-  text: z.array(
-   z.object({
-    q: z.string(),
-    a: z.array(
-     z.object({
-      text: z.string(),
-      images: z
-       .array(
-        z.object({
-         src: z.string(),
-         alt: z.string(),
-        })
-       )
-       .optional(),
-     })
-    ),
-   })
-  ),
+  // 본문은 마크다운으로 작성 (Q: **볼드**, A: 일반 단락)
+  // text 필드 제거
  }),
 });
 

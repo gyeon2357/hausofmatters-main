@@ -1,7 +1,8 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Separator from "../../components/Separator.astro";
+import Share from "../../components/Share.astro";
 
 export async function getStaticPaths() {
  const allinterview = await getCollection("interview");
@@ -15,8 +16,8 @@ export async function getStaticPaths() {
 
 const { interview } = Astro.props;
 const allArtists = await getCollection("artists");
+const { Content } = await render(interview);
 
-// ✅ reference("artists")를 사용하므로 interview.data.artist는 artist ID
 const artistId = String(interview.data.artist);
 const artist = allArtists.find(a => a.id === artistId);
 
@@ -35,7 +36,6 @@ const seoDescription = `${stageName} | ${dateStr}`;
 ---
 
 <BaseLayout title={title} description={seoDescription} ogImage={coverSrc || undefined}>
- <!-- 커버 이미지 -->
  {
   coverSrc && (
    <div class="interview-cover">
@@ -44,11 +44,9 @@ const seoDescription = `${stageName} | ${dateStr}`;
   )
  }
 
- <!-- 헤더 -->
  <header class="interview-header">
   <p class="interview-label">HAUS OF interview</p>
   <h1>{stageName}</h1>
-
   <p class="interview-meta">
    <span>{genre}</span>
    <span class="sep">·</span>
@@ -58,31 +56,9 @@ const seoDescription = `${stageName} | ${dateStr}`;
 
  <Separator />
 
- <!-- Q&A 본문 -->
  <div class="interview-body">
-  {
-   interview.data.text.map(item => (
-    <div class="qna-block">
-     <p class="question">{item.q}</p>
-
-     {item.a.map(answer => (
-      <div class="answer-block">
-       <p class="answer">{answer.text}</p>
-
-       {answer.images && answer.images.length > 0 && (
-        <div class={`image-group image-group--${answer.images.length}`}>
-         {answer.images.map(img => (
-          <div class="image-wrap">
-           <img class="fade-in" src={img.src} alt={img.alt} loading="lazy" />
-          </div>
-         ))}
-        </div>
-       )}
-      </div>
-     ))}
-    </div>
-   ))
-  }
+  <Content />
+  <Share title={stageName} />
  </div>
 </BaseLayout>
 
@@ -126,89 +102,53 @@ const seoDescription = `${stageName} | ${dateStr}`;
   opacity: 0.5;
  }
 
- /* Q&A */
+ /* ── 본문 ── */
  .interview-body {
   margin: 1rem auto 6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3.5rem;
   max-width: 720px;
+  word-break: keep-all;
+  gap: 0;
  }
 
- .qna-block {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
- }
-
- .question {
+ /* **볼드 단락** = 질문 */
+ .interview-body :global(p > strong:only-child) {
+  display: block;
   font-size: 1rem;
   font-weight: 700;
-  word-break: keep-all;
-
-  margin: 0;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
  }
 
- .question::before {
-  content: "";
+ /* 첫 번째 질문은 위 마진 없음 */
+ .interview-body :global(p:first-child > strong:only-child) {
+  margin-top: 0;
  }
 
- .answer {
-  margin: 0;
-  font-size: 1rem;
+ /* 일반 단락 = 답변 */
+ .interview-body :global(p) {
+  margin: 0 0 0.75rem;
+  line-height: 1.8;
   letter-spacing: -0.25px;
-
   padding-left: 0.75rem;
-
-  white-space: pre-line;
-  word-break: keep-all;
-  text-wrap: pretty;
  }
 
- /* 이미지 그룹 */
- .image-group {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
+ /* 질문 단락은 padding 없음 */
+ .interview-body :global(p:has(> strong:only-child)) {
+  padding-left: 0;
+  margin-bottom: 0;
  }
 
- .image-group--1 {
-  grid-template-columns: 1fr;
- }
-
- .image-group--2 {
-  grid-template-columns: 1fr 1fr;
- }
-
- .image-group--3 {
-  grid-template-columns: 1fr 1fr 1fr;
- }
-
- .image-wrap {
-  overflow: hidden;
-  background: var(--color-placeholder);
-  margin: 1rem 0;
- }
-
- .image-wrap img {
+ /* 인터뷰 중 삽입 이미지 */
+ .interview-body :global(img) {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
+  margin: 1.5rem 0;
  }
 
  @media (max-width: 480px) {
   .interview-header h1 {
    font-size: 1.5rem;
-  }
-
-  .interview-body {
-   gap: 2.5rem;
-  }
-
-  .image-group--2,
-  .image-group--3 {
-   grid-template-columns: 1fr;
   }
  }
 </style>
