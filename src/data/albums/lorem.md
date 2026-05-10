@@ -1,10 +1,13 @@
 ---
 name: lorem
 artist: ipsum
+release: 2024-01-01
 category: hom
 magazine: hom-35
 editor: zamso
-image: /images/albums/lorem.jpg
+image:
+  src: /images/albums/lorem.jpg
+  alt: lorem
 tracks:
   - '1'
   - '2'
