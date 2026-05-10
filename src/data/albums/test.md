@@ -7,6 +7,8 @@ magazine: hom-32
 editor: test
 image:
   src: /images/albums/lorem.jpg
+tracks:
+  - '1'
 ---
 
 234
