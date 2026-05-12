@@ -44,6 +44,7 @@ const albums = defineCollection({
   editor: z.string().optional(),
   recommended: z.boolean().optional(),
   magazine: z.string().optional(),
+  relatedAlbums: z.array(z.string()).optional(),
  }),
 });
 

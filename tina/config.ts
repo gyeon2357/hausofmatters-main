@@ -81,7 +81,7 @@ export default defineConfig({
             name: "body",
             label: "목차",
             isBody: true,
-            description: "## 섹션명  /  **소섹션**  /  - 항목 형식으로 작성",
+            description: "붙여넣기 후 마크다운으로 작성",
           },
         ],
       },
@@ -118,7 +118,7 @@ export default defineConfig({
           {
             type: "datetime",
             name: "release",
-            label: "발매일",
+            label: "발매일 ✱",
             ui: { dateFormat: "YYYY-MM-DD" },
           },
           {
@@ -135,6 +135,13 @@ export default defineConfig({
             name: "magazine",
             label: "매거진 연결",
             description: "ex) hom-35 또는 w-hom-12",
+          },
+          {
+            type: "string",
+            name: "relatedAlbums",
+            label: "관련 앨범 (선택)",
+            list: true,
+            description: "앨범 파일명(ID) 입력. ex) black, 6seoul",
           },
           {
             type: "string",
@@ -158,7 +165,7 @@ export default defineConfig({
           {
             type: "string",
             name: "tracks",
-            label: "트랙리스트",
+            label: "트랙리스트 ✱",
             list: true,
           },
           {

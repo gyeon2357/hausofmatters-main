@@ -49,7 +49,7 @@ const albums = await getCollection("albums", ({ data }) => data.artist === artis
 const { Content } = await render(artist);
 ---
 
-<BaseLayout title={artist.data.name}>
+<BaseLayout title={artist.data.stage_name ?? artist.data.name ?? artist.id}>
  <section>
   <header class="title-header">
    <h2>

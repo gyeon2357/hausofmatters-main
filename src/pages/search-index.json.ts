@@ -24,20 +24,21 @@ export const GET: APIRoute = async () => {
 
  const index: SearchItem[] = [];
 
- // 매거진 .md 본문 텍스트 추출 헬퍼
- function readMagazineBody(id: string): string {
+ // 매거진/앨범/인터뷰 .md 본문 텍스트 추출 헬퍼
+ function readBodyText(collection: string, id: string): string {
   try {
-   const filePath = path.resolve(`./src/data/magazine/${id}.md`);
+   const filePath = path.resolve(`./src/data/${collection}/${id}.md`);
    const raw = fs.readFileSync(filePath, "utf8");
-   // frontmatter 제거
    const body = raw.replace(/^---[\s\S]*?---/, "").trim();
-   // HTML 엔티티 & 태그 정리
    return body
-    .replace(/<[^>]+>/g, " ")
+    .replace(/!\[.*?\]\(.*?\)/g, "")  // 이미지 제거
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")  // 링크 텍스트만
+    .replace(/#{1,6}\s*/g, "")  // 헤더 기호
+    .replace(/\*\*([^*]+)\*\*/g, "$1")  // 볼드
+    .replace(/\*([^*]+)\*/g, "$1")  // 이탤릭
+    .replace(/<[^>]+>/g, " ")  // HTML 태그
     .replace(/&hairsp;/g, "")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
   } catch {
@@ -65,6 +66,10 @@ export const GET: APIRoute = async () => {
   if (album.data.tracks?.length) fields["Tracks"] = album.data.tracks.join(", ");
   if (album.data.magazine) fields["Magazine"] = album.data.magazine;
 
+  // 앨범 리뷰 본문
+  const albumBody = readBodyText("albums", album.id);
+  if (albumBody) fields["Review"] = albumBody;
+
   const image = album.data.image?.src ?? `/images/albums/${album.id}.jpg`;
 
   index.push({ type: "album", url: `/albums/${album.id}`, displayTitle: album.data.name, image, fields });
@@ -85,7 +90,7 @@ export const GET: APIRoute = async () => {
   fields["Title"] = displayTitle;
 
   // 본문 내용 (아티스트명, 앨범명 등) 검색 가능하게
-  const bodyText = readMagazineBody(id);
+  const bodyText = readBodyText("magazine", id);
   if (bodyText) fields["Content"] = bodyText;
 
   const image = issue.data.image?.src ?? `/images/magazine/thumb/${id}.jpg`;
@@ -95,18 +100,23 @@ export const GET: APIRoute = async () => {
 
  // ── Interview ────────────────────────────────────────────
  for (const interview of interviews.filter(i => i.data.published)) {
-  const artistId = String(interview.data.artist);
-  const stageName = artistMap.get(artistId) ?? artistId;
-  const artist = artists.find(a => a.id === artistId);
+  // artist 필드 = 표시명 (ex. "DJ POOL"), interview.id = 파일명 (ex. "djpool")
+  const displayName = interview.data.artist ?? interview.id;
+  // artists 컬렉션 연결은 파일명(interview.id)으로
+  const artist = artists.find(a => a.id === interview.id);
 
   const fields: Record<string, string> = {};
-  fields["Artist"] = stageName;
+  fields["Artist"] = displayName;
   if (artist?.data.genre) fields["Genre"] = artist.data.genre;
   if (interview.data.date) fields["Date"] = new Date(interview.data.date).toLocaleDateString("ko-KR");
 
   const image = interview.data.coverImage?.src ?? artist?.data.image?.src ?? undefined;
 
-  index.push({ type: "interview", url: `/interview/${interview.id}`, displayTitle: stageName, image, fields });
+  // 인터뷰 본문 (Q&A 텍스트)
+  const interviewBody = readBodyText("interview", interview.id);
+  if (interviewBody) fields["Content"] = interviewBody;
+
+  index.push({ type: "interview", url: `/interview/${interview.id}`, displayTitle: displayName, image, fields });
  }
 
  // ── Feature ──────────────────────────────────────────────
