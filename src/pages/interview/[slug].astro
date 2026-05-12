@@ -18,10 +18,15 @@ const { interview } = Astro.props;
 const allArtists = await getCollection("artists");
 const { Content } = await render(interview);
 
-const artistId = String(interview.data.artist);
-const artist = allArtists.find(a => a.id === artistId);
+// 파일명(interview.id)으로 artists 컬렉션 조회 → 장르·이미지 연결용
+const artist = allArtists.find(a => a.id === interview.id);
 
-const stageName = artist?.data.stage_name ?? interview.id;
+// 페이지 표시명: artist 필드 → artists 컬렉션 stage_name → 파일명 순으로 fallback
+const stageName =
+  interview.data.artist ??
+  artist?.data.stage_name ??
+  interview.id;
+
 const genre = artist?.data.genre ?? "";
 const dateStr = new Date(interview.data.date).toLocaleDateString("ko-KR", {
  year: "numeric",
@@ -98,16 +103,13 @@ const seoDescription = `${stageName} | ${dateStr}`;
   opacity: 0.7;
  }
 
- .sep {
-  opacity: 0.5;
- }
+ .sep { opacity: 0.5; }
 
  /* ── 본문 ── */
  .interview-body {
   margin: 1rem auto 6rem;
   max-width: 720px;
   word-break: keep-all;
-  gap: 0;
  }
 
  /* **볼드 단락** = 질문 */
@@ -147,8 +149,6 @@ const seoDescription = `${stageName} | ${dateStr}`;
  }
 
  @media (max-width: 480px) {
-  .interview-header h1 {
-   font-size: 1.5rem;
-  }
+  .interview-header h1 { font-size: 1.5rem; }
  }
 </style>

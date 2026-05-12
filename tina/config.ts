@@ -30,140 +30,8 @@ export default defineConfig({
     },
   },
 
-  // ─────────────────────────────────────────
-  // 컬렉션 정의
-  // ─────────────────────────────────────────
   schema: {
     collections: [
-
-      // ── Album ─────────────────────────────
-      {
-        name: "album",
-        label: "Album",
-        path: "src/data/albums",
-        format: "md",
-        ui: {
-          filename: {
-            label: "파일명 (URL 슬러그)",
-            description: "영문 소문자, 하이픈 사용. ex) black-dot",
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "name",
-            label: "앨범명",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "artist",
-            label: "아티스트",
-            description: "artists 폴더에 파일이 있으면 파일명(ID)을, 없으면 이름을 직접 입력",
-          },
-          {
-            type: "datetime",
-            name: "release",
-            label: "발매일",
-            ui: {
-              dateFormat: "YYYY-MM-DD",
-            },
-          },
-          {
-            type: "string",
-            name: "category",
-            label: "카테고리",
-            options: ["hom", "w-hom"],
-          },
-          {
-            type: "string",
-            name: "magazine",
-            label: "매거진 (연결)",
-            description: "ex) hom-35 또는 w-hom-12",
-          },
-          {
-            type: "string",
-            name: "editor",
-            label: "에디터",
-          },
-          {
-  type: "object",
-  name: "image",
-  label: "커버 이미지",
-  fields: [
-    { type: "image", name: "src", label: "이미지" },
-    { type: "string", name: "alt", label: "대체 텍스트" },
-  ],
-},
-          {
-            type: "string",
-            name: "tracks",
-            label: "트랙리스트",
-            list: true,
-            ui: {
-              component: "list",
-            },
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "본문",
-            isBody: true,
-          },
-        ],
-      },
-
-      // ── Artist ────────────────────────────
-      {
-        name: "artist",
-        label: "Artist",
-        path: "src/data/artists",
-        format: "md",
-        ui: {
-          filename: {
-            label: "파일명 (URL 슬러그)",
-            description: "영문 소문자, 하이픈. ex) dj-pool",
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "stage_name",
-            label: "활동명",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "genre",
-            label: "장르",
-          },
-          {
-            type: "object",
-            name: "image",
-            label: "프로필 이미지",
-            fields: [
-              { type: "image", name: "src", label: "이미지" },
-              { type: "string", name: "alt", label: "대체 텍스트" },
-            ],
-          },
-          {
-            type: "string",
-            name: "instagram",
-            label: "인스타그램 핸들 (@ 제외)",
-          },
-          {
-            type: "string",
-            name: "soundcloud",
-            label: "사운드클라우드 URL",
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "소개",
-            isBody: true,
-          },
-        ],
-      },
 
       // ── Magazine ──────────────────────────
       {
@@ -173,7 +41,7 @@ export default defineConfig({
         format: "md",
         ui: {
           filename: {
-            label: "파일명 (URL 슬러그)",
+            label: "Page Name (Filename)",
             description: "ex) hom-35 또는 w-hom-12",
           },
         },
@@ -186,29 +54,117 @@ export default defineConfig({
               { label: "HOM (한국힙합)", value: "hom" },
               { label: "w/HOM (해외힙합)", value: "w-hom" },
             ],
-            required: true,
           },
           {
             type: "datetime",
             name: "date",
             label: "발행일",
-            ui: {
-              dateFormat: "YYYY-MM-DD",
-            },
+            ui: { dateFormat: "YYYY-MM-DD" },
+          },
+          {
+            type: "string",
+            name: "pdfPath",
+            label: "PDF 경로",
+            description: "로컬: /pdf/hom-35.pdf  /  외부 URL: https://...",
           },
           {
             type: "object",
             name: "image",
             label: "커버 이미지",
             fields: [
-              { type: "image", name: "src", label: "이미지" },
-              { type: "string", name: "alt", label: "대체 텍스트" },
+              { type: "image", name: "src", label: "이미지 업로드" },
+              { type: "string", name: "alt", label: "대체 텍스트 (선택)" },
             ],
           },
           {
             type: "rich-text",
             name: "body",
-            label: "본문",
+            label: "목차",
+            isBody: true,
+            description: "## 섹션명  /  **소섹션**  /  - 항목 형식으로 작성",
+          },
+        ],
+      },
+
+      // ── Album ─────────────────────────────
+      {
+        name: "album",
+        label: "Album",
+        path: "src/data/albums",
+        format: "md",
+        ui: {
+          filename: {
+            label: "Page Name (Filename)",
+            description: "영문 소문자, 하이픈. ex) black-dot",
+          },
+          allowedActions: {
+            create: true,
+            delete: true,
+            createNestedFolder: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "name",
+            label: "앨범명",
+          },
+          {
+            type: "string",
+            name: "artist",
+            label: "아티스트",
+            description: "artists 폴더 파일이 있으면 파일명(ID)을, 없으면 이름 직접 입력",
+          },
+          {
+            type: "datetime",
+            name: "release",
+            label: "발매일",
+            ui: { dateFormat: "YYYY-MM-DD" },
+          },
+          {
+            type: "string",
+            name: "category",
+            label: "카테고리",
+            options: [
+              { label: "HOM (한국힙합)", value: "hom" },
+              { label: "w/HOM (해외힙합)", value: "w-hom" },
+            ],
+          },
+          {
+            type: "string",
+            name: "magazine",
+            label: "매거진 연결",
+            description: "ex) hom-35 또는 w-hom-12",
+          },
+          {
+            type: "string",
+            name: "editor",
+            label: "에디터",
+          },
+          {
+            type: "boolean",
+            name: "recommended",
+            label: "Pick (추천)",
+          },
+          {
+            type: "object",
+            name: "image",
+            label: "커버 이미지",
+            fields: [
+              { type: "image", name: "src", label: "이미지 업로드" },
+              { type: "string", name: "alt", label: "대체 텍스트 (선택)" },
+            ],
+          },
+          {
+            type: "string",
+            name: "tracks",
+            label: "트랙리스트",
+            list: true,
+          },
+          {
+            type: "rich-text",
+            name: "body",
+            label: "본문 (리뷰)",
             isBody: true,
           },
         ],
@@ -222,25 +178,22 @@ export default defineConfig({
         format: "md",
         ui: {
           filename: {
-            label: "파일명 (URL 슬러그)",
-            description: "아티스트 ID와 동일하게. ex) dj-pool",
+            label: "Page Name (Filename)",
+            description: "URL 슬러그. ex) dj-pool (아티스트명과 별개)",
           },
         },
         fields: [
           {
             type: "string",
             name: "artist",
-            label: "아티스트 ID",
-            description: "artists 폴더의 파일명과 일치해야 연결됩니다. ex) dj-pool",
-            required: true,
+            label: "아티스트명",
+            description: "페이지에 표시되는 이름. ex) DJ POOL (띄어쓰기 가능)",
           },
           {
             type: "datetime",
             name: "date",
             label: "발행일",
-            ui: {
-              dateFormat: "YYYY-MM-DD",
-            },
+            ui: { dateFormat: "YYYY-MM-DD" },
           },
           {
             type: "boolean",
@@ -252,8 +205,8 @@ export default defineConfig({
             name: "coverImage",
             label: "커버 이미지",
             fields: [
-              { type: "image", name: "src", label: "이미지" },
-              { type: "string", name: "alt", label: "대체 텍스트" },
+              { type: "image", name: "src", label: "이미지 업로드" },
+              { type: "string", name: "alt", label: "대체 텍스트 (선택)" },
             ],
           },
           {
@@ -261,7 +214,7 @@ export default defineConfig({
             name: "body",
             label: "본문 (Q&A)",
             isBody: true,
-            description: "**볼드 단락** = 질문, 일반 단락 = 답변",
+            description: "**볼드 단락** = 질문  /  일반 단락 = 답변",
           },
         ],
       },
@@ -274,7 +227,7 @@ export default defineConfig({
         format: "md",
         ui: {
           filename: {
-            label: "파일명 (URL · 제목)",
+            label: "Page Name (Filename)",
             description: "영문 소문자, 하이픈. 파일명이 페이지 제목이 됩니다. ex) black-dot-review",
           },
         },
@@ -288,32 +241,28 @@ export default defineConfig({
             type: "datetime",
             name: "date",
             label: "날짜",
-            ui: {
-              dateFormat: "YYYY-MM-DD",
-            },
-            required: true,
+            ui: { dateFormat: "YYYY-MM-DD" },
           },
           {
             type: "string",
             name: "category",
             label: "카테고리",
             description: "ex) 공연후기, 앨범리뷰, 칼럼",
-            required: true,
           },
           {
             type: "object",
             name: "coverImage",
             label: "커버 이미지",
             fields: [
-              { type: "image", name: "src", label: "이미지" },
-              { type: "string", name: "alt", label: "대체 텍스트" },
+              { type: "image", name: "src", label: "이미지 업로드" },
+              { type: "string", name: "alt", label: "대체 텍스트 (선택)" },
             ],
           },
           {
             type: "string",
             name: "link",
             label: "연결 링크 (선택)",
-            description: "앨범 ID (ex. 6seoul) 또는 매거진 ID (ex. hom-35) 입력 시 버튼 생성",
+            description: "앨범 ID (ex. 6seoul) 또는 매거진 ID (ex. hom-35) → 버튼 자동 생성",
           },
           {
             type: "boolean",

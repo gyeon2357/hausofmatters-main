@@ -1,9 +1,9 @@
 ---
-name: "Kenji Nakamura"
-stage_name: "Zenji"
+name: "example"
+stage_name: "example"
 genre: "Lo-fi Beats"
 image: 
-    src: "/images/artists/zenji.jpg"
+    src: "/images/artists/example.jpg"
     alt: "Zenji sitting on the floor bathed in neon lights"
 ---
 
