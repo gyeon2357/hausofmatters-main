@@ -3,17 +3,17 @@ name: "The Tree Is Burning"
 artist: "DeVita"
 release: 2026-03-04
 category: "hom"
-tracks:
- - "Judas Reborn"
- - "The Climb"
- - "Amen"
- - "YHWH"
- - "Tricycle"
- - "Changes"
- - "Kyrie"
- - "Sailing"
- - "Lamb"
- - "Hallelujah"
+tracks: |-
+ Judas Reborn
+ The Climb
+ Amen
+ YHWH
+ Tricycle
+ Changes
+ Kyrie
+ Sailing
+ Lamb
+ Hallelujah
 
 magazine: "hom-35"
 editor: "writersglock"

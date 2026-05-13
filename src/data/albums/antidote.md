@@ -8,15 +8,15 @@ editor: WestCastle
 image:
   src: /images/albums/antidote.jpg
   alt: 디모렉스_ANTIDOTE_cover
-tracks:
-  - AT THE BOTTOM
-  - HURT SO BAD
-  - SAY MY NAME
-  - CAN’T STOP THE PARTY
-  - KICK IT
-  - LOSE IT
-  - STAY THE NIGHT
-  - MISS ME
+tracks: |-
+ AT THE BOTTOM
+ HURT SO BAD
+ SAY MY NAME
+ CAN’T STOP THE PARTY
+ KICK IT
+ LOSE IT
+ STAY THE NIGHT
+ MISS ME
 ---
 
 그 어떤 부품도 허투루 놓인 것이 없고, 모든 것이 맞물려 돌아가는 정교한 기계식 손목시계를 생각해보자. 태엽들이 제 자리에서 제 역할을 하고 있을 뿐임에도 불구하고 0.001초의 오차도 없이 딱 맞물려 돌아가는 시스템 안에서 우리는 아름다움을 느낀다.

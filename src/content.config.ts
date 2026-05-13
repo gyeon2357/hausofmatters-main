@@ -38,7 +38,7 @@ const albums = defineCollection({
    alt: z.string().optional(),
   }).optional(),
   release: z.date(),
-  tracks: z.array(z.string()),
+  tracks: z.string(),
   artist: z.string().optional(),
   category: z.enum(["hom", "w-hom"]).default("hom"),
   editor: z.string().optional(),

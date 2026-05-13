@@ -3,16 +3,16 @@ name: "Rhythmic Personality Disorder"
 artist: "네이비 이고(NAVY EGO)"
 release: 2026-03-20
 category: "hom"
-tracks:
- - "RPD: Case Study"
- - "Two-Armed Bandit"
- - "Monarchs"
- - "Fragmentality (Feat. 덥덥이)"
- - "Shabazz Napier (Feat. Quesa Dilla)"
- - "Ice, Fire, Life II"
- - "Bye, nary (Feat. Conspi) "
- - "Agøn's Exit Plan"
- - "The Cure"
+tracks: |-
+ RPD: Case Study
+ Two-Armed Bandit
+ Monarchs
+ Fragmentality (Feat. 덥덥이)
+ Shabazz Napier (Feat. Quesa Dilla)
+ Ice, Fire, Life II
+ Bye, nary (Feat. Conspi) 
+ Agøn's Exit Plan
+ The Cure
 
 magazine: "hom-35"
 editor: "쟈이즈"

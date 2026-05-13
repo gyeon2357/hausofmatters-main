@@ -166,7 +166,10 @@ export default defineConfig({
             type: "string",
             name: "tracks",
             label: "트랙리스트 ✱",
-            list: true,
+            ui: {
+              component: "textarea",
+            },
+            description: "한 줄에 트랙 하나씩 입력. [1. 2. 3. ] 번호를 작성 하지 않아도 자동으로 번호 리스트로 표시됩니다.",
           },
           {
             type: "rich-text",
@@ -194,7 +197,7 @@ export default defineConfig({
             type: "string",
             name: "artist",
             label: "아티스트명",
-            description: "페이지에 표시되는 이름. ex) DJ POOL (띄어쓰기 가능)",
+            description: "페이지에 표시되는 이름. ex) DJ POOL",
           },
           {
             type: "datetime",
@@ -221,7 +224,7 @@ export default defineConfig({
             name: "body",
             label: "본문 (Q&A)",
             isBody: true,
-            description: "**볼드 단락** = 질문  /  일반 단락 = 답변",
+            description: "**볼드 단락** = 질문, 일반 단락 = 답변, 줄바꿈 = 질문/답변 구분",
           },
         ],
       },

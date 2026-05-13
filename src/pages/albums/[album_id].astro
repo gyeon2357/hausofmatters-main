@@ -93,9 +93,9 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
       })()
     }
 
-    <h5>Track List</h5>
+    <h5 class="track">Track List</h5>
     <ol>
-     {album.data.tracks?.map(track => <li>{track}</li>)}
+     {album.data.tracks?.split('\n').filter(t => t.trim()).map(track => <li>{track.trim().replace(/^\d+\.\s*/, '')}</li>)}
     </ol>
 
     <Content />
@@ -113,7 +113,7 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
 
     {relatedAlbumEntries.length > 0 && (
      <div class="related">
-      <h5>Related</h5>
+      <h5>Related Album / </h5>
       <ul class="related-list">
        {relatedAlbumEntries.map(rel => (
         <li>
@@ -125,7 +125,7 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
             loading="lazy"
            />
           )}
-          <span>{rel.data.name}</span>
+          <span> {rel.data.name}</span>
          </a>
         </li>
        ))}
@@ -140,9 +140,7 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
 </BaseLayout>
 
 <style>
- .release {
-  margin-bottom: 1.25rem;
- }
+
 
  .row {
   display: flex;
@@ -152,51 +150,9 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
   margin: 0.5rem 0 1rem;
  }
 
- .magazine-link {
-  display: inline-block;
-
-  opacity: 0.8;
-  transition: opacity 0.2s;
- }
- .magazine-link:hover {
-  opacity: 1;
- }
 
  .pick-badge {
   vertical-align: middle;
  }
 
- .related {
-  margin-top: 1.5rem;
- }
-
- .related-list {
-  list-style: none;
-  padding: 0;
-  margin: 0.5rem 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
- }
-
- .related-list a {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: inherit;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-  font-size: 0.875rem;
- }
-
- .related-list a:hover {
-  opacity: 1;
- }
-
- .related-list img {
-  width: 2rem;
-  height: 2rem;
-  object-fit: cover;
- }
 </style>

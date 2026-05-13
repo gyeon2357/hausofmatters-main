@@ -3,13 +3,13 @@ name: "[LOadingG . .]"
 artist: "푸린(Purynn)"
 release: 2026-02-16
 category: "hom"
-tracks:
- - "intro0o0oo"
- - "개인사"
- - "Girls (feat. Kid Milli)"
- - "Tool Kit"
- - "하고픈 대로 (feat. CHOILB)"
- - "Matter"
+tracks: |-
+ intro0o0oo
+ 개인사
+ Girls (feat. Kid Milli)
+ Tool Kit
+ 하고픈 대로 (feat. CHOILB)
+ Matter
 
 magazine: "hom-35"
 editor: "loding"

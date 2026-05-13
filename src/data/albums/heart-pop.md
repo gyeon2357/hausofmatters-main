@@ -3,16 +3,16 @@ name: "heart pop"
 artist: "예일(yeil)"
 release: 2026-02-20
 category: "hom"
-tracks:
- - "intro"
- - "aitai"
- - "resett"
- - "꿈안에서"
- - "anone"
- - "아이러니한 사이"
- - "하나 둘 셋"
- - "러브스토리.."
- - "heart pop"
+tracks: |-
+ intro
+ aitai
+ resett
+ 꿈안에서
+ anone
+ 아이러니한 사이
+ 하나 둘 셋
+ 러브스토리..
+ heart pop
 
 magazine: "hom-35"
 editor: "공ZA"

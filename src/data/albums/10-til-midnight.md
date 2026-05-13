@@ -7,21 +7,21 @@ magazine: w-hom-34
 editor: moogsick
 image:
   src: /images/albums/10-Til-Midnight.jpg
-tracks:
-  - Step (feat. Swizz Beatz)
-  - Lied 2 U
-  - Slid Off
-  - Daddy Rich (feat. Richard Pryor)
-  - Stop Counting My Poccets
-  - OG to BG (feat. Kanobby)
-  - Dogg Wattup Doe (feat. Peezy)
-  - Leave That Dogg Alone
-  - Pop My Shit (feat. Trinidad James)
-  - 17 Rules
-  - Bread Under The Bed (feat. Stresmatic)
-  - No Ticcet Needed (feat. Kanobby)
-  - Long Beachin' (feat. Shawn Louisiana)
-  - QTSAMYAH (feat. October London)
+tracks: |-
+  1. Step (feat. Swizz Beatz)
+  2. Lied 2 U
+  3. Slid Off
+  4. Daddy Rich (feat. Richard Pryor)
+  Stop Counting My Poccets
+  OG to BG (feat. Kanobby)
+  Dogg Wattup Doe (feat. Peezy)
+  Leave That Dogg Alone
+  Pop My Shit (feat. Trinidad James)
+  17 Rules
+  Bread Under The Bed (feat. Stresmatic)
+  No Ticcet Needed (feat. Kanobby)
+  Long Beachin' (feat. Shawn Louisiana)
+  QTSAMYAH (feat. October London)
 ---
 
 현 세대 래퍼들이 본받아야 하는, 소위 OG를 논할 때 제일 먼저 나와야 할 이름은 어쩌면 다른 누구도 아닌 Snoop Dogg일지도 모른다. NFT 광풍 당시 내놓았던 형편없는 파일 뭉치를 제외하더라도, 그는 — 사실 과거의 영광에 몸을 맡기는 게 더 안전한 선택임에도 — 꾸준히 앨범을 내놓아 왔다.

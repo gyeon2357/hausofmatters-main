@@ -12,17 +12,16 @@ const interviewCards = allinterview
  .filter(i => i.data.published)
  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
  .map(interview => {
-  // ✅ reference("artists")를 사용하므로 interview.data.artist는 artist ID
-  const artistId = String(interview.data.artist);
-  const artist = allArtists.find(a => a.id === artistId);
+  // interview.data.artist = 표시명, interview.id(파일명)으로 artists 조회
+  const artist = allArtists.find(a => a.id === interview.id);
 
   return {
    href: `/interview/${interview.id}`,
-   stageName: artist?.data.stage_name ?? interview.id,
+   stageName: interview.data.artist ?? artist?.data.stage_name ?? interview.id,
    genre: artist?.data.genre ?? "",
    date: new Date(interview.data.date).toLocaleDateString("ko-KR"),
    coverSrc: interview.data.coverImage?.src ?? artist?.data.image?.src ?? "",
-   coverAlt: interview.data.coverImage?.alt ?? artist?.data.stage_name ?? "",
+   coverAlt: interview.data.coverImage?.alt ?? interview.data.artist ?? "",
   };
  });
 ---

@@ -206,7 +206,7 @@ img {
 
 li {
  font-size: 0.875rem;
- line-height: 1.4;
+ line-height: 1.5;
 }
 
 button {
@@ -307,10 +307,74 @@ figure.video-embed iframe {
  grid-template-areas: "img" "content";
 }
 
+.release {
+ margin-bottom: 1.25rem;
+}
+
+.track {
+ font-weight: 700;
+}
+
+.magazine-link {
+ display: inline-block;
+ font-weight: 700;
+}
+
+.editor {
+ font-weight: 700;
+}
+
+.related {
+ display: flex;
+ align-items: center;
+}
+
+.related h5 {
+ font-weight: 700;
+}
+
+.related-list {
+ display: flex;
+ flex-wrap: wrap;
+ list-style: none;
+
+ margin: 0;
+ padding: 0;
+
+ font-weight: 700;
+}
+
+.related-list a {
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+ text-decoration: none;
+ color: inherit;
+
+ transition: opacity 0.2s;
+ font-size: 0.875rem;
+}
+
+.related-list img {
+ width: 2rem;
+ height: 2rem;
+ object-fit: cover;
+}
+
 @media screen and (min-width: 44em) {
  .content-wrap {
   grid-template-columns: 30vw 1fr;
   grid-template-areas: "img content";
+ }
+}
+
+@media (max-width: 768px) {
+ .content-wrap {
+  gap: 0.75rem;
+ }
+
+ .release {
+  margin-bottom: 0.75rem;
  }
 }
 
@@ -335,13 +399,13 @@ figure.video-embed iframe {
 
 .content p {
  font-size: 1rem;
- line-height: 1.55;
+ line-height: 1.575;
  word-break: keep-all;
  text-wrap: pretty;
 }
 
 .content p:last-of-type {
- margin-bottom: 0;
+ margin-bottom: 1rem;
 }
 
 .content ol {

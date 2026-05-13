@@ -63,7 +63,7 @@ export const GET: APIRoute = async () => {
   if (album.data.category) fields["Category"] = album.data.category;
   if (album.data.editor) fields["Editor"] = album.data.editor;
   if (album.data.release) fields["Release"] = new Date(album.data.release).toLocaleDateString("ko-KR");
-  if (album.data.tracks?.length) fields["Tracks"] = album.data.tracks.join(", ");
+  if (album.data.tracks?.length) fields["Tracks"] = album.data.tracks;
   if (album.data.magazine) fields["Magazine"] = album.data.magazine;
 
   // 앨범 리뷰 본문

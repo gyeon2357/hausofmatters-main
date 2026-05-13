@@ -8,14 +8,14 @@ editor: loding
 image:
   src: /images/albums/mp3.jpg
   alt: 우원재_mp3_cover
-tracks:
-  - 서른 (30)
-  - 끼리끼리
-  - Online Hate
-  - 싸가지 (Feat. 비비 (BIBI))
-  - '개소리 (Feat. Kid Milli, TOMMY YANG) '
-  - 'Cap '
-  - Slow Down (Feat. The Quiett)
+tracks: |-
+ 서른 (30)
+ 끼리끼리
+ Online Hate
+ 싸가지 (Feat. 비비 (BIBI))
+ 개소리 (Feat. Kid Milli, TOMMY YANG)
+ Cap
+ Slow Down (Feat. The Quiett)
 ---
 
 “스물아홉(29)”으로 20대의 마무리를 바라보던 우원재는 서른을 지나 다시 우리 곁으로 왔다. 그에게 서른이란 아직은 크게 체감되지 않는 새 챕터이자 후회와 슬픔을 비롯한 지난 과거를 마무리 짓고 현재를 바라보려고 하는 단계로 보인다. 이러한 감정이 담긴 “서른 (30)”으로 \[mp3]는 시작된다. 

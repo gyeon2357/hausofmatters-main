@@ -6,22 +6,22 @@ category: hom
 magazine: hom-35
 editor: 산소
 recommended: true
-tracks:
-  - 2AM in ITW
-  - 느끼는척하지마
-  - 마법
-  - PLAYER (feat. Crush)
-  - BETTER
-  - STAY on FIRE (feat. DEAN)
-  - 눈감아줄게 (feat. 김하온 (HAON))
-  - 'M.I.A (feat. 김하온 (HAON), JMIN)'
-  - somesomesome x3
-  - DAYDREAM
-  - NAMSAN TOWER (feat. LEY)
-  - TOXICK
-  - THAT IS ME
-  - PLACEs & EXes
-  - TRAP (feat. Jimmy Paige)
+tracks: |-
+ 2AM in ITW
+ 느끼는척하지마
+ 마법
+ PLAYER (feat. Crush)
+ BETTER
+ STAY on FIRE (feat. DEAN)
+ 눈감아줄게 (feat. 김하온 (HAON))
+ M.I.A (feat. 김하온 (HAON), JMIN)
+ somesomesome x3
+ DAYDREAM
+ NAMSAN TOWER (feat. LEY)
+ TOXICK
+ THAT IS ME
+ PLACEs & EXes
+ TRAP (feat. Jimmy Paige)
 ---
 
 해외 축구를 보다보면 나도 모르게 세계 각지 도시들에 대한 선입견들이 생기곤 한다. 어떤 도시는 뜨거운 열기가 가득한 도시로, 또 어떤 도시는 차갑고 냉혈한 곳으로 말이다. 이러한 선입견들은 각 도시를 대표하는 축구 클럽들 그리고 그 팬들의 이미지들의 결과이다. 힙합 역시 마찬가지이다. Atlanta를 떠올리면 Gucci Mane과 T.I.가 만들어낸 트랩 사운드가, Los Angeles를 떠올리면 Dr. Dre와 Snoop Dogg의 지펑크가 자연스럽게 연결되는 것처럼, 한 아티스트 혹은 한 집단의 음악이 결국 도시의 이미지를 규정해버리는 순간이 존재한다. 이렇게 하나의 사운드가 하나의 도시를 대표하게 될 때, 우리는 비로소 ‘사운드’라는 개념의 탄생을 목격한다.

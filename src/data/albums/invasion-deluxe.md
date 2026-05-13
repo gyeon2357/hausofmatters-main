@@ -3,25 +3,25 @@ name: "Invasion (Deluxe)"
 artist: "김상민그는감히전설이라고할수있다"
 release: 2025-12-11
 category: "hom"
-tracks:
- - "Intro"
- - "무한의 계단 (feat. 염따)"
- - "HARARI FLOW (feat. GGM Kimbo)"
- - "실리콘밸리 (feat. 키드밀리 (Kid Milli)"
- - "BAKARA (feat. Street Baby)"
- - "(Bonus Track) Nightingale (feat. 스윙스)"
- - "황제펭귄 (feat. 그냥노창, 양홍원)"
- - "Invasion 2 (feat. EK) (Prod. Niceshotnick)"
- - "2014 (feat. JIN, 스윙스)"
- - "INNOVASION"
- - "New Drip (Outro) (feat. likecannabiss)"
- - "Interlude (Deluxe Departure) (feat. 스윙스)"
- - "KITON"
- - "Lessgo 2 (feat. Molly Yam)"
- - "EPIC HIGH"
- - "Kite (feat. Yung Weej, GGM Lil Dragon) (Prod. June)"
- - "S.U.O.H (feat. BIG 9ULPO)"
- - "깃 (241211)"
+tracks: |-
+ Intro
+ 무한의 계단 (feat. 염따)
+ HARARI FLOW (feat. GGM Kimbo)
+ 실리콘밸리 (feat. 키드밀리 (Kid Milli)
+ BAKARA (feat. Street Baby)
+ (Bonus Track) Nightingale (feat. 스윙스)
+ 황제펭귄 (feat. 그냥노창, 양홍원)
+ Invasion 2 (feat. EK) (Prod. Niceshotnick)
+ 2014 (feat. JIN, 스윙스)
+ INNOVASION
+ New Drip (Outro) (feat. likecannabiss)
+ Interlude (Deluxe Departure) (feat. 스윙스)
+ KITON
+ Lessgo 2 (feat. Molly Yam)
+ EPIC HIGH
+ Kite (feat. Yung Weej, GGM Lil Dragon) (Prod. June)
+ S.U.O.H (feat. BIG 9ULPO)
+ 깃 (241211)
 
 magazine: "hom-32"
 editor: "Alonso2000"

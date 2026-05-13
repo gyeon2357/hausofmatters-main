@@ -3,19 +3,19 @@ name: "black."
 artist: "최성"
 release: 2026-03-20
 category: "hom"
-tracks:
- - "랩틸리언 (feat. ch1tkey)"
- - "mcintosh"
- - "Eclipse"
- - "멸종위기 (feat. Street Baby)"
- - "호 (feat. 김상민그는감히전설이라고할수있다)"
- - "fuck a world"
- - "ono"
- - "파라오 (feat. SUPERBEE)"
- - "올라 (feat. EK)"
- - "black"
- - "too late (feat. The Quiett)"
- - "비네"
+tracks: |-
+ 랩틸리언 (feat. ch1tkey)
+ mcintosh
+ Eclipse
+ 멸종위기 (feat. Street Baby)
+ 호 (feat. 김상민그는감히전설이라고할수있다)
+ fuck a world
+ ono
+ 파라오 (feat. SUPERBEE)
+ 올라 (feat. EK)
+ black
+ too late (feat. The Quiett)
+ 비네
 
 magazine: "hom-35"
 editor: "공ZA"
