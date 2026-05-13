@@ -416,7 +416,7 @@ figure.video-embed iframe {
 }
 
 .content ol {
- list-style-type: decimal-leading-zero;
+ list-style-type: decimal;
  padding: 0 0 0 2.25em;
  margin-bottom: 0.75rem;
 }
