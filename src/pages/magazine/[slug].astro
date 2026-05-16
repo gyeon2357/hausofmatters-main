@@ -7,6 +7,8 @@ import Separator from "../../components/Separator.astro";
 import Flipbook from "../../components/Flipbook.astro";
 
 import Share from "../../components/Share.astro";
+import fs from "node:fs";
+import path from "node:path";
 
 export async function getStaticPaths() {
  const issues = await getCollection("magazine");
@@ -57,23 +59,41 @@ const seoDescription =
 // --- 기존 변수들 아래에 추가 ---
 
 function renderToc(text: string): string {
- return text
-  .split("\n")
-  .map(line => {
-   if (!line.trim()) return "";
-   return line
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\\\[/g, "[")
-    .replace(/\\\]/g, "]")
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>");
-  })
-  .join("<br>\n");
+ const lines = text.split("\n");
+ const out: string[] = [];
+ for (const line of lines) {
+  if (!line.trim()) {
+   // 빈 줄: 직전이 이미 빈 줄이면 무시, 아니면 간격 하나
+   if (out.length > 0 && out[out.length - 1] !== "") out.push("");
+  } else {
+   out.push(
+    line
+     .replace(/&/g, "&amp;")
+     .replace(/</g, "&lt;")
+     .replace(/>/g, "&gt;")
+     .replace(/\\\[/g, "[")
+     .replace(/\\\]/g, "]")
+     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+     .replace(/\*(.+?)\*/g, "<em>$1</em>")
+   );
+  }
+ }
+ return out.map(l => (l === "" ? "<br>" : l + "<br>")).join("\n");
 }
 
-const tocHtml = issue.data.toc ? renderToc(issue.data.toc) : "";
+// toc 필드 우선, 없으면 파일 본문에서 읽기
+function readBody(id: string): string {
+ try {
+  const fp = path.resolve(`./src/data/magazine/${id}.md`);
+  const raw = fs.readFileSync(fp, "utf8");
+  return raw.replace(/^---[\s\S]*?---/, "").trim();
+ } catch {
+  return "";
+ }
+}
+
+const rawToc = issue.data.toc || readBody(id);
+const tocHtml = rawToc ? renderToc(rawToc) : "";
 ---
 
 <BaseLayout title={title} description={seoDescription} ogImage={image.src}>
@@ -96,9 +116,9 @@ const tocHtml = issue.data.toc ? renderToc(issue.data.toc) : "";
    {image && <img class="fade-in" src={image.src} alt={image.alt} />}
 
    <div class="content">
-    <div><Flipbook pdfPath={pdfPath} /> <Share title={title} /></div>
+    <div><Flipbook pdfPath={pdfPath} /></div>
 
-    <h5>Description</h5>
+    <h4>Contents</h4>
     {tocHtml && <div class="toc-text" set:html={tocHtml} />}
 
     <dl>
@@ -113,6 +133,8 @@ const tocHtml = issue.data.toc ? renderToc(issue.data.toc) : "";
       }
      </dd>
     </dl>
+
+    <Share title={title} />
    </div>
   </div>
  </section>
@@ -168,7 +190,6 @@ const tocHtml = issue.data.toc ? renderToc(issue.data.toc) : "";
  }
 
  .toc-text {
-  white-space: pre-line;
   font-size: 0.875rem;
   line-height: 1.7;
   margin: 0;
