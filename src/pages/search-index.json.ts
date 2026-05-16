@@ -77,6 +77,8 @@ export const GET: APIRoute = async () => {
 
  // ── Magazine ─────────────────────────────────────────────
  for (const issue of magazine) {
+  // Special 카테고리는 검색에서 제외
+  if (issue.data.category === "special") continue;
   const id = issue.id;
   let displayTitle = id.toUpperCase();
   if (/^w-hom-(\d+)$/.test(id)) displayTitle = id.replace(/^w-hom-(\d+)$/, "w/HOM #$1");

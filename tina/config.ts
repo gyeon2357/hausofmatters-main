@@ -77,11 +77,13 @@ export default defineConfig({
             ],
           },
           {
-            type: "rich-text",
-            name: "body",
+            type: "string",
+            name: "toc",
             label: "목차",
-            isBody: true,
-            description: "붙여넣기 후 마크다운으로 작성",
+            ui: {
+              component: "textarea",
+            },
+            description: "줄바꿈 그대로 표시됩니다. 붙여넣기 바로 사용 가능",
           },
         ],
       },
@@ -169,7 +171,7 @@ export default defineConfig({
             ui: {
               component: "textarea",
             },
-            description: "한 줄에 트랙 하나씩 입력. [1. 2. 3. ] 번호를 작성 하지 않아도 자동으로 번호 리스트로 표시됩니다.",
+            description: "한 줄에 트랙 하나씩 입력. 자동으로 번호 리스트로 표시됩니다.",
           },
           {
             type: "rich-text",
@@ -197,7 +199,7 @@ export default defineConfig({
             type: "string",
             name: "artist",
             label: "아티스트명",
-            description: "페이지에 표시되는 이름. ex) DJ POOL",
+            description: "페이지에 표시되는 이름. ex) DJ POOL (띄어쓰기 가능)",
           },
           {
             type: "datetime",
@@ -224,7 +226,7 @@ export default defineConfig({
             name: "body",
             label: "본문 (Q&A)",
             isBody: true,
-            description: "**볼드 단락** = 질문, 일반 단락 = 답변, 줄바꿈 = 질문/답변 구분",
+            description: "**볼드 단락** = 질문  /  일반 단락 = 답변",
           },
         ],
       },

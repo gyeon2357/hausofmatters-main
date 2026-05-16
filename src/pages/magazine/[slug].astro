@@ -50,8 +50,30 @@ const nextIssue = sameCategory[nextIndex];
 const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 
 // 목록으로 돌아가는 링크 (category 기반)
-const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : "/magazine/hom";
-const seoDescription = issue.data.category === "w-hom" ? "해외힙합 매거진 w/HOM" : "한국힙합 매거진 HOM";
+const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : issue.data.category === "special" ? "/magazine" : "/magazine/hom";
+const seoDescription =
+ issue.data.category === "w-hom" ? "해외힙합 매거진 w/HOM" : issue.data.category === "special" ? "Hausofmatters Special Edition" : "한국힙합 매거진 HOM";
+
+// --- 기존 변수들 아래에 추가 ---
+
+function renderToc(text: string): string {
+ return text
+  .split("\n")
+  .map(line => {
+   if (!line.trim()) return "";
+   return line
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\\\[/g, "[")
+    .replace(/\\\]/g, "]")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  })
+  .join("<br>\n");
+}
+
+const tocHtml = issue.data.toc ? renderToc(issue.data.toc) : "";
 ---
 
 <BaseLayout title={title} description={seoDescription} ogImage={image.src}>
@@ -77,7 +99,7 @@ const seoDescription = issue.data.category === "w-hom" ? "해외힙합 매거진
     <div><Flipbook pdfPath={pdfPath} /> <Share title={title} /></div>
 
     <h5>Description</h5>
-    <Content />
+    {tocHtml && <div class="toc-text" set:html={tocHtml} />}
 
     <dl>
      <dt>Published</dt>
@@ -144,5 +166,11 @@ const seoDescription = issue.data.category === "w-hom" ? "해외힙합 매거진
  .share {
   margin: 0;
  }
+
+ .toc-text {
+  white-space: pre-line;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
+ }
 </style>
-  

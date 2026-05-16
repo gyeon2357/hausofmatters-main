@@ -36,8 +36,11 @@ const featureCards = allFeature
               </div>
               <div class="meta">
                 <span class="meta-title">
-                  {card.data.artist ?? card.id.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
+                  {card.id.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
                 </span>
+                {card.data.artist && (
+                  <span class="meta-artist">{card.data.artist}</span>
+                )}
                 <span class="meta-category">{card.data.category}</span>
                 <span class="meta-date">
                   {new Date(card.data.date).toLocaleDateString("ko-KR")}

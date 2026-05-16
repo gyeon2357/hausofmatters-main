@@ -21,11 +21,12 @@ const magazine = defineCollection({
   slug: z.string().optional(),
   pdfPath: z.string(),
   date: z.date(),
-  category: z.enum(["hom", "w-hom"]).default("hom"),
+  category: z.enum(["hom", "w-hom", "special"]).default("hom"),
   image: z.object({
    src: z.string(),
    alt: z.string().optional(),
   }).optional(),
+  toc: z.string().optional(),
  }),
 });
 
