@@ -63,6 +63,7 @@
  --color-link: #000;
  --color-link-hover: #999;
  --color-placeholder: #f8f8f8;
+ --color-point: color(display-p3 1 0.682353 0.313725 / 1);
 
  --info-font:
   "iAWriterQuattroS", "SpoqaHanSansNeo", BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
@@ -86,6 +87,7 @@
   --color-link: #f0f0f0;
   --color-link-hover: #888;
   --color-placeholder: #1e1e1e;
+  --color-point: color(display-p3 1 0.470588 0 / 1);
  }
 }
 
@@ -98,6 +100,7 @@
  --color-link: #f0f0f0;
  --color-link-hover: #888;
  --color-placeholder: #1e1e1e;
+ --color-point: color(display-p3 1 0.470588 0 / 1);
 }
 
 [data-theme="light"] {
@@ -109,6 +112,7 @@
  --color-link: #000;
  --color-link-hover: #999;
  --color-placeholder: #f8f8f8;
+ --color-point: color(display-p3 1 0.682353 0.313725 / 1);
 }
 
 body {
@@ -188,6 +192,12 @@ a {
    opacity: 0.5;
    background-color: transparent;
   }
+ }
+}
+
+@media (max-width: 768px) {
+ body {
+  padding: 0 0.75rem;
  }
 }
 
@@ -619,11 +629,9 @@ dd {
 }
 
 mark {
- background: transparent;
+ background: var(--color-point);
  color: inherit;
  opacity: 1;
- text-decoration: underline;
- text-underline-offset: 1px;
 }
 
 #theme-toggle {

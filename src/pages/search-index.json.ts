@@ -92,8 +92,9 @@ export const GET: APIRoute = async () => {
   fields["Title"] = displayTitle;
 
   // 본문 내용 (아티스트명, 앨범명 등) 검색 가능하게
-  const bodyText = readBodyText("magazine", id);
-  if (bodyText) fields["Content"] = bodyText;
+  // toc 프론트매터 필드 우선, 없으면 파일 본문에서 읽기
+  const tocText = issue.data.toc || readBodyText("magazine", id);
+  if (tocText) fields["Content"] = tocText.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1');
 
   const image = issue.data.image?.src ?? `/images/magazine/thumb/${id}.jpg`;
 
