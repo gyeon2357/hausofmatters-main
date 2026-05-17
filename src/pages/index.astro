@@ -33,44 +33,10 @@ const albumCards = recentAlbums.map(album => {
 
 const sorted = allMagazines.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-// 인트로: hom / w-hom 커버 목록 (클라이언트에서 랜덤 선택)
-// 마퀴 커버: 이미지 있는 전체 (special 제외)
-type Cover = { src: string; alt: string };
-
-const allCovers: Cover[] = sorted
+// 인트로: Three.js WebGL 드리프트용 매거진 썸네일 URL 목록
+const coverUrls: string[] = sorted
  .filter(m => m.data.category !== "special")
- .map(m => ({
-  src: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
-  alt: m.id,
- }));
-
-// 4행: 커버를 행별로 중복 없이 분배, 각 행 내에서는 반복 허용
-function shuffle(arr: Cover[]): Cover[] {
- return [...arr].sort(() => Math.random() - 0.5);
-}
-
-function splitInto4(arr: Cover[]): [Cover[], Cover[], Cover[], Cover[]] {
- const s = shuffle(arr);
- const n = s.length;
- // 균등 분배 (나머지는 앞 행에)
- const q = Math.floor(n / 4);
- const r = n % 4;
- const cuts = [0, q + (r > 0 ? 1 : 0), 2*q + (r > 1 ? 2 : r > 0 ? 1 : 0), 3*q + (r > 2 ? 3 : r > 1 ? 2 : r > 0 ? 1 : 0), n];
- return [s.slice(cuts[0], cuts[1]), s.slice(cuts[1], cuts[2]), s.slice(cuts[2], cuts[3]), s.slice(cuts[3], cuts[4])];
-}
-
-function fillRow(arr: Cover[], min = 16): Cover[] {
- if (!arr.length) return [];
- let out = [...arr];
- while (out.length < min) out = [...out, ...arr];
- return out;
-}
-
-const [r1, r2, r3, r4] = splitInto4(allCovers);
-const row1 = fillRow(r1);
-const row2 = fillRow(r2);
-const row3 = fillRow(r3);
-const row4 = fillRow(r4);
+ .map(m => m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`);
 
 // ✅ category 기반, 각 최신 2개
 const homCards = sorted
@@ -97,26 +63,10 @@ const whomCards = sorted
 ---
 
 <BaseLayout title={title}>
- <!-- ── 인트로: GSAP 마퀴 ── -->
- <section class="mq-hero" id="mq-hero">
-  {
-   [
-    { covers: row1, dir: 1, speed: 80 },
-    { covers: row2, dir: -1, speed: 100 },
-    { covers: row3, dir: 1, speed: 65 },
-    { covers: row4, dir: -1, speed: 85 },
-   ].map(({ covers, dir, speed }) => (
-    <div class="mq-row" data-dir={dir} data-speed={speed}>
-     <div class="mq-track">
-      {[...covers, ...covers].map(c => (
-       <div class="mq-item">
-        <img src={c.src} alt={c.alt} loading="eager" draggable="false" />
-       </div>
-      ))}
-     </div>
-    </div>
-   ))
-  }
+ <!-- ── 인트로: Three.js WebGL 드리프트 ── -->
+ <section class="webgl-intro" id="webgl-intro">
+  <canvas id="drift-canvas"></canvas>
+  <script id="cover-urls" type="application/json" set:html={JSON.stringify(coverUrls)} />
  </section>
 
  <section class="latest-magazine">
@@ -187,47 +137,25 @@ const whomCards = sorted
 </BaseLayout>
 
 <style>
- /* ── 마퀴 히어로 ── */
- .mq-hero {
+  /* ── WebGL 인트로 ── */
+ .webgl-intro {
+  position: relative;
   width: 100vw;
-  height: calc(100vh - 5rem);
+  height: 100vh;
   margin-left: -0.5rem;
   margin-right: -0.5rem;
-  margin-bottom: 6rem;
+  margin-bottom: 4rem;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  
+  background: var(--color-bg);
  }
 
- .mq-row {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  align-items: stretch;
- }
-
- .mq-track {
-  display: flex;
-  align-items: stretch;
-
-  will-change: transform;
-  flex-shrink: 0;
- }
-
- .mq-item {
-  flex-shrink: 0;
+ #drift-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-  overflow: hidden;
- }
-
- .mq-item img {
-  height: 100%;
-  width: auto;
   display: block;
-  object-fit: cover;
-  pointer-events: none;
-  user-select: none;
  }
 
  /* ── 기존 스타일 ── */
@@ -345,33 +273,242 @@ const whomCards = sorted
 
 <script src="../scripts/index.js"></script>
 
-<script>
- import { gsap } from "gsap";
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script is:inline>
+(function() {
+  const canvas = document.getElementById('drift-canvas');
+  if (!canvas) return;
+  const urlData = document.getElementById('cover-urls');
+  const allUrls = urlData ? JSON.parse(urlData.textContent || '[]') : [];
+  if (!allUrls.length) return;
 
- document.addEventListener("astro:page-load", initMarquee);
- if (document.readyState !== "loading") initMarquee();
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1,1,1,-1,0.1,10);
+  camera.position.z = 1;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
- function initMarquee() {
-  const rows = document.querySelectorAll<HTMLElement>(".mq-row");
-  if (!rows.length) return;
+  const NUM_BANDS   = 8;
+  const CLONE_COUNT = 3;
+  const IMAGE_GAP   = 12;
 
-  rows.forEach(row => {
-   const track = row.querySelector<HTMLElement>(".mq-track");
-   if (!track) return;
+  // 밴드 높이 = 뷰포트 / 밴드 수 - 간격
+  function getBandHeight() { return Math.floor(window.innerHeight / NUM_BANDS) - 4; }
+  function getImageHeight() { return getBandHeight() - 10; }
 
-   const dir = Number(row.dataset.dir ?? 1);
-   const speed = Number(row.dataset.speed ?? 80);
+  // offsetY: 뷰포트 기준 균등 분배 (겹침 없음)
+  function computeOffsets() {
+    const spacing = window.innerHeight / NUM_BANDS;
+    return Array.from({ length: NUM_BANDS }, (_, i) =>
+      (i - (NUM_BANDS - 1) / 2) * spacing
+    );
+  }
 
-   gsap.fromTo(
-    track,
-    { xPercent: dir === 1 ? 0 : -5 },
-    {
-     xPercent: dir === 1 ? -5 : 0,
-     duration: speed,
-     ease: "none",
-     repeat: -1,
+  const bandSpeeds    = [0.55, 0.80, 0.45, 0.65, 0.35, 0.70, 0.50, 0.90];
+  const bandRotations = Array(NUM_BANDS).fill(7 * Math.PI / 180);
+  const bandRotTypes  = ['fromLeft','fromCenter','fromLeft','fromCenter','fromLeft','fromCenter','fromLeft','fromCenter'];
+  const bandCurves    = [35,30,35,30,35,30,35,30];
+
+  // URL → 8밴드 분배
+  function getUrlsForBand(bi) {
+    const base = allUrls.filter((_, i) => i % NUM_BANDS === bi);
+    const pool = base.length ? base : allUrls;
+    const out = [...pool];
+    while (out.length < 4) out.push(...pool);
+    return out;
+  }
+
+  function createBandTexture(images, bandH, imgH) {
+    let seqW = 0;
+    images.forEach(img => { if (img.loaded) seqW += img.width + IMAGE_GAP; });
+    seqW = Math.max(seqW - IMAGE_GAP, 1);
+    const totalW = seqW * CLONE_COUNT;
+    const c = document.createElement('canvas');
+    c.width = totalW; c.height = bandH;
+    const ctx = c.getContext('2d');
+    let x = 0;
+    for (let cl = 0; cl < CLONE_COUNT; cl++) {
+      images.forEach(img => {
+        if (!img.loaded) return;
+        const cy = (bandH - img.height) / 2;
+        ctx.save(); ctx.globalAlpha = 0.93;
+        ctx.drawImage(img.el, x, cy, img.width, img.height);
+        ctx.restore();
+        x += img.width + IMAGE_GAP;
+      });
     }
-   );
+    return { canvas: c, totalWidth: totalW, sequenceWidth: seqW };
+  }
+
+  function loadBand(bi) {
+    const bandH = getBandHeight();
+    const imgH  = getImageHeight();
+    return new Promise(resolve => {
+      const urls = getUrlsForBand(bi);
+      const images = [];
+      let loaded = 0;
+      urls.forEach(url => {
+        const obj = { loaded: false, el: null, width: 0, height: 0 };
+        images.push(obj);
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        const done = () => { if (++loaded === urls.length) resolve(createBandTexture(images, bandH, imgH)); };
+        img.onload = () => {
+          const ratio = img.naturalWidth / img.naturalHeight;
+          obj.height = imgH;
+          obj.width  = Math.round(imgH * ratio);
+          obj.el = img; obj.loaded = true; done();
+        };
+        img.onerror = () => {
+          const ph = document.createElement('canvas');
+          ph.width = 80; ph.height = imgH;
+          ph.getContext('2d').fillStyle = '#222';
+          ph.getContext('2d').fillRect(0,0,80,imgH);
+          obj.el = ph; obj.width = 80; obj.height = imgH; obj.loaded = true; done();
+        };
+        img.src = url;
+      });
+    });
+  }
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }
+  `;
+  const fragmentShader = `
+    precision highp float;
+    uniform vec2 uResolution; uniform sampler2D uTexture;
+    uniform float uTextureWidth,uSequenceWidth,uBandHeight;
+    uniform float uScroll,uSpeed,uOffsetY,uRotation;
+    uniform float uRotationType,uHasRotation,uCurveAmount,uCurveDirection;
+    varying vec2 vUv;
+    mat2 rot(float a){ return mat2(cos(a),-sin(a),sin(a),cos(a)); }
+    void main(){
+      vec2 p=vUv*uResolution; vec2 op=p;
+      float nx=p.x/uResolution.x;
+      float cf=4.0*(nx-0.5)*(nx-0.5);
+      float co=(0.5-cf)*uCurveAmount*uCurveDirection;
+      float bt=(uResolution.y-uBandHeight)*0.5+uOffsetY+co;
+      float bb=bt+uBandHeight;
+      float bcy=(uResolution.y-uBandHeight)*0.5+uOffsetY+uBandHeight*0.5;
+      if(uHasRotation>0.5){
+        vec2 rc=uRotationType>0.5?vec2(0.0,bcy):vec2(uResolution.x*0.5,bcy);
+        p-=rc; p=rot(uRotation)*p; p+=rc;
+        op-=rc; op=rot(uRotation)*op; op+=rc;
+      }
+      float margin=3.0;
+      if(p.y<bt-margin||p.y>bb+margin){ discard; return; }
+      float sp=uScroll*uSpeed;
+      float wx=mod(op.x+sp,uSequenceWidth);
+      float tx=(wx+uSequenceWidth)/uTextureWidth;
+      float ty=(p.y-bt)/(bb-bt);
+      if(tx<0.0||tx>1.0||ty<0.0||ty>1.0){ discard; return; }
+      vec4 col=texture2D(uTexture,vec2(tx,ty));
+      if(col.a<0.5){ discard; return; }
+      float edge=min(p.y-bt,bb-p.y);
+      if(edge<margin) col.a*=smoothstep(0.0,margin,edge);
+      if(col.a<0.01){ discard; return; }
+      gl_FragColor=col;
+    }
+  `;
+
+  let materials = [];
+  let autoScroll  = 0;
+  const DRIFT_SPEED = 0.6;
+
+  // ── 드래그 인터랙션 ──
+  let isDragging = false;
+  let lastDragX  = 0;
+  let velocity   = 0;
+  const INERTIA  = 0.90;
+
+  canvas.style.cursor = 'grab';
+
+  canvas.addEventListener('mousedown', e => {
+    isDragging = true; lastDragX = e.clientX; velocity = 0;
+    canvas.style.cursor = 'grabbing';
   });
- }
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - lastDragX;
+    autoScroll -= dx * 2;
+    velocity = -dx * 2;
+    lastDragX = e.clientX;
+  });
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    canvas.style.cursor = 'grab';
+  });
+
+  canvas.addEventListener('touchstart', e => {
+    isDragging = true; lastDragX = e.touches[0].clientX; velocity = 0;
+  }, { passive: true });
+  canvas.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - lastDragX;
+    autoScroll -= dx * 2;
+    velocity = -dx * 2;
+    lastDragX = e.touches[0].clientX;
+  }, { passive: true });
+  canvas.addEventListener('touchend', () => { isDragging = false; });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!isDragging) {
+      autoScroll += DRIFT_SPEED;
+      autoScroll += velocity;
+      velocity *= INERTIA;
+    }
+    const offsets = computeOffsets();
+    const bandH   = getBandHeight();
+    materials.forEach((m, i) => {
+      m.uniforms.uScroll.value      = autoScroll;
+      m.uniforms.uOffsetY.value     = offsets[i];
+      m.uniforms.uBandHeight.value  = bandH;
+      m.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+    });
+    renderer.render(scene, camera);
+  }
+
+  async function init() {
+    const offsets = computeOffsets();
+    const bandH   = getBandHeight();
+    const results = await Promise.all(
+      Array.from({ length: NUM_BANDS }, (_, i) => loadBand(i))
+    );
+    results.forEach((td, i) => {
+      const tex = new THREE.Texture(td.canvas);
+      tex.needsUpdate = true;
+      const mat = new THREE.ShaderMaterial({
+        uniforms: {
+          uResolution:    { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uTexture:       { value: tex },
+          uTextureWidth:  { value: td.totalWidth },
+          uSequenceWidth: { value: td.sequenceWidth },
+          uBandHeight:    { value: bandH },
+          uScroll:        { value: 0 },
+          uSpeed:         { value: bandSpeeds[i] },
+          uOffsetY:       { value: offsets[i] },
+          uRotation:      { value: bandRotations[i] },
+          uRotationType:  { value: bandRotTypes[i] === 'fromLeft' ? 1.0 : 0.0 },
+          uHasRotation:   { value: 1.0 },
+          uCurveAmount:   { value: bandCurves[i] },
+          uCurveDirection:{ value: 1 },
+        },
+        vertexShader, fragmentShader,
+        transparent: true, depthTest: false, depthWrite: false, alphaTest: 0.5,
+      });
+      materials.push(mat);
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat);
+      mesh.position.z = i * -0.1;
+      scene.add(mesh);
+    });
+    animate();
+  }
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  init();
+})();
 </script>

@@ -960,21 +960,20 @@
 }
 
 .flipbook-btn {
- text-transform: uppercase;
- font-weight: bold;
- user-select: none;
- cursor: pointer;
+ background: var(--color-link);
+ color: var(--color-bg);
+ border: 1px solid var(--border-color);
+ padding: 0.25rem 0.4rem;
 
- border: none;
- background: #f9f9f9;
- background: none;
+ font-size: 87.5%;
+ line-height: 1;
 
- /* border-bottom: 3px solid rgba(0, 0, 0, .15); */
- /* border: 2px solid #999; */
  -webkit-transition: none;
  -o-transition: none;
  transition: none;
 
+ user-select: none;
+ cursor: pointer;
 }
 
 /*dark*/
