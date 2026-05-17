@@ -33,6 +33,45 @@ const albumCards = recentAlbums.map(album => {
 
 const sorted = allMagazines.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
+// 인트로: hom / w-hom 커버 목록 (클라이언트에서 랜덤 선택)
+// 마퀴 커버: 이미지 있는 전체 (special 제외)
+type Cover = { src: string; alt: string };
+
+const allCovers: Cover[] = sorted
+ .filter(m => m.data.category !== "special")
+ .map(m => ({
+  src: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
+  alt: m.id,
+ }));
+
+// 4행: 커버를 행별로 중복 없이 분배, 각 행 내에서는 반복 허용
+function shuffle(arr: Cover[]): Cover[] {
+ return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function splitInto4(arr: Cover[]): [Cover[], Cover[], Cover[], Cover[]] {
+ const s = shuffle(arr);
+ const n = s.length;
+ // 균등 분배 (나머지는 앞 행에)
+ const q = Math.floor(n / 4);
+ const r = n % 4;
+ const cuts = [0, q + (r > 0 ? 1 : 0), 2*q + (r > 1 ? 2 : r > 0 ? 1 : 0), 3*q + (r > 2 ? 3 : r > 1 ? 2 : r > 0 ? 1 : 0), n];
+ return [s.slice(cuts[0], cuts[1]), s.slice(cuts[1], cuts[2]), s.slice(cuts[2], cuts[3]), s.slice(cuts[3], cuts[4])];
+}
+
+function fillRow(arr: Cover[], min = 16): Cover[] {
+ if (!arr.length) return [];
+ let out = [...arr];
+ while (out.length < min) out = [...out, ...arr];
+ return out;
+}
+
+const [r1, r2, r3, r4] = splitInto4(allCovers);
+const row1 = fillRow(r1);
+const row2 = fillRow(r2);
+const row3 = fillRow(r3);
+const row4 = fillRow(r4);
+
 // ✅ category 기반, 각 최신 2개
 const homCards = sorted
  .filter(m => m.data.category === "hom")
@@ -58,10 +97,27 @@ const whomCards = sorted
 ---
 
 <BaseLayout title={title}>
- <div class="content content--page">
-  <h3>HAUS OF MATTERS KHL KILL THEM ALL</h3>
-  <p></p>
- </div>
+ <!-- ── 인트로: GSAP 마퀴 ── -->
+ <section class="mq-hero" id="mq-hero">
+  {
+   [
+    { covers: row1, dir: 1, speed: 80 },
+    { covers: row2, dir: -1, speed: 100 },
+    { covers: row3, dir: 1, speed: 65 },
+    { covers: row4, dir: -1, speed: 85 },
+   ].map(({ covers, dir, speed }) => (
+    <div class="mq-row" data-dir={dir} data-speed={speed}>
+     <div class="mq-track">
+      {[...covers, ...covers].map(c => (
+       <div class="mq-item">
+        <img src={c.src} alt={c.alt} loading="eager" draggable="false" />
+       </div>
+      ))}
+     </div>
+    </div>
+   ))
+  }
+ </section>
 
  <section class="latest-magazine">
   <div class="section-header">
@@ -131,6 +187,50 @@ const whomCards = sorted
 </BaseLayout>
 
 <style>
+ /* ── 마퀴 히어로 ── */
+ .mq-hero {
+  width: 100vw;
+  height: calc(100vh - 5rem);
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  margin-bottom: 6rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+ }
+
+ .mq-row {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+ }
+
+ .mq-track {
+  display: flex;
+  align-items: stretch;
+
+  will-change: transform;
+  flex-shrink: 0;
+ }
+
+ .mq-item {
+  flex-shrink: 0;
+  height: 100%;
+  overflow: hidden;
+ }
+
+ .mq-item img {
+  height: 100%;
+  width: auto;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+ }
+
+ /* ── 기존 스타일 ── */
  .featured-albums {
   margin: 4rem 0;
  }
@@ -225,7 +325,6 @@ const whomCards = sorted
  @media (max-width: 768px) {
   .albums-grid {
    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-
   }
  }
 
@@ -245,3 +344,34 @@ const whomCards = sorted
 </style>
 
 <script src="../scripts/index.js"></script>
+
+<script>
+ import { gsap } from "gsap";
+
+ document.addEventListener("astro:page-load", initMarquee);
+ if (document.readyState !== "loading") initMarquee();
+
+ function initMarquee() {
+  const rows = document.querySelectorAll<HTMLElement>(".mq-row");
+  if (!rows.length) return;
+
+  rows.forEach(row => {
+   const track = row.querySelector<HTMLElement>(".mq-track");
+   if (!track) return;
+
+   const dir = Number(row.dataset.dir ?? 1);
+   const speed = Number(row.dataset.speed ?? 80);
+
+   gsap.fromTo(
+    track,
+    { xPercent: dir === 1 ? 0 : -5 },
+    {
+     xPercent: dir === 1 ? -5 : 0,
+     duration: speed,
+     ease: "none",
+     repeat: -1,
+    }
+   );
+  });
+ }
+</script>
