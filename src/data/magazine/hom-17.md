@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2024-10-14T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-17.pdf
 toc: |-
   **/ New Releases**
   팀 NY [TEAM NY: The Summer]  

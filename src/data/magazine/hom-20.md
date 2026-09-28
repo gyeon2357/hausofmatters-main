@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-01-13T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-20.pdf
 toc: |-
   **/ New Releases**
   오르내림 [soft side]  

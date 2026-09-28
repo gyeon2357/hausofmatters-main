@@ -31,7 +31,7 @@ const homCards = allMagazines
 <BaseLayout title={title}>
  <header class="title-header title-header--initial">
   <h2>Magazine <span class="faded">/ HOM</span></h2>
-  <a class="back" href="/magazine">/ Back</a>
+  <a class="nav-link" href="/magazine">Back</a>
  </header>
  <Separator />
 
@@ -108,11 +108,11 @@ const homCards = allMagazines
  }
 
  .meta-title {
-  font-size: 0.875rem;
+  font-size: var(--font-size-s);
   font-weight: 600;
  }
 
  .meta-date {
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
  }
 </style>

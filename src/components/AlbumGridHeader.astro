@@ -23,7 +23,7 @@ const { albumsTotal, title = "Review" } = Astro.props;
    <button data-shuffle><TextSlider content="Shuffle" /></button>
   </div>
  </section>
- <a class="back" href="/albums">/ Back</a>
+ <a class="nav-link" href="/albums">Back</a>
 </header>
 
 <Separator />
@@ -58,7 +58,7 @@ const { albumsTotal, title = "Review" } = Astro.props;
  .sort-group button {
   display: flex;
   align-items: center;
-  font-size: 1.25rem;
+  font-size: var(--font-size-l);
  }
 
  .sort-group > button::before {
@@ -70,64 +70,19 @@ const { albumsTotal, title = "Review" } = Astro.props;
   margin-right: 0.25rem;
  }
 
- .search-group {
-  display: flex;
-  align-items: center;
-  position: relative;
-
-  margin-left: 0.75rem;
- }
-
  .sort--active {
   opacity: 0.4;
  }
 
- .search-group:has(> .search--active) {
-  margin-left: 1rem;
- }
- .search-group:has(> .search--active)::before {
-  pointer-events: none;
-  content: "";
-  position: absolute;
-  left: -1rem;
-  right: -1rem;
-  top: -0.5rem;
-  bottom: -0.5rem;
-  border: 1px solid;
- }
- .search--active:focus-visible {
-  color: inherit;
- }
-
- .search-group .clear {
-  margin-left: 1rem;
- }
-
  .total-num {
-  font-size: 82.5%;
+  font-size: var(--font-size-s);
   font-weight: 700;
   vertical-align: middle;
- }
-
- @media only screen and (max-width: 1200px) {
-  .sort-group button {
-   display: flex;
-   align-items: center;
-
-   font-size: 1rem;
-  }
  }
 
  @media only screen and (max-width: 768px) {
   .sort-group {
    gap: 0.625rem;
-  }
-
-  .sort-group button {
-   display: flex;
-   align-items: center;
-
-   font-size: 0.825rem;
   }
  }
 </style>

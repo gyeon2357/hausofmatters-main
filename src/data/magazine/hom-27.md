@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-08-11T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-27.pdf
 toc: |-
   **/ New Releases**
   추다혜차지스 [소수민족]  

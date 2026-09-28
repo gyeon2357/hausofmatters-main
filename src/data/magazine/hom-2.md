@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2023-07-10T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-2.pdf
 toc: |-
   **/ New Releases**  
   Wonstein [DEMO]  

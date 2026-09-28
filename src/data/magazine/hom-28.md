@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-09-01T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-28.pdf
 toc: |-
   **/ New Releases**
   XXK [초월]  

@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-05-12T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-24.pdf
 toc: |-
   **/ New Releases**
   유라 [A side]  

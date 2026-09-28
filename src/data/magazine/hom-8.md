@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2024-01-08T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-8.pdf
 toc: |-
   **/ New Releases**
   이현우&선진 [we’re open on sundays]  

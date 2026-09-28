@@ -33,9 +33,6 @@ const albumCards = recentAlbums.map(album => {
 
 const sorted = allMagazines.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-// 인트로: Three.js WebGL 드리프트용 매거진 썸네일 URL 목록
-const coverUrls: string[] = sorted.filter(m => m.data.category !== "special").map(m => m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`);
-
 // ✅ category 기반, 각 최신 2개
 const homCards = sorted
  .filter(m => m.data.category === "hom")
@@ -61,16 +58,13 @@ const whomCards = sorted
 ---
 
 <BaseLayout title={title}>
- <!-- ── 인트로: Three.js WebGL 드리프트 ── -->
- <section class="webgl-intro" id="webgl-intro">
-  <canvas id="drift-canvas"></canvas>
-  <script id="cover-urls" type="application/json" set:html={JSON.stringify(coverUrls)} />
- </section>
+ <!-- ── 히어로: 디자인 리뉴얼 예정 — 빈 박스로 자리만 잡아둠 ── -->
+ <section class="hero-placeholder full-bleed" id="hero-placeholder"></section>
 
  <section class="latest-magazine">
   <div class="section-header">
    <h2>Latest Magazine</h2>
-   <a class="more-link" href="/magazine">/ View All</a>
+   <a class="nav-link" href="/magazine">View All</a>
   </div>
   <div class="magazine-columns">
    <div class="magazine-column">
@@ -116,7 +110,7 @@ const whomCards = sorted
  <section class="featured-albums">
   <div class="section-header">
    <h2>Featured Album</h2>
-   <a class="more-link" href="/albums">/ View All</a>
+   <a class="nav-link" href="/albums">View All</a>
   </div>
   <div class="albums-grid">
    {
@@ -135,25 +129,14 @@ const whomCards = sorted
 </BaseLayout>
 
 <style>
- /* ── WebGL 인트로 ── */
- .webgl-intro {
+ /* ── 히어로 플레이스홀더 ── */
+ /* 화면 끝까지 채우는 건 global.css의 .full-bleed 클래스(grid-column: 1 / -1)가 담당.
+    여기서는 높이/배경만 지정 — 좌우 여백 관련 margin 계산이 필요 없음 */
+ .hero-placeholder {
   position: relative;
-  width: 100vw;
   height: 100vh;
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
   margin-bottom: 4rem;
-  overflow: hidden;
-  background: var(--color-bg);
- }
-
- #drift-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
+  background: var(--color-placeholder);
  }
 
  /* ── 기존 스타일 ── */
@@ -170,7 +153,7 @@ const whomCards = sorted
 
  .album-year {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: var(--font-size-s);
  }
 
  .latest-magazine {
@@ -185,7 +168,7 @@ const whomCards = sorted
 
  .column-label {
   margin: 0 0 0.5rem;
-  font-size: 1.25rem;
+  font-size: var(--font-size-l);
  }
 
  .magazine-list {
@@ -225,13 +208,13 @@ const whomCards = sorted
 
  .magazine-title {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--font-size-base);
   line-height: 1.3;
  }
 
  .magazine-date {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: var(--font-size-xs);
   line-height: 1.3;
  }
 
@@ -241,11 +224,6 @@ const whomCards = sorted
   justify-content: start;
   gap: 2rem;
   margin-bottom: 2rem;
- }
-
- .section-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
  }
 
  @media (max-width: 768px) {
@@ -270,257 +248,3 @@ const whomCards = sorted
 </style>
 
 <script src="../scripts/index.js"></script>
-
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script is:inline>
- var _driftRafId;
- var _driftRenderer;
-
- document.addEventListener("astro:before-swap", function () {
-  if (_driftRafId) {
-   cancelAnimationFrame(_driftRafId);
-   _driftRafId = null;
-  }
-  if (_driftRenderer) {
-   _driftRenderer.dispose();
-   _driftRenderer = null;
-  }
- });
-
- function initDrift() {
-  if (_driftRafId) {
-   cancelAnimationFrame(_driftRafId);
-   _driftRafId = null;
-  }
-
-  const canvas = document.getElementById("drift-canvas");
-  if (!canvas || typeof THREE === "undefined") return;
-
-  const urlData = document.getElementById("cover-urls");
-  const allUrls = urlData ? JSON.parse(urlData.textContent || "[]") : [];
-  if (!allUrls.length) return;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-  camera.position.z = 1;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  _driftRenderer = renderer;
-  // LOCKED_H 설정 후 아래에서 setSize
-
-  // 데스크톱: 6밴드 (이미지 더 크게), 모바일: 8밴드
-  const IS_MOBILE = window.innerWidth < 1024;
-  const NUM_BANDS = IS_MOBILE ? 3 : 4;
-  const CLONE_COUNT = 2;
-  const IMAGE_GAP = 4;
-  const CURVE = 30; // 웨이브 커브
-  const ROTATION = 0; // 로테이션 제거
-
-  // 초기 높이 고정 (모바일 주소창 영향 차단)
-  var LOCKED_H = window.innerHeight;
-  renderer.setSize(window.innerWidth, LOCKED_H);
-  canvas.style.height = LOCKED_H + "px";
-
-  function getBandHeight() {
-   return Math.floor(LOCKED_H / NUM_BANDS) + 4;
-  }
-  function getImageHeight() {
-   return getBandHeight() - 6;
-  }
-
-  function computeOffsets() {
-   var spacing = LOCKED_H / NUM_BANDS;
-   return Array.from({ length: NUM_BANDS }, function (_, i) {
-    return (i - (NUM_BANDS - 1) / 2) * spacing;
-   });
-  }
-
-  var bandSpeeds = IS_MOBILE ? [0.55, 0.7, 0.45] : [0.55, 0.8, 0.45, 0.65];
-
-  function shuffleArr(arr) {
-   return arr.slice().sort(function () {
-    return Math.random() - 0.5;
-   });
-  }
-
-  var _shuffledUrls = shuffleArr(allUrls);
-  function getUrlsForBand(bi) {
-   var pool = [];
-   for (var k = bi; k < _shuffledUrls.length; k += NUM_BANDS) pool.push(_shuffledUrls[k]);
-   // 각 밴드에서도 최소 4개 확보
-   while (pool.length < 4) pool = pool.concat(pool);
-   return pool;
-  }
-
-  function createBandTexture(images, bandH) {
-   var seqW = 0;
-   images.forEach(function (img) {
-    if (img.loaded) seqW += img.width + IMAGE_GAP;
-   });
-   seqW = Math.max(seqW - IMAGE_GAP, 1);
-   var totalW = seqW * CLONE_COUNT;
-   var c = document.createElement("canvas");
-   c.width = totalW;
-   c.height = bandH;
-   var ctx = c.getContext("2d");
-   var x = 0;
-   for (var cl = 0; cl < CLONE_COUNT; cl++) {
-    images.forEach(function (img) {
-     if (!img.loaded) return;
-     var cy = (bandH - img.height) / 2;
-     ctx.save();
-     ctx.globalAlpha = 0.93;
-     ctx.drawImage(img.el, x, cy, img.width, img.height);
-     ctx.restore();
-     x += img.width + IMAGE_GAP;
-    });
-   }
-   return { canvas: c, totalWidth: totalW, sequenceWidth: seqW };
-  }
-
-  function loadBand(bi) {
-   var bandH = getBandHeight();
-   var imgH = getImageHeight();
-   return new Promise(function (resolve) {
-    var urls = getUrlsForBand(bi);
-    var images = [];
-    var loaded = 0;
-    urls.forEach(function (url) {
-     var obj = { loaded: false, el: null, width: 0, height: 0 };
-     images.push(obj);
-     var img = new Image();
-     img.crossOrigin = "anonymous";
-     var done = function () {
-      if (++loaded === urls.length) resolve(createBandTexture(images, bandH));
-     };
-     img.onload = function () {
-      var ratio = img.naturalWidth / img.naturalHeight;
-      obj.height = imgH;
-      obj.width = Math.round(imgH * ratio);
-      obj.el = img;
-      obj.loaded = true;
-      done();
-     };
-     img.onerror = function () {
-      var ph = document.createElement("canvas");
-      ph.width = 80;
-      ph.height = imgH;
-      ph.getContext("2d").fillStyle = "#222";
-      ph.getContext("2d").fillRect(0, 0, 80, imgH);
-      obj.el = ph;
-      obj.width = 80;
-      obj.height = imgH;
-      obj.loaded = true;
-      done();
-     };
-     img.src = url;
-    });
-   });
-  }
-
-  var vertexShader = `
-    varying vec2 vUv;
-    void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }
-  `;
-  var fragmentShader = `
-    precision highp float;
-    uniform vec2 uResolution; uniform sampler2D uTexture;
-    uniform float uTextureWidth,uSequenceWidth,uBandHeight;
-    uniform float uScroll,uSpeed,uOffsetY,uCurveAmount;
-    varying vec2 vUv;
-    void main(){
-      vec2 p=vUv*uResolution;
-      float nx=p.x/uResolution.x;
-      float cf=4.0*(nx-0.5)*(nx-0.5);
-      float co=(0.5-cf)*uCurveAmount;
-      float bt=(uResolution.y-uBandHeight)*0.5+uOffsetY+co;
-      float bb=bt+uBandHeight;
-      float margin=2.0;
-      if(p.y<bt-margin||p.y>bb+margin){ discard; return; }
-      float wx=mod(p.x+uScroll*uSpeed,uSequenceWidth);
-      float tx=(wx+uSequenceWidth)/uTextureWidth;
-      float ty=(p.y-bt)/(bb-bt);
-      if(tx<0.0||tx>1.0||ty<0.0||ty>1.0){ discard; return; }
-      vec4 col=texture2D(uTexture,vec2(tx,ty));
-      if(col.a<0.5){ discard; return; }
-      float edge=min(p.y-bt,bb-p.y);
-      if(edge<margin) col.a*=smoothstep(0.0,margin,edge);
-      if(col.a<0.01){ discard; return; }
-      gl_FragColor=col;
-    }
-  `;
-
-  var materials = [];
-  var autoScroll = 0;
-  var DRIFT = 0.7;
-  var velocity = 0;
-
-  function animate() {
-   _driftRafId = requestAnimationFrame(animate);
-   autoScroll += DRIFT;
-   autoScroll += velocity;
-   velocity *= 0.9;
-   var offsets = computeOffsets();
-   var bandH = getBandHeight();
-   materials.forEach(function (m, i) {
-    m.uniforms.uScroll.value = autoScroll;
-    m.uniforms.uOffsetY.value = offsets[i];
-    // uBandHeight, uResolution 은 init 시 고정 — 변경 안 함
-   });
-   renderer.render(scene, camera);
-  }
-
-  Promise.all(
-   Array.from({ length: NUM_BANDS }, function (_, i) {
-    return loadBand(i);
-   })
-  ).then(function (results) {
-   var offsets = computeOffsets();
-   var bandH = getBandHeight();
-   results.forEach(function (td, i) {
-    var tex = new THREE.Texture(td.canvas);
-    tex.needsUpdate = true;
-    var mat = new THREE.ShaderMaterial({
-     uniforms: {
-      uResolution: { value: new THREE.Vector2(window.innerWidth, LOCKED_H) },
-      uTexture: { value: tex },
-      uTextureWidth: { value: td.totalWidth },
-      uSequenceWidth: { value: td.sequenceWidth },
-      uBandHeight: { value: bandH },
-      uScroll: { value: 0 },
-      uSpeed: { value: bandSpeeds[i] || 0.5 },
-      uOffsetY: { value: offsets[i] },
-      uCurveAmount: { value: CURVE },
-     },
-     vertexShader: vertexShader,
-     fragmentShader: fragmentShader,
-     transparent: true,
-     depthTest: false,
-     depthWrite: false,
-     alphaTest: 0.5,
-    });
-    materials.push(mat);
-    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
-    mesh.position.z = i * -0.1;
-    scene.add(mesh);
-   });
-   animate();
-  });
-
-  // orientation change만 높이 업데이트
-  window.addEventListener("resize", function () {
-   var newW = window.innerWidth;
-   var newH = window.innerHeight;
-   // 150px 이상 변화 = 방향 전환. 작은 변화(주소창)는 무시
-   if (Math.abs(newH - LOCKED_H) > 150) {
-    LOCKED_H = newH;
-    renderer.setSize(newW, LOCKED_H);
-    canvas.style.height = LOCKED_H + "px";
-   } else {
-    renderer.setSize(newW, LOCKED_H);
-   }
-  });
- }
-
- document.addEventListener("astro:page-load", initDrift);
- initDrift();
-</script>

@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-02-10T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-21.pdf
 toc: |-
   **/ New Releases**
   휴먼메이드고스트 [HEARTSAVIOR]  

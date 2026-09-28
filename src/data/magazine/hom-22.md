@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-03-10T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-22.pdf
 toc: |-
   **/ New Releases**
   db김재권 [정신지옥]  

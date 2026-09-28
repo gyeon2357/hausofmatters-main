@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2024-09-09T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-16.pdf
 toc: |-
   **/ New Releases**
   신스, 린스모크 [Iceberg Syndrome]  

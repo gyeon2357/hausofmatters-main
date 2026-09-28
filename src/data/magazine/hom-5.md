@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2023-10-09T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-5.pdf
 toc: |-
   **/ New Releases**
   트레이 비 [Ready To Tray]  

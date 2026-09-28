@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2026-01-01T00:00:00.000Z
-pdfPath: /pdf/hom-3.pdf
+pdfPath: /pdf/hom-32.pdf
 toc: |-
   **/ New Releases**
   DJ 켄드릭스 [a spell to break the curse] & [a spell to break the curse (rap remix)]  

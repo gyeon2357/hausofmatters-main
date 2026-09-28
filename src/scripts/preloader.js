@@ -82,10 +82,9 @@ const init = () => {
   toggleLoading();
 };
 
-// Execute a callback only if the current page is the home page.
+// Preloader는 이제 모든 페이지 공통(BaseLayout)에서 렌더링되므로 페이지 종류와 무관하게 실행.
 const handlePageEvent = (_event, callback) => {
-  const page = document.documentElement.getAttribute('data-page');
-  if (page === 'home') callback();
+  callback();
 };
 
 // Listen for Astro's lifecycle events.

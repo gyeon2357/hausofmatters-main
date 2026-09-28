@@ -39,10 +39,10 @@ if (feature.data.link) {
   // hom- 또는 w-hom- 으로 시작하면 magazine, 아니면 album
   if (/^(w-)?hom-/i.test(raw)) {
     linkHref = `/magazine/${raw.toLowerCase()}`;
-    linkLabel = `/ ${raw.toUpperCase()}`;
+    linkLabel = raw.toUpperCase();
   } else {
     linkHref = `/albums/${raw.toLowerCase()}`;
-    linkLabel = `/ ${raw.toUpperCase()}`;
+    linkLabel = raw.toUpperCase();
   }
 }
 const seoDescription = feature.data.artist
@@ -69,6 +69,7 @@ const seoDescription = feature.data.artist
       <span class="sep">·</span>
       <span>{dateStr}</span>
     </p>
+    <a class="nav-link" href="/feature">Back to Feature</a>
   </header>
 
   <Separator />
@@ -79,7 +80,7 @@ const seoDescription = feature.data.artist
     <div class="feature-footer">
       {
         linkHref && (
-          <a class="link-btn" href={linkHref}>
+          <a class="related-link" href={linkHref}>
             {linkLabel}
           </a>
         )
@@ -112,19 +113,23 @@ const seoDescription = feature.data.artist
   .feature-label {
     margin: 0 0 0.5rem;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
     opacity: 0.6;
   }
 
   .feature-header h1 {
     margin: 0 0 0.5rem;
-    font-size: 2rem;
+    font-size: var(--font-size-2xl);
   }
 
   .feature-meta {
-    margin: 0;
-    font-size: 0.85rem;
+    margin: 0 0 0.75rem;
+    font-size: var(--font-size-s);
     opacity: 0.7;
+  }
+
+  .feature-header .nav-link {
+    display: inline-block;
   }
 
   .sep {
@@ -150,22 +155,4 @@ const seoDescription = feature.data.artist
     border-top: 1px solid var(--border-color);
   }
 
-  .link-btn {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 0.875rem;
-    opacity: 0.8;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-
-  .link-btn:hover {
-    opacity: 1;
-  }
-
-  @media (max-width: 480px) {
-    .feature-header h1 {
-      font-size: 1.5rem;
-    }
-  }
 </style>
