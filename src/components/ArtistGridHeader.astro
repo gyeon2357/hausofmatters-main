@@ -1,8 +1,6 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
 import Separator from "../components/Separator.astro";
-import Search from "../components/Search.astro";
-import Cross from "../assets/images/cross.svg";
 
 type Props = {
  artistsTotal: number;
@@ -18,19 +16,12 @@ const { artistsTotal } = Astro.props;
   <div>
    <button data-sort><TextSlider content="Sort" /></button>
    <button data-shuffle><TextSlider content="Shuffle" /></button>
-   <div>
-    <button data-search class="search"><TextSlider content="Search" /></button>
-    <button data-clear class="clear hidden" aria-label="Clear search">
-     <Cross width={16} height={16} />
-    </button>
-   </div>
   </div>
   <span class="total-num"><TextSlider content={"(" + artistsTotal + ")"} /></span>
  </section>
 </header>
 
 <Separator />
-<Search />
 
 <style>
  section {
@@ -46,31 +37,9 @@ const { artistsTotal } = Astro.props;
   margin: 0;
   padding: 0;
  }
- div:has(> .search) {
-  position: relative;
- }
- div:has(> .search--active) {
-  margin-left: 1rem;
- }
- div:has(> .search--active)::before {
-  pointer-events: none;
-  content: "";
-  position: absolute;
-  left: -1rem;
-  right: -1rem;
-  top: -0.5rem;
-  bottom: -0.5rem;
-  border: 1px solid;
-  border-radius: 2rem;
- }
- .search--active {
-  &:focus-visible {
-   color: inherit;
-  }
- }
 
  .total-num {
-  font-size: 82.5%;
+  font-size: var(--font-size-s);
   font-weight: 700;
   vertical-align: text-top;
  }

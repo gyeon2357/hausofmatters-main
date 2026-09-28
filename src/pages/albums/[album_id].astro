@@ -28,7 +28,18 @@ const relatedAlbumEntries = album.data.relatedAlbums
 
 const category = album.data.category === "w-hom" ? "w-hom" : "hom";
 const backHref = `/albums/${category}`;
-const backLabel = "/ Back";
+const backLabel = "Back";
+
+// 같은 카테고리 내 Prev/Next 탐색 (발매일 최신순 정렬)
+const sameCategoryAlbums = allAlbums
+ .filter(a => (a.data.category === "w-hom" ? "w-hom" : "hom") === category)
+ .sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime());
+const currentAlbumIndex = sameCategoryAlbums.findIndex(a => a.id === album.id);
+const hasAlbumSiblings = sameCategoryAlbums.length > 1;
+const prevAlbum = hasAlbumSiblings ? sameCategoryAlbums[(currentAlbumIndex + 1) % sameCategoryAlbums.length] : undefined;
+const nextAlbum = hasAlbumSiblings
+ ? sameCategoryAlbums[(currentAlbumIndex - 1 + sameCategoryAlbums.length) % sameCategoryAlbums.length]
+ : undefined;
 
 // artist
 const rawArtist = album.data.artist as unknown;
@@ -72,7 +83,21 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
     {artistName && <span class="faded">by {artistName}</span>}
    </h2>
    <div>
-    <a class="back" href={backHref}>{backLabel}</a>
+    <a class="nav-link" href={backHref}>{backLabel}</a>
+    {
+     hasAlbumSiblings && (
+      <>
+       <span class="faded">/</span>
+       <a class="nav-link" href={`/albums/${prevAlbum!.id}`} data-astro-prefetch>
+        Prev Album
+       </a>
+       <span class="faded">/</span>
+       <a class="nav-link" href={`/albums/${nextAlbum!.id}`} data-astro-prefetch>
+        Next Album
+       </a>
+      </>
+     )
+    }
    </div>
   </header>
   <Separator />
@@ -102,8 +127,8 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
     <div class="row">
      {
       magazineHref && (
-       <a class="magazine-link" href={magazineHref}>
-        / In {album.data.magazine?.toUpperCase()}
+       <a class="related-link" href={magazineHref}>
+        In {album.data.magazine?.toUpperCase()}
        </a>
       )
      }

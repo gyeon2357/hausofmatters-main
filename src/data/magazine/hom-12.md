@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2024-05-13T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-12.pdf
 toc: |-
   **/ New Releases**
   U.H.Q. MAFIA [Underground VOL. 1]  

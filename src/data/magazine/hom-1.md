@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2023-06-12T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-1.pdf
 toc: |-
   **/ About H.O.M**  
   Haus Of Matters 창립에 관한 모든 것  

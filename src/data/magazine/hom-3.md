@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2023-08-14T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-3.pdf
 toc: |-
   **/ New Releases**  
   Yescoba, HEO DANIEL, Kimhojun [Plangers]  

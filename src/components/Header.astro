@@ -2,53 +2,45 @@
 import TextSlider from "../components/TextSlider.astro";
 import Separator from "../components/Separator.astro";
 import Search from "../components/Search.astro";
+import NavMenu from "../components/NavMenu.astro";
 ---
 
-<header transition:persist>
+<header class="full-bleed" transition:persist>
  <section>
-  <div>
+  <a href="/" class="logo-link">
    <img id="site-logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
-   <h1>
-    <a href="/">
-     <TextSlider content="HAUSOFMATTERS" />
-    </a>
-   </h1>
-  </div>
+  </a>
 
-  <li>
+  <ul class="nav-links">
+   <li>
+    <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
+   </li>
+   <li>
+    <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
+   </li>
+   <li>
+    <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
+   </li>
+   <li>
+    <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
+   </li>
+   <li>
+    <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
+   </li>
+  </ul>
+
+  <div class="header-actions">
    <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
    <button id="search-open-btn" aria-label="검색" class="search-btn">
     <TextSlider content="Search" />
    </button>
-  </li>
-
-  <li>
-   <button id="theme-toggle" aria-label="Toggle dark mode">
-    <span class="toggle-track">
-     <span class="toggle-thumb"></span>
-    </span><TextSlider content="Dark" />
+   <button id="menu-open-btn" aria-label="메뉴 열기" class="menu-btn">
+    <TextSlider content="Menu" />
    </button>
-  </li>
+  </div>
  </section>
 
- <ul>
-  <li>
-   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
-  </li>
-  <li>
-   <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
-  </li>
-  <li>
-   <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
-  </li>
-  <li>
-   <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
-  </li>
-  <li>
-   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
-  </li>
- </ul>
- <button id="top-btn" aria-label="Scroll to top">/ TOP</button>
+ <button id="top-btn" class="top-btn" aria-label="Scroll to top">TOP</button>
  <Separator />
 
  <style>
@@ -65,43 +57,22 @@ import Search from "../components/Search.astro";
 
    padding: 1rem 1rem 0;
    gap: 0.75rem;
-   margin-left: -1rem;
-   margin-right: -1rem;
   }
 
   header section {
    display: flex;
-   justify-content: space-between;
    align-items: center;
    width: 100%;
-  }
-
-  header section div {
-   display: flex;
-   justify-content: start;
-   align-items: center;
   }
 
   header a.current {
    opacity: 0.4;
   }
-  header h1 a.current {
-   color: inherit;
-  }
 
-  h1 {
-   font-size: 1rem;
-   font-weight: inherit;
-   margin: 0;
-  }
-
-  header section a {
+  .logo-link {
    display: flex;
    align-items: center;
-  }
-
-  header section h1 {
-   margin-left: 0.5rem;
+   flex-shrink: 0;
   }
 
   .logo {
@@ -110,43 +81,52 @@ import Search from "../components/Search.astro";
    width: auto;
   }
 
-  /* Search 버튼 — 기존 링크와 동일한 스타일 */
-  #search-open-btn {
-   background: none;
-   border: none;
-   color: inherit;
-   font: inherit;
-   font-family: var(--info-font);
-   cursor: pointer;
-   padding: 0;
+  .nav-links,
+  header section a,
+  .header-actions button {
    display: flex;
    align-items: center;
   }
 
-  ul {
-   display: flex;
+  .nav-links {
    list-style: none;
    gap: 1.25rem;
-   margin: 0;
+   margin: 0 0 0 2rem;
    padding: 0;
-   grid-column: auto / span 2;
    overflow: hidden;
    max-height: 2rem;
    transition:
     max-height 0.25s ease,
-    opacity 0.25s ease,
-    padding 0.25s ease;
+    opacity 0.25s ease;
    opacity: 1;
   }
 
-  ul.nav-hidden {
+  .nav-links.nav-hidden {
    max-height: 0;
    opacity: 0;
    pointer-events: none;
   }
 
-  ul li {
-   font-size: 0.875rem;
+  .nav-links li {
+   font-size: var(--font-size-s);
+  }
+
+  .header-actions {
+   gap: 1.25rem;
+   margin-left: auto;
+  }
+
+  /* Search / Menu 버튼 — 기존 링크와 동일한 스타일 */
+  #search-open-btn,
+  #menu-open-btn {
+   background: none;
+   border: none;
+   color: inherit;
+   font: inherit;
+   font-family: var(--info-font);
+   font-size: var(--font-size-s);
+   cursor: pointer;
+   padding: 0;
   }
 
   @media screen and (max-width: 768px) {
@@ -155,13 +135,12 @@ import Search from "../components/Search.astro";
     padding: 0.75rem 0.75rem 0;
    }
 
-   ul {
-    gap: 0.75rem;
+   .nav-links {
+    display: none;
    }
 
-   ul li,
-   header {
-    font-size: 0.825rem;
+   .header-actions {
+    gap: 0.75rem;
    }
   }
 
@@ -175,7 +154,7 @@ import Search from "../components/Search.astro";
    background: var(--color-bg);
    color: var(--color-text, currentColor);
    font-family: inherit;
-   font-size: 0.875rem;
+   font-size: var(--font-size-s);
    padding: 0.375rem 0.5rem;
    cursor: pointer;
 
@@ -205,7 +184,6 @@ import Search from "../components/Search.astro";
    btn.dataset.initialized = "true";
 
    const inner = btn.querySelector(".oh__inner");
-   const thumb = btn.querySelector(".toggle-thumb");
 
    const getEffective = () =>
     document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -214,14 +192,12 @@ import Search from "../components/Search.astro";
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
     if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
-    if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
    };
 
    const initial = getEffective();
    if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
-   if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
    const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
    if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
@@ -330,9 +306,38 @@ import Search from "../components/Search.astro";
    loadSearchIndex();
   }
 
+  // ── 메뉴 aside ────────────────────────────────────────────
+  function initMenu() {
+   const openBtn = document.getElementById("menu-open-btn");
+   const dialog = document.getElementById("menu-dialog") as HTMLDialogElement | null;
+   const closeBtn = document.getElementById("close-menu");
+
+   if (!openBtn || !dialog) return;
+
+   const ac = new AbortController();
+   const sig = ac.signal;
+   const prev = (openBtn as any).__menuAC as AbortController | undefined;
+   prev?.abort();
+   (openBtn as any).__menuAC = ac;
+
+   openBtn.addEventListener("click", () => dialog.showModal(), { signal: sig });
+   closeBtn?.addEventListener("click", () => dialog.close(), { signal: sig });
+   dialog.addEventListener(
+    "click",
+    e => {
+     if (e.target === dialog) dialog.close();
+    },
+    { signal: sig }
+   );
+   dialog.querySelectorAll("a[href]").forEach(a => {
+    a.addEventListener("click", () => dialog.close(), { signal: sig });
+   });
+  }
+
   document.addEventListener("astro:page-load", initHeader);
   document.addEventListener("astro:page-load", initTheme);
   document.addEventListener("astro:page-load", initSearch);
+  document.addEventListener("astro:page-load", initMenu);
   document.addEventListener("astro:page-load", initTopBtn);
 
   // ── 스크롤 방향 감지 ─────────────────────────────────────
@@ -348,7 +353,7 @@ import Search from "../components/Search.astro";
    function setNav(hide: boolean) {
     const now = Date.now();
     if (hide === isHidden || now - lastToggle < COOLDOWN) return;
-    const nav = document.querySelector("header ul");
+    const nav = document.querySelector(".nav-links");
     if (!nav) return;
     isHidden = hide;
     lastToggle = now;
@@ -431,5 +436,6 @@ import Search from "../components/Search.astro";
  </script>
 </header>
 
-<!-- Search 모달: header 밖에 두어 z-index 충돌 방지 -->
+<!-- Search / 메뉴 모달: header 밖에 두어 z-index 충돌 방지 -->
 <Search />
+<NavMenu />

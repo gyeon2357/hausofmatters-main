@@ -47,7 +47,12 @@ const sameCategory = issues
  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const currentIndex = sameCategory.findIndex(i => (i.data.slug ?? i.id) === slug);
-const nextIndex = (currentIndex + 1) % sameCategory.length;
+// sameCategory는 최신순 정렬 → +1 은 더 과거 호(Prev), -1 은 더 최신 호(Next)
+const hasSiblings = sameCategory.length > 1;
+const prevIndex = (currentIndex + 1) % sameCategory.length;
+const prevIssue = sameCategory[prevIndex];
+const prevSlug = prevIssue.data.slug ?? prevIssue.id;
+const nextIndex = (currentIndex - 1 + sameCategory.length) % sameCategory.length;
 const nextIssue = sameCategory[nextIndex];
 const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 
@@ -104,9 +109,21 @@ const tocHtml = rawToc ? renderToc(rawToc) : "";
   <header class="title-header">
    <h2>{title}</h2>
    <div>
-    <a class="back" href={backHref}>View All</a>
-    <span class="faded">/</span>
-    <a class="back" href={`/magazine/${nextSlug}`} data-astro-prefetch>Prev Issue</a>
+    <a class="nav-link" href={backHref}>View All</a>
+    {
+     hasSiblings && (
+      <>
+       <span class="faded">/</span>
+       <a class="nav-link" href={`/magazine/${prevSlug}`} data-astro-prefetch>
+        Prev Issue
+       </a>
+       <span class="faded">/</span>
+       <a class="nav-link" href={`/magazine/${nextSlug}`} data-astro-prefetch>
+        Next Issue
+       </a>
+      </>
+     )
+    }
    </div>
   </header>
 
@@ -190,7 +207,7 @@ const tocHtml = rawToc ? renderToc(rawToc) : "";
  }
 
  .toc-text {
-  font-size: 0.875rem;
+  font-size: var(--font-size-s);
   line-height: 1.7;
   margin: 0;
  }

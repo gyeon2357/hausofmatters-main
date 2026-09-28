@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-04-14T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-23.pdf
 toc: |-
   **/ New Releases**
   포티몽키 [Stairs]  

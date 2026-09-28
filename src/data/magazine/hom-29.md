@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-10-13T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-29.pdf
 toc: |-
   **/ New Releases**
   리치 이기 [Mazrin]  

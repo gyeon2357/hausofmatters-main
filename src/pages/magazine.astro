@@ -35,7 +35,7 @@ const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").sli
   <section>
    <div class="section-header">
     <h3 class="section-title">HOM</h3>
-    <a class="more-link" href="/magazine/hom">/ View All</a>
+    <a class="nav-link" href="/magazine/hom">View All</a>
    </div>
    <ul class="grid">
     {
@@ -67,8 +67,8 @@ const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").sli
     <section>
      <div class="section-header">
       <h3 class="section-title">w/HOM</h3>
-      <a class="more-link" href="/magazine/w-hom">
-       / View All
+      <a class="nav-link" href="/magazine/w-hom">
+       View All
       </a>
      </div>
      <ul class="grid">
@@ -151,11 +151,11 @@ const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").sli
  }
 
  .meta-title {
-  font-size: 0.875rem;
+  font-size: var(--font-size-s);
   font-weight: 600;
  }
 
  .meta-date {
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
  }
 </style>

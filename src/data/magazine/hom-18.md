@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2024-11-11T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-18.pdf
 toc: |-
   **/ New Releases**
   후카 [RUDEMAN]  

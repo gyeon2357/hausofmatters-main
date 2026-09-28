@@ -10,11 +10,7 @@ const title = "Hausofmatters - Artists";
 ---
 
 <BaseLayout title={title}>
- <!-- 
-    The <Preloader /> component is used to preload all images on the homepage using the images.loaded.js script. 
-    If you don’t want to use the preloader (e.g., for faster page load times or if you don’t require preloading images), you can safely remove the <Preloader /> component from this layout.
-  -->
- <!-- <Preloader /> -->
+ <!-- 이미지 프리로더는 BaseLayout에서 전체 페이지 공통으로 렌더링됨 -->
  <ArtistGridHeader artistsTotal={artistsTotal} />
  <ArtistGrid artists={allArtists} />
 </BaseLayout>

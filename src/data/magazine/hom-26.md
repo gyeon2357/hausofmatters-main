@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2025-07-14T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-26.pdf
 toc: |-
   **/ New Releases**
   리치 이기, 구피 키드, 떨스티헤다고트 [NO FEAR LIFE]  

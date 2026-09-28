@@ -1,7 +1,7 @@
 ---
 category: hom
 date: 2024-03-11T00:00:00.000Z
-pdfPath: /pdf/hom-30.pdf
+pdfPath: /pdf/hom-10.pdf
 toc: |-
   **/ New Releases**
   JJK, 덥덥이 [Platinum Era]  
