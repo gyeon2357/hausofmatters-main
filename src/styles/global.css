@@ -494,7 +494,9 @@ dd {
  line-height: 1.4;
 
  gap: 1rem;
- align-items: center;
+ /* 정렬 버튼 등 옆 칸 콘텐츠가 좁은 화면에서 줄바꿈되어 행이 늘어나도,
+    h2는 항상 행 상단(=헤더에서 일정한 여백)에 고정되도록 center 대신 start 사용 */
+ align-items: start;
  padding: 1rem 0 1.25rem;
  width: 100%;
 }
@@ -661,30 +663,16 @@ mark {
  opacity: 1;
 }
 
-#theme-toggle {
- display: flex;
- align-items: center;
- gap: 0.375rem;
- background: none;
- border: none;
- padding: 0;
- cursor: pointer;
- font: inherit;
- color: inherit;
-}
-
-.theme-icon {
- display: inline-flex;
- align-items: center;
- flex-shrink: 0;
-}
-
+/* 테마 토글 해/달 아이콘 — [data-theme]는 <html>에 붙는 속성이라 컴포넌트 스코프 CSS로는
+   매칭이 안 돼서(스코프 해시가 엉뚱한 쪽에 붙음) 전역 스타일시트에 둠 */
 .theme-icon svg {
- display: block;
  width: 0.85rem;
  height: 0.85rem;
 }
 
+.icon-sun {
+ display: block;
+}
 .icon-moon {
  display: none;
 }
