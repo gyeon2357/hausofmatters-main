@@ -963,6 +963,7 @@
  background: var(--color-link);
  color: var(--color-bg);
  border: 1px solid var(--border-color);
+ border-radius: 999px;
  padding: 0.25rem 0.4rem;
 
  font-size: 87.5%;

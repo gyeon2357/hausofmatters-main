@@ -124,6 +124,10 @@ body {
  grid-template-rows: auto 1fr auto;
  min-height: 100vh;
 
+ /* 카테고리 pill-nav가 화면 하단에 고정되므로, footer 등 마지막 콘텐츠가
+    그 밑에 가려지지 않도록 같은 높이만큼 여백을 둠 (Header.astro에서 갱신) */
+ padding-bottom: var(--bottom-nav-height, 3.5rem);
+
  &.blurred {
   filter: blur(5px);
   pointer-events: none;
@@ -620,6 +624,7 @@ dd {
  font-size: var(--font-size-xs);
  padding: 0.2rem 0.4rem;
  border: 1px solid silver;
+ border-radius: 999px;
 }
 
 #copy-toast {
