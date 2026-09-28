@@ -8,10 +8,14 @@
 }
 
 @font-face {
- font-family: "iAWriterQuattroS";
+ /* 라틴 문자 전용 — Arial Narrow엔 한글 글리프가 없어 자동으로 다음(Noto Sans KR 등)으로 폴백됨.
+    Bold 전용 파일이 없어 700 요청은 브라우저가 합성(faux-bold)함 */
+ font-family: "Arial Narrow";
  src:
-  url("/fonts/iAWriterQuattroS-Regular.woff2") format("woff2"),
-  url("/fonts/iAWriterQuattroS-Regular.woff") format("woff");
+  url("/fonts/ArialNarrow-Regular.woff2") format("woff2"),
+  url("/fonts/ArialNarrow-Regular.woff") format("woff"),
+  url("/fonts/ArialNarrow-Regular.ttf") format("truetype"),
+  url("/fonts/ArialNarrow-Regular.eot") format("embedded-opentype");
  unicode-range: U+0020-007E;
  font-weight: 400;
  font-style: normal;
@@ -19,33 +23,14 @@
 }
 
 @font-face {
- font-family: "iAWriterQuattroS";
+ /* 한글/기호 등 Arial Narrow가 커버하지 못하는 글리프를 담당 (Bold 파일 없음 → 합성) */
+ font-family: "Noto Sans KR";
  src:
-  url("/fonts/iAWriterQuattroS-Bold.woff2") format("woff2"),
-  url("/fonts/iAWriterQuattroS-Bold.woff") format("woff");
- unicode-range: U+0020-007E;
- font-weight: 700;
- font-style: normal;
- font-display: swap;
-}
-
-@font-face {
- font-family: "Pretendard";
- src:
-  url("/fonts/Pretendard-Regular.subset.woff2") format("woff2"),
-  url("/fonts/Pretendard-Regular.subset.woff") format("woff");
+  url("/fonts/NotoSansKR-Regular.woff2") format("woff2"),
+  url("/fonts/NotoSansKR-Regular.woff") format("woff"),
+  url("/fonts/NotoSansKR-Regular.otf") format("opentype"),
+  url("/fonts/NotoSansKR-Regular.eot") format("embedded-opentype");
  font-weight: 400;
- font-style: normal;
- font-display: swap;
-}
-
-@font-face {
- /* SemiBold(600) 파일 하나로 600~700 요청을 전부 커버 (Bold 전용 파일은 없음) */
- font-family: "Pretendard";
- src:
-  url("/fonts/Pretendard-SemiBold.subset.woff2") format("woff2"),
-  url("/fonts/Pretendard-SemiBold.subset.woff") format("woff");
- font-weight: 600 700;
  font-style: normal;
  font-display: swap;
 }
@@ -62,12 +47,8 @@
  --color-placeholder: #f8f8f8;
  --color-point: color(display-p3 1 0.682353 0.313725 / 1);
 
- --info-font:
-  "iAWriterQuattroS", "Pretendard", BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
-  "Helvetica Neue", Helvetica, Arial, sans-serif;
- --main-font:
-  "Pretendard", BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica,
-  Arial, sans-serif;
+ --info-font: "Arial Narrow", "Noto Sans KR", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
+ --main-font: "Arial Narrow", "Noto Sans KR", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
 
  /* 글자 크기 스케일 — 전 사이트에서 이 6단계만 사용.
     위계는 크기 차이보다 margin/여백/위치로 표현할 것 */
@@ -142,6 +123,10 @@ body {
  grid-template-columns: 1rem 1fr 1rem;
  grid-template-rows: auto 1fr auto;
  min-height: 100vh;
+
+ /* 카테고리 pill-nav가 화면 하단에 고정되므로, footer 등 마지막 콘텐츠가
+    그 밑에 가려지지 않도록 같은 높이만큼 여백을 둠 (Header.astro에서 갱신) */
+ padding-bottom: var(--bottom-nav-height, 3.5rem);
 
  &.blurred {
   filter: blur(5px);
@@ -639,6 +624,7 @@ dd {
  font-size: var(--font-size-xs);
  padding: 0.2rem 0.4rem;
  border: 1px solid silver;
+ border-radius: 999px;
 }
 
 #copy-toast {

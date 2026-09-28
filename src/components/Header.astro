@@ -1,50 +1,63 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
-import Separator from "../components/Separator.astro";
 import Search from "../components/Search.astro";
-import NavMenu from "../components/NavMenu.astro";
 ---
 
+<!-- fakemagazine.kr 레퍼런스: 로고를 가운데 두고 좌우에 아이콘 액션(테마/검색)을 배치.
+     카테고리 pill 내비게이션은 화면 하단에 고정된 별도 바로 분리해, 위/아래 모두
+     불투명한 흰 박스 대신 그라데이션 스크림으로 콘텐츠 위에 떠 있는 느낌을 줌 -->
 <header class="full-bleed" transition:persist>
- <section>
+ <section class="header-bar">
+  <button id="theme-toggle" aria-label="다크모드 전환" class="icon-btn theme-toggle">
+   <span class="theme-icon" aria-hidden="true">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+     <circle cx="12" cy="12" r="4" />
+     <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
+     <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" />
+    </svg>
+   </span>
+  </button>
+
   <a href="/" class="logo-link">
    <img id="site-logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
   </a>
 
-  <ul class="nav-links">
-   <li>
-    <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
-   </li>
-   <li>
-    <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
-   </li>
-   <li>
-    <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
-   </li>
-   <li>
-    <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
-   </li>
-   <li>
-    <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
-   </li>
-  </ul>
-
-  <div class="header-actions">
-   <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
-   <button id="search-open-btn" aria-label="검색" class="search-btn">
-    <TextSlider content="Search" />
-   </button>
-   <button id="menu-open-btn" aria-label="메뉴 열기" class="menu-btn">
-    <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
-    <span class="menu-label"><TextSlider content="Menu" /></span>
-   </button>
-  </div>
+  <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
+  <button id="search-open-btn" aria-label="검색" class="icon-btn search-btn">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8" />
+    <path d="M21 21l-4.35-4.35" />
+   </svg>
+  </button>
  </section>
+</header>
 
- <button id="top-btn" class="top-btn" aria-label="Scroll to top">TOP</button>
- <Separator />
+<!-- 카테고리 내비게이션: 헤더와 분리해 화면 하단에 고정 -->
+<nav class="pill-nav full-bleed" aria-label="주요 메뉴" transition:persist>
+ <ul class="pill-links">
+  <li>
+   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
+  </li>
+  <li>
+   <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
+  </li>
+  <li>
+   <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
+  </li>
+  <li>
+   <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
+  </li>
+  <li>
+   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
+  </li>
+ </ul>
+</nav>
 
- <style>
+<button id="top-btn" class="top-btn" aria-label="Scroll to top">TOP</button>
+
+<style>
   header {
    display: flex;
    flex-direction: column;
@@ -52,16 +65,20 @@ import NavMenu from "../components/NavMenu.astro";
    position: sticky;
    top: 0;
    z-index: 100;
-   background: var(--color-bg);
+   /* 불투명한 흰 박스 대신 아래로 갈수록 옅어지는 스크림 — 콘텐츠(특히 커버 이미지) 위에
+      떠 있는 느낌을 주고, 스크롤해도 텍스트가 완전히 가려지지 않게 함 */
+   background: linear-gradient(to bottom, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 55%, transparent) 65%, transparent 100%);
 
    font-family: var(--info-font);
 
-   padding: 1rem 1rem 0;
-   gap: 0.75rem;
+   padding: 1rem 1rem 2rem;
   }
 
-  header section {
-   display: flex;
+  /* 아이콘(테마) - 로고(중앙) - 아이콘(검색) 3열 그리드로, 좌우 아이콘 폭이 달라도
+     로고가 항상 시각적 중앙에 오도록 바깥 두 칸을 동일 비율(1fr)로 둠 */
+  .header-bar {
+   display: grid;
+   grid-template-columns: 1fr auto 1fr;
    align-items: center;
    width: 100%;
   }
@@ -69,130 +86,113 @@ import NavMenu from "../components/NavMenu.astro";
   .logo-link {
    display: flex;
    align-items: center;
-   flex-shrink: 0;
+   justify-content: center;
   }
 
   .logo {
    display: block;
-   height: 0.75rem;
+   height: 1.5rem;
    width: auto;
   }
 
-  .nav-links,
-  header section a,
-  .header-actions button {
+  .icon-btn {
    display: flex;
    align-items: center;
-  }
-
-  .nav-links {
-   list-style: none;
-   gap: 1.25rem;
-   margin: 0 0 0 2rem;
-   padding: 0;
-  }
-
-  .nav-links li {
-   font-size: var(--font-size-s);
-  }
-
-  .nav-links a,
-  #search-open-btn {
-   text-decoration: underline;
-   text-underline-position: under;
-  }
-
-  .header-actions {
-   display: flex;
-   align-items: center;
-   gap: 1.25rem;
-   margin-left: auto;
-  }
-
-  /* Search / Menu 버튼 — 기존 링크와 동일한 스타일 */
-  #search-open-btn,
-  #menu-open-btn {
    background: none;
    border: none;
    color: inherit;
-   font: inherit;
-   font-family: var(--info-font);
-   font-size: var(--font-size-s);
    cursor: pointer;
    padding: 0;
-   gap: 0.4rem;
   }
 
-  /* 데스크톱에서는 로고 옆에 이미 전체 메뉴가 있으므로 Menu 버튼 자체를 숨김 —
-     모바일에서만(아래 미디어쿼리) 다시 노출 */
-  #menu-open-btn {
+  .icon-btn svg {
+   width: 1.1rem;
+   height: 1.1rem;
+  }
+
+  .theme-toggle {
+   justify-self: start;
+  }
+
+  .search-btn {
+   justify-self: end;
+  }
+
+  /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 헤더와 대칭으로 위로 갈수록
+     옅어지는 스크림 배경을 써서 흰 박스처럼 보이지 않게 함 */
+  .pill-nav {
+   position: fixed;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   z-index: 100;
+   width: 100%;
+
+   padding: 1.5rem 1rem 1rem;
+   background: linear-gradient(to top, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 55%, transparent) 65%, transparent 100%);
+
+   overflow-x: auto;
+   scrollbar-width: none;
+  }
+
+  .pill-nav::-webkit-scrollbar {
    display: none;
   }
 
-  /* 햄버거(가로 두 줄) 아이콘 — 열리면 두 줄이 회전하며 X로 합쳐짐 */
-  .menu-icon {
-   position: relative;
-   width: 1rem;
-   height: 0.5rem;
-   flex-shrink: 0;
+  .pill-links {
+   display: flex;
+   justify-content: center;
+   list-style: none;
+   gap: 0.5rem;
+   margin: 0;
+   padding: 0;
+   width: max-content;
+   min-width: 100%;
   }
 
-  .menu-icon span {
-   position: absolute;
-   left: 0;
-   width: 1rem;
-   height: 1px;
-   background: currentColor;
+  .pill-links a {
+   display: flex;
+   align-items: center;
+   white-space: nowrap;
+   font-size: var(--font-size-s);
+   padding: 0.35em 0.9em;
+   border: 1px solid var(--border-color);
+   border-radius: 999px;
    transition:
-    top 0.25s ease,
-    transform 0.25s ease;
+    background-color 0.2s ease,
+    color 0.2s ease;
   }
 
-  .menu-icon span:first-child {
-   top: 0;
+  .pill-links a:hover {
+   color: inherit;
+   background: color-mix(in srgb, currentColor 8%, transparent);
   }
 
-  .menu-icon span:last-child {
-   top: 100%;
-  }
-
-  #menu-open-btn.is-open .menu-icon span:first-child {
-   top: 50%;
-   transform: rotate(45deg);
-  }
-
-  #menu-open-btn.is-open .menu-icon span:last-child {
-   top: 50%;
-   transform: rotate(-45deg);
+  .pill-links a.current {
+   background: var(--color-text);
+   border-color: var(--color-text);
+   color: var(--color-bg);
   }
 
   @media screen and (max-width: 768px) {
    header {
-    gap: 0.625rem;
-    padding: 0.75rem 0.75rem 0;
+    padding: 0.75rem 0.75rem 1.5rem;
    }
 
-   .nav-links {
-    display: none;
+   .pill-nav {
+    padding: 1.25rem 0.75rem 0.75rem;
    }
 
-   .header-actions {
-    gap: 0.75rem;
-   }
-
-   .menu-label {
-    display: none;
-   }
-
-   #menu-open-btn {
-    display: flex;
+   .pill-links {
+    justify-content: flex-start;
    }
   }
 
   #top-btn {
    display: none;
    position: fixed;
-   bottom: 1.25rem;
+   /* pill-nav가 화면 하단에 고정되므로 그 위로 띄움 */
+   bottom: calc(var(--bottom-nav-height, 3.5rem) + 0.75rem);
    right: 1rem;
    z-index: 200;
 
@@ -200,7 +200,9 @@ import NavMenu from "../components/NavMenu.astro";
    color: var(--color-text, currentColor);
    font-family: inherit;
    font-size: var(--font-size-s);
-   padding: 0.375rem 0.5rem;
+   padding: 0.375rem 0.7rem;
+   border: 1px solid var(--border-color);
+   border-radius: 999px;
    cursor: pointer;
 
    opacity: 0;
@@ -216,18 +218,18 @@ import NavMenu from "../components/NavMenu.astro";
  <script>
   function initHeader() {
    const path = window.location.pathname;
-   // 헤더 안 nav-links뿐 아니라 header 밖에 렌더링되는 메뉴 aside(menu-links)도 함께 표시
-   document.querySelectorAll("header a[href], #menu-dialog a[href]").forEach(a => {
+   document.querySelectorAll("header a[href], .pill-nav a[href]").forEach(a => {
     const href = a.getAttribute("href");
     if (!href) return;
     a.classList.toggle("current", href !== "/" && path.startsWith(href));
    });
   }
 
-  // 헤더 높이를 CSS 변수로 노출 — 메뉴 aside가 헤더 아래부터만 덮도록(로고/검색이 계속 보이게) 사용
-  function updateHeaderHeight() {
-   const header = document.querySelector("header");
-   if (header) document.documentElement.style.setProperty("--header-height", header.offsetHeight + "px");
+  // pill-nav가 화면 하단에 고정되므로 실제 높이를 CSS 변수로 노출 —
+  // body 하단 여백(footer 가림 방지)과 top-btn 위치가 여기에 맞춰 움직임
+  function updateBottomNavHeight() {
+   const nav = document.querySelector(".pill-nav");
+   if (nav) document.documentElement.style.setProperty("--bottom-nav-height", nav.getBoundingClientRect().height + "px");
   }
 
   function initTheme() {
@@ -235,23 +237,18 @@ import NavMenu from "../components/NavMenu.astro";
    if (!btn || btn.dataset.initialized) return;
    btn.dataset.initialized = "true";
 
-   const inner = btn.querySelector(".oh__inner");
-
    const getEffective = () =>
     document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
    const apply = (theme: string) => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
    };
 
-   const initial = getEffective();
-   if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
    const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
-   if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
+   if (logoInit) logoInit.src = getEffective() === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
    btn.addEventListener("click", () => {
     apply(getEffective() === "dark" ? "light" : "dark");
@@ -363,63 +360,12 @@ import NavMenu from "../components/NavMenu.astro";
    loadSearchIndex();
   }
 
-  // ── 메뉴 aside ────────────────────────────────────────────
-  function initMenu() {
-   const openBtn = document.getElementById("menu-open-btn");
-   const dialog = document.getElementById("menu-dialog") as HTMLDialogElement | null;
-
-   if (!openBtn || !dialog) return;
-
-   const ac = new AbortController();
-   const sig = ac.signal;
-   const prev = (openBtn as any).__menuAC as AbortController | undefined;
-   prev?.abort();
-   (openBtn as any).__menuAC = ac;
-
-   // 햄버거 버튼이 열기/닫기를 겸함 — 열리면 아이콘이 X로 바뀜(트랜지션은 CSS에서 처리)
-   // showModal()은 브라우저가 dialog 밖 전체를 inert(클릭 불가) 처리해버려서
-   // 헤더의 로고/검색 버튼까지 눌리지 않게 됨 — 그래서 일반 show()로 열고
-   // 블러/배경은 dialog 자체 스타일로, 바깥 클릭/Escape 닫기는 직접 구현
-   openBtn.addEventListener(
-    "click",
-    () => {
-     if (dialog.open) {
-      dialog.close();
-     } else {
-      dialog.show();
-      openBtn.classList.add("is-open");
-     }
-    },
-    { signal: sig }
-   );
-   // Escape나 바깥 클릭 등 어떤 경로로 닫히든 dialog의 close 이벤트에서 아이콘 상태를 되돌림
-   dialog.addEventListener("close", () => openBtn.classList.remove("is-open"), { signal: sig });
-   dialog.addEventListener(
-    "click",
-    e => {
-     if (e.target === dialog) dialog.close();
-    },
-    { signal: sig }
-   );
-   document.addEventListener(
-    "keydown",
-    e => {
-     if (e.key === "Escape" && dialog.open) dialog.close();
-    },
-    { signal: sig }
-   );
-   dialog.querySelectorAll("a[href]").forEach(a => {
-    a.addEventListener("click", () => dialog.close(), { signal: sig });
-   });
-  }
-
   document.addEventListener("astro:page-load", initHeader);
   document.addEventListener("astro:page-load", initTheme);
   document.addEventListener("astro:page-load", initSearch);
-  document.addEventListener("astro:page-load", initMenu);
   document.addEventListener("astro:page-load", initTopBtn);
-  document.addEventListener("astro:page-load", updateHeaderHeight);
-  window.addEventListener("resize", updateHeaderHeight, { passive: true });
+  document.addEventListener("astro:page-load", updateBottomNavHeight);
+  window.addEventListener("resize", updateBottomNavHeight, { passive: true });
 
   // ── Top 버튼 ─────────────────────────────────────────────
   function initTopBtn() {
@@ -446,6 +392,5 @@ import NavMenu from "../components/NavMenu.astro";
  </script>
 </header>
 
-<!-- Search / 메뉴 모달: header 밖에 두어 z-index 충돌 방지 -->
+<!-- Search 모달: header 밖에 두어 z-index 충돌 방지 -->
 <Search />
-<NavMenu />
