@@ -94,7 +94,7 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
   <Preloader />
   <SmoothScroll />
   <Header />
-  <slot />
+  <main><slot /></main>
   <Footer />
   <script src="../scripts/imageFade.js"></script>
  </body>

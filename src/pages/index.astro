@@ -21,13 +21,26 @@ function formatTitle(id: string): string {
  return id.toUpperCase();
 }
 
-const albumCards = recentAlbums.map(album => {
+// 마크다운 서식을 걷어내고 리뷰 본문 일부만 미리보기로 보여줄 때 사용
+function excerpt(markdown: string, maxLength = 140): string {
+ const plain = markdown
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+  .replace(/[*_`#>]/g, "")
+  .replace(/\s+/g, " ")
+  .trim();
+ return plain.length > maxLength ? plain.slice(0, maxLength).trim() + "…" : plain;
+}
+
+const albumCards = recentAlbums.map((album, index) => {
  return {
   href: `/albums/${album.id}`,
   name: album.data.name,
   imageSrc: album.data.image?.src ?? `/images/albums/${album.id}.jpg`,
   imageAlt: album.data.image?.alt ?? album.id.replace(/-/g, " "),
   year: new Date(album.data.release).getFullYear(),
+  featured: index < 2,
+  review: index < 2 ? excerpt(album.body ?? "") : "",
  };
 });
 
@@ -115,12 +128,13 @@ const whomCards = sorted
   <div class="albums-grid">
    {
     albumCards.map(card => (
-     <a class="album-card" href={card.href} data-name={card.name} data-astro-prefetch>
+     <a class:list={["album-card", { "album-card--featured": card.featured }]} href={card.href} data-name={card.name} data-astro-prefetch>
       <div class="album-img">
        <img class="fade-in" loading="lazy" src={card.imageSrc} alt={card.imageAlt} />
       </div>
       <p class="album-name">{card.name}</p>
       <p class="album-year">{card.year}</p>
+      {card.featured && card.review && <p class="album-review">{card.review}</p>}
      </a>
     ))
    }
@@ -151,6 +165,23 @@ const whomCards = sorted
   margin-bottom: 4rem;
  }
 
+ /* 처음 2개(추천 앨범)는 2칸을 차지하는 큰 카드로 보여주고, 리뷰 일부를 함께 노출 */
+ .album-card--featured {
+  grid-column: span 2;
+ }
+
+ .album-review {
+  margin: 0.5rem 0 0;
+  font-size: var(--font-size-s);
+  line-height: 1.5;
+  color: var(--color-text-alt);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+ }
+
  .album-year {
   margin: 0;
   font-size: var(--font-size-s);
@@ -164,6 +195,8 @@ const whomCards = sorted
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
  }
 
  .column-label {

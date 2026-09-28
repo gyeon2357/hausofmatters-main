@@ -134,9 +134,14 @@ body {
  /* 좌우 여백을 padding 대신 grid 트랙으로 관리.
     기본 자식은 가운데(2번) 트랙에 들어가 자동으로 여백이 생기고,
     화면 끝까지 채워야 하는 요소만 .full-bleed로 1~3번 트랙을 전부 차지하게 함.
-    (음수 마진/vw 없이 반응형 여백을 한 곳에서만 관리) */
+    (음수 마진/vw 없이 반응형 여백을 한 곳에서만 관리)
+
+    행(row)은 header / main / footer 3단만 두고, main을 1fr로 늘려서
+    콘텐츠가 짧아도 footer가 항상 뷰포트 하단에 붙도록 함 */
  display: grid;
  grid-template-columns: 1rem 1fr 1rem;
+ grid-template-rows: auto 1fr auto;
+ min-height: 100vh;
 
  &.blurred {
   filter: blur(5px);
@@ -149,19 +154,33 @@ body > * {
  min-width: 0;
 }
 
+/* main은 header/footer 사이의 1fr 행 전체(3트랙)를 차지한 뒤,
+   내부에서 다시 같은 3트랙 여백 구조를 반복해 .full-bleed가 그 안에서도 동작하게 함 */
+main {
+ display: grid;
+ grid-template-columns: 1rem 1fr 1rem;
+ grid-column: 1 / -1;
+}
+
+main > * {
+ grid-column: 2;
+ min-width: 0;
+}
+
 .full-bleed {
  grid-column: 1 / -1;
 }
 
 @media (max-width: 768px) {
- body {
+ body,
+ main {
   grid-template-columns: 0.75rem 1fr 0.75rem;
  }
 }
 
 h2 {
  font-size: var(--font-size-xl);
- font-weight: 700;
+ font-weight: 400;
 
  margin: 0;
 }
@@ -267,8 +286,7 @@ button {
 }
 
 hr {
- border: 1px solid var(--border-color);
- border-bottom: 0;
+ border: none;
  width: 100%;
  margin: 0;
 }
@@ -655,42 +673,36 @@ mark {
  color: inherit;
 }
 
-.toggle-track {
+.theme-icon {
  display: inline-flex;
  align-items: center;
- width: 1.2rem;
- height: 0.75rem;
- border-radius: 999px;
- background: var(--color-faded);
- padding: 0.1rem;
- transition: background 0.25s ease;
  flex-shrink: 0;
 }
 
-.toggle-thumb {
- width: 0.5rem;
- height: 0.5rem;
- border-radius: 50%;
- background: var(--color-bg);
- transition: transform 0.25s ease;
+.theme-icon svg {
+ display: block;
+ width: 0.85rem;
+ height: 0.85rem;
 }
 
-[data-theme="dark"] .toggle-track {
- background: var(--color-text);
+.icon-moon {
+ display: none;
+}
+
+[data-theme="dark"] .icon-sun {
+ display: none;
+}
+[data-theme="dark"] .icon-moon {
+ display: block;
 }
 
 @media (prefers-color-scheme: dark) {
- :not([data-theme="light"]) .toggle-track {
-  background: var(--color-text);
+ :root:not([data-theme="light"]) .icon-sun {
+  display: none;
  }
-}
-
-[data-theme="dark"] .toggle-thumb {
- transform: translateX(0.5rem);
-}
-
-[data-theme="light"] .toggle-thumb {
- transform: translateX(0);
+ :root:not([data-theme="light"]) .icon-moon {
+  display: block;
+ }
 }
 
 /* search */

@@ -24,8 +24,14 @@ import Search from "../components/Search.astro";
 
   <li>
    <button id="theme-toggle" aria-label="Toggle dark mode">
-    <span class="toggle-track">
-     <span class="toggle-thumb"></span>
+    <span class="theme-icon" aria-hidden="true">
+     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
+     </svg>
+     <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" />
+     </svg>
     </span><TextSlider content="Dark" />
    </button>
   </li>
@@ -198,7 +204,6 @@ import Search from "../components/Search.astro";
    btn.dataset.initialized = "true";
 
    const inner = btn.querySelector(".oh__inner");
-   const thumb = btn.querySelector(".toggle-thumb");
 
    const getEffective = () =>
     document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -207,14 +212,12 @@ import Search from "../components/Search.astro";
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
     if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
-    if (thumb instanceof HTMLElement) thumb.style.transform = theme === "dark" ? "translateX(0.5rem)" : "translateX(0)";
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
    };
 
    const initial = getEffective();
    if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
-   if (thumb instanceof HTMLElement) thumb.style.transform = initial === "dark" ? "translateX(0.5rem)" : "translateX(0)";
    const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
    if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
