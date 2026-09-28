@@ -1,11 +1,12 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
-import Cross from "../assets/images/cross.svg";
 ---
 
 <dialog id="menu-dialog">
  <button id="close-menu" type="button" aria-label="Close menu">
-  <Cross width={16} height={16} />
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+   <path d="M2 2l12 12M14 2 2 14" />
+  </svg>
  </button>
 
  <ul class="menu-links">
@@ -49,13 +50,16 @@ import Cross from "../assets/images/cross.svg";
   margin: 0;
   padding: 4rem 2rem 2rem;
   position: fixed;
-  inset: 0 0 0 auto;
+  inset: 0;
   height: 100%;
   max-height: none;
-  width: min(320px, 80vw);
+  width: 100%;
   max-width: none;
 
-  background: var(--color-bg);
+  /* 옆으로 좁게 뜨던 패널 대신 전체 화면을 반투명 블러로 덮음 */
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: var(--color-text);
   font-family: var(--info-font);
  }

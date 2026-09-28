@@ -35,7 +35,8 @@ import NavMenu from "../components/NavMenu.astro";
     <TextSlider content="Search" />
    </button>
    <button id="menu-open-btn" aria-label="메뉴 열기" class="menu-btn">
-    <TextSlider content="Menu" />
+    <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+    <span class="menu-label"><TextSlider content="Menu" /></span>
    </button>
   </div>
  </section>
@@ -112,6 +113,8 @@ import NavMenu from "../components/NavMenu.astro";
   }
 
   .header-actions {
+   display: flex;
+   align-items: center;
    gap: 1.25rem;
    margin-left: auto;
   }
@@ -127,6 +130,21 @@ import NavMenu from "../components/NavMenu.astro";
    font-size: var(--font-size-s);
    cursor: pointer;
    padding: 0;
+   gap: 0.4rem;
+  }
+
+  /* 모바일 전용 햄버거(가로 두 줄) 아이콘 — 데스크톱에서는 "Menu" 텍스트만 사용 */
+  .menu-icon {
+   display: none;
+   flex-direction: column;
+   gap: 0.25rem;
+  }
+
+  .menu-icon span {
+   display: block;
+   width: 1rem;
+   height: 1px;
+   background: currentColor;
   }
 
   @media screen and (max-width: 768px) {
@@ -141,6 +159,14 @@ import NavMenu from "../components/NavMenu.astro";
 
    .header-actions {
     gap: 0.75rem;
+   }
+
+   .menu-label {
+    display: none;
+   }
+
+   .menu-icon {
+    display: flex;
    }
   }
 
@@ -233,6 +259,7 @@ import NavMenu from "../components/NavMenu.astro";
    const closeBtn = document.getElementById("close-dialog");
    const form = document.getElementById("search-form");
    const hint = document.getElementById("search-hint");
+   const suggestions = document.getElementById("search-suggestions");
 
    if (!openBtn || !dialog || !input) return;
 
@@ -247,6 +274,7 @@ import NavMenu from "../components/NavMenu.astro";
     dialog!.showModal();
     input!.value = "";
     hint!.textContent = "아티스트 · 앨범 · 인터뷰 · 공연정보";
+    suggestions?.classList.remove("suggestions-hidden");
     setTimeout(() => input!.focus(), 50);
    }
 
@@ -269,6 +297,7 @@ import NavMenu from "../components/NavMenu.astro";
    input.addEventListener(
     "input",
     () => {
+     suggestions?.classList.toggle("suggestions-hidden", input!.value.trim() !== "");
      clearTimeout(debounce);
      debounce = setTimeout(async () => {
       const q = input!.value.trim().toLowerCase();
