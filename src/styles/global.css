@@ -598,13 +598,19 @@ dd {
  font-size: var(--font-size-base);
  font-weight: 400;
 
- text-decoration: none;
+ text-decoration: underline;
+ text-underline-position: under;
  color: inherit;
  transition: opacity 0.2s ease;
 }
 
 .nav-link:hover {
  opacity: 1;
+}
+
+/* 헤더/메뉴 내비게이션에서 현재 페이지에 해당하는 링크 표시 */
+.current {
+ font-weight: 700;
 }
 
 /* 다른 콘텐츠로 연결되는 관련 링크 (앨범→매거진, 피처→앨범/매거진 등) */

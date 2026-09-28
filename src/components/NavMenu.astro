@@ -1,13 +1,8 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
-import Cross from "../assets/images/cross.svg";
 ---
 
 <dialog id="menu-dialog">
- <button id="close-menu" type="button" aria-label="Close menu">
-  <Cross width={16} height={16} />
- </button>
-
  <ul class="menu-links">
   <li>
    <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
@@ -47,15 +42,25 @@ import Cross from "../assets/images/cross.svg";
  dialog#menu-dialog {
   border: 0;
   margin: 0;
-  padding: 4rem 2rem 2rem;
+  padding: 2.5rem 2rem 2rem;
   position: fixed;
-  inset: 0 0 0 auto;
-  height: 100%;
+  /* 헤더(로고/검색/메뉴 버튼)는 계속 보이고 클릭도 되도록, 그 아래부터만 덮음.
+     showModal() 대신 show()로 열기 때문에(아래 Header.astro 참고) ::backdrop이
+     생기지 않고, 문서의 나머지 부분도 inert 처리되지 않아 헤더가 계속 살아있음 */
+  top: var(--header-height, 4.5rem);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
   max-height: none;
-  width: min(320px, 80vw);
+  width: 100%;
   max-width: none;
+  z-index: 90;
 
-  background: var(--color-bg);
+  /* 옆으로 좁게 뜨던 패널 대신 전체 화면을 반투명 블러로 덮음 */
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: var(--color-text);
   font-family: var(--info-font);
  }
@@ -66,29 +71,6 @@ import Cross from "../assets/images/cross.svg";
   display: flex;
   flex-direction: column;
   justify-content: space-between;
- }
-
- dialog#menu-dialog::backdrop {
-  background: color-mix(in srgb, var(--color-text) 10%, transparent);
-  backdrop-filter: blur(4px);
- }
-
- #close-menu {
-  display: flex;
-  align-items: center;
-
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  opacity: 0.8;
-  padding: 0.25rem;
- }
- #close-menu:hover {
-  opacity: 1;
  }
 
  .menu-links {
@@ -102,6 +84,8 @@ import Cross from "../assets/images/cross.svg";
 
  .menu-links a {
   font-size: var(--font-size-l);
+  text-decoration: underline;
+  text-underline-position: under;
  }
 
  .menu-footer {
@@ -126,6 +110,7 @@ import Cross from "../assets/images/cross.svg";
  .menu-instagram {
   font-size: var(--font-size-s);
   color: inherit;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-position: under;
  }
 </style>
