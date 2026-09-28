@@ -66,10 +66,6 @@ import NavMenu from "../components/NavMenu.astro";
    width: 100%;
   }
 
-  header a.current {
-   opacity: 0.4;
-  }
-
   .logo-link {
    display: flex;
    align-items: center;
@@ -94,22 +90,16 @@ import NavMenu from "../components/NavMenu.astro";
    gap: 1.25rem;
    margin: 0 0 0 2rem;
    padding: 0;
-   overflow: hidden;
-   max-height: 2rem;
-   transition:
-    max-height 0.25s ease,
-    opacity 0.25s ease;
-   opacity: 1;
-  }
-
-  .nav-links.nav-hidden {
-   max-height: 0;
-   opacity: 0;
-   pointer-events: none;
   }
 
   .nav-links li {
    font-size: var(--font-size-s);
+  }
+
+  .nav-links a,
+  #search-open-btn {
+   text-decoration: underline;
+   text-underline-position: under;
   }
 
   .header-actions {
@@ -133,18 +123,47 @@ import NavMenu from "../components/NavMenu.astro";
    gap: 0.4rem;
   }
 
-  /* 모바일 전용 햄버거(가로 두 줄) 아이콘 — 데스크톱에서는 "Menu" 텍스트만 사용 */
-  .menu-icon {
+  /* 데스크톱에서는 로고 옆에 이미 전체 메뉴가 있으므로 Menu 버튼 자체를 숨김 —
+     모바일에서만(아래 미디어쿼리) 다시 노출 */
+  #menu-open-btn {
    display: none;
-   flex-direction: column;
-   gap: 0.25rem;
+  }
+
+  /* 햄버거(가로 두 줄) 아이콘 — 열리면 두 줄이 회전하며 X로 합쳐짐 */
+  .menu-icon {
+   position: relative;
+   width: 1rem;
+   height: 0.5rem;
+   flex-shrink: 0;
   }
 
   .menu-icon span {
-   display: block;
+   position: absolute;
+   left: 0;
    width: 1rem;
    height: 1px;
    background: currentColor;
+   transition:
+    top 0.25s ease,
+    transform 0.25s ease;
+  }
+
+  .menu-icon span:first-child {
+   top: 0;
+  }
+
+  .menu-icon span:last-child {
+   top: 100%;
+  }
+
+  #menu-open-btn.is-open .menu-icon span:first-child {
+   top: 50%;
+   transform: rotate(45deg);
+  }
+
+  #menu-open-btn.is-open .menu-icon span:last-child {
+   top: 50%;
+   transform: rotate(-45deg);
   }
 
   @media screen and (max-width: 768px) {
@@ -165,7 +184,7 @@ import NavMenu from "../components/NavMenu.astro";
     display: none;
    }
 
-   .menu-icon {
+   #menu-open-btn {
     display: flex;
    }
   }
@@ -197,11 +216,18 @@ import NavMenu from "../components/NavMenu.astro";
  <script>
   function initHeader() {
    const path = window.location.pathname;
-   document.querySelectorAll("header a[href]").forEach(a => {
+   // 헤더 안 nav-links뿐 아니라 header 밖에 렌더링되는 메뉴 aside(menu-links)도 함께 표시
+   document.querySelectorAll("header a[href], #menu-dialog a[href]").forEach(a => {
     const href = a.getAttribute("href");
     if (!href) return;
     a.classList.toggle("current", href !== "/" && path.startsWith(href));
    });
+  }
+
+  // 헤더 높이를 CSS 변수로 노출 — 메뉴 aside가 헤더 아래부터만 덮도록(로고/검색이 계속 보이게) 사용
+  function updateHeaderHeight() {
+   const header = document.querySelector("header");
+   if (header) document.documentElement.style.setProperty("--header-height", header.offsetHeight + "px");
   }
 
   function initTheme() {
@@ -282,6 +308,8 @@ import NavMenu from "../components/NavMenu.astro";
     dialog!.close();
    }
 
+   // showModal() 특성상 열려있는 동안 openBtn 자체가 inert(클릭 불가)라
+   // 트리거 버튼을 닫기로 재사용할 수 없음 — 별도 닫기 버튼(closeBtn) 필요
    openBtn.addEventListener("click", openDialog, { signal: sig });
    closeBtn?.addEventListener("click", closeDialog, { signal: sig });
 
@@ -339,7 +367,6 @@ import NavMenu from "../components/NavMenu.astro";
   function initMenu() {
    const openBtn = document.getElementById("menu-open-btn");
    const dialog = document.getElementById("menu-dialog") as HTMLDialogElement | null;
-   const closeBtn = document.getElementById("close-menu");
 
    if (!openBtn || !dialog) return;
 
@@ -349,12 +376,35 @@ import NavMenu from "../components/NavMenu.astro";
    prev?.abort();
    (openBtn as any).__menuAC = ac;
 
-   openBtn.addEventListener("click", () => dialog.showModal(), { signal: sig });
-   closeBtn?.addEventListener("click", () => dialog.close(), { signal: sig });
+   // 햄버거 버튼이 열기/닫기를 겸함 — 열리면 아이콘이 X로 바뀜(트랜지션은 CSS에서 처리)
+   // showModal()은 브라우저가 dialog 밖 전체를 inert(클릭 불가) 처리해버려서
+   // 헤더의 로고/검색 버튼까지 눌리지 않게 됨 — 그래서 일반 show()로 열고
+   // 블러/배경은 dialog 자체 스타일로, 바깥 클릭/Escape 닫기는 직접 구현
+   openBtn.addEventListener(
+    "click",
+    () => {
+     if (dialog.open) {
+      dialog.close();
+     } else {
+      dialog.show();
+      openBtn.classList.add("is-open");
+     }
+    },
+    { signal: sig }
+   );
+   // Escape나 바깥 클릭 등 어떤 경로로 닫히든 dialog의 close 이벤트에서 아이콘 상태를 되돌림
+   dialog.addEventListener("close", () => openBtn.classList.remove("is-open"), { signal: sig });
    dialog.addEventListener(
     "click",
     e => {
      if (e.target === dialog) dialog.close();
+    },
+    { signal: sig }
+   );
+   document.addEventListener(
+    "keydown",
+    e => {
+     if (e.key === "Escape" && dialog.open) dialog.close();
     },
     { signal: sig }
    );
@@ -368,77 +418,8 @@ import NavMenu from "../components/NavMenu.astro";
   document.addEventListener("astro:page-load", initSearch);
   document.addEventListener("astro:page-load", initMenu);
   document.addEventListener("astro:page-load", initTopBtn);
-
-  // ── 스크롤 방향 감지 ─────────────────────────────────────
-  (function initScrollNav() {
-   const COOLDOWN = 200;
-   let lastToggle = 0;
-   let isHidden = false;
-
-   function isNearBottom(margin = 200) {
-    return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - margin;
-   }
-
-   function setNav(hide: boolean) {
-    const now = Date.now();
-    if (hide === isHidden || now - lastToggle < COOLDOWN) return;
-    const nav = document.querySelector(".nav-links");
-    if (!nav) return;
-    isHidden = hide;
-    lastToggle = now;
-    nav.classList.toggle("nav-hidden", hide);
-   }
-
-   function attachLenis(lenis: any) {
-    lenis.on("scroll", ({ scroll, velocity }: { scroll: number; velocity: number }) => {
-     if (scroll < 80 || isNearBottom()) {
-      setNav(false);
-      return;
-     }
-     if (velocity > 0.3) setNav(true);
-     else if (velocity < -0.3) setNav(false);
-    });
-   }
-
-   if ((window as any).__lenis) {
-    attachLenis((window as any).__lenis);
-    return;
-   }
-
-   setTimeout(() => {
-    if ((window as any).__lenis) {
-     attachLenis((window as any).__lenis);
-     return;
-    }
-
-    let lastY = window.scrollY;
-    let accumulated = 0;
-    const THRESHOLD = 12;
-
-    window.addEventListener(
-     "scroll",
-     () => {
-      const currentY = window.scrollY;
-      accumulated += currentY - lastY;
-      lastY = currentY;
-
-      if (currentY < 80 || isNearBottom()) {
-       setNav(false);
-       accumulated = 0;
-       return;
-      }
-      if (accumulated > THRESHOLD) {
-       setNav(true);
-       accumulated = 0;
-      } else if (accumulated < -THRESHOLD) {
-       setNav(false);
-       accumulated = 0;
-      }
-     },
-     { passive: true }
-    );
-   }, 200);
-  })();
+  document.addEventListener("astro:page-load", updateHeaderHeight);
+  window.addEventListener("resize", updateHeaderHeight, { passive: true });
 
   // ── Top 버튼 ─────────────────────────────────────────────
   function initTopBtn() {
