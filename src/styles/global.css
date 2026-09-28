@@ -22,6 +22,19 @@
  font-display: swap;
 }
 
+@font-face {
+ /* 한글/기호 등 Arial Narrow가 커버하지 못하는 글리프를 담당 (Bold 파일 없음 → 합성) */
+ font-family: "Noto Sans KR";
+ src:
+  url("/fonts/NotoSansKR-Regular.woff2") format("woff2"),
+  url("/fonts/NotoSansKR-Regular.woff") format("woff"),
+  url("/fonts/NotoSansKR-Regular.otf") format("opentype"),
+  url("/fonts/NotoSansKR-Regular.eot") format("embedded-opentype");
+ font-weight: 400;
+ font-style: normal;
+ font-display: swap;
+}
+
 :root {
  font-size: 16px;
  --color-text: #000;
@@ -34,7 +47,6 @@
  --color-placeholder: #f8f8f8;
  --color-point: color(display-p3 1 0.682353 0.313725 / 1);
 
- /* Noto Sans KR은 @font-face 파일 도착 전까지 시스템 폰트로만 매칭됨(있으면 사용, 없으면 다음으로 폴백) */
  --info-font: "Arial Narrow", "Noto Sans KR", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
  --main-font: "Arial Narrow", "Noto Sans KR", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
 
