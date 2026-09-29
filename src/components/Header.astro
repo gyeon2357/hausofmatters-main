@@ -1,13 +1,15 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
 import Search from "../components/Search.astro";
+import MobileMenu from "../components/MobileMenu.astro";
 ---
 
 <!-- 데스크톱: 로고를 가운데 두고 좌우에 텍스트 버튼(테마/검색) 배치.
-     모바일: 화면이 좁아 텍스트 버튼은 숨기고 로고만 남김 — 카테고리는 하단 pill-nav가 전담 -->
+     모바일: 테마 버튼은 숨기고, 검색 버튼 우측에 Menu 버튼을 추가 —
+     하위 메뉴/검색/테마/인스타그램/메일은 MobileMenu 오버레이에서 한 번에 노출 -->
 <header class="full-bleed" transition:persist>
  <section class="header-bar">
-  <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle">
+  <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle theme-toggle-btn">
    <TextSlider content="Dark" />
   </button>
 
@@ -15,10 +17,16 @@ import Search from "../components/Search.astro";
    <img id="site-logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
   </a>
 
-  <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
-  <button id="search-open-btn" aria-label="검색" class="text-btn search-btn">
-   <TextSlider content="Search" />
-  </button>
+  <div class="header-actions">
+   <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
+   <button id="search-open-btn" aria-label="검색" class="text-btn search-btn">
+    <TextSlider content="Search" />
+   </button>
+   <!-- 모바일 전용: 하위 메뉴/검색/테마/인스타그램/메일을 모두 담은 오버레이를 여는 버튼 -->
+   <button id="mobile-menu-open" aria-label="전체 메뉴 열기" class="text-btn menu-btn">
+    <TextSlider content="Menu" />
+   </button>
+  </div>
  </section>
 </header>
 
@@ -43,8 +51,6 @@ import Search from "../components/Search.astro";
  </ul>
 </nav>
 
-<button id="top-btn" class="top-btn" aria-label="Scroll to top">TOP</button>
-
 <style>
   header {
    display: flex;
@@ -62,16 +68,20 @@ import Search from "../components/Search.astro";
    padding: 1rem 1rem 2rem;
   }
 
-  /* 아이콘(테마) - 로고(중앙) - 아이콘(검색) 3열 그리드로, 좌우 아이콘 폭이 달라도
-     로고가 항상 시각적 중앙에 오도록 바깥 두 칸을 동일 비율(1fr)로 둠 */
+  /* 테마(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌우 칸의 콘텐츠 폭/노출 여부가
+     달라도(예: 모바일에서 테마 버튼만 숨김) 로고가 항상 정중앙에 오도록,
+     1fr의 암묵적 최소폭(auto)을 minmax(0, 1fr)로 제거해 두 칸을 강제로 동일하게 둠 */
   .header-bar {
    display: grid;
-   grid-template-columns: 1fr auto 1fr;
+   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
    align-items: center;
    width: 100%;
   }
 
   .logo-link {
+   /* theme-toggle이 모바일에서 display:none이 되면 grid auto-placement가
+      나머지 아이템을 앞 칸으로 당겨버려서, 항상 2번째 칸으로 명시 고정 */
+   grid-column: 2;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -98,11 +108,27 @@ import Search from "../components/Search.astro";
   }
 
   .theme-toggle {
+   grid-column: 1;
    justify-self: start;
   }
 
-  .search-btn {
+  .header-actions {
+   grid-column: 3;
+   display: flex;
+   align-items: center;
+   gap: 1rem;
    justify-self: end;
+  }
+
+  /* 데스크톱에서는 Search 버튼만으로 충분 — Menu는 모바일에서만 노출 */
+  .menu-btn {
+   display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+   .menu-btn {
+    display: flex;
+   }
   }
 
   /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 헤더와 대칭으로 위로 갈수록
@@ -170,9 +196,8 @@ import Search from "../components/Search.astro";
     height: 1.1rem;
    }
 
-   /* 화면이 좁아지면 텍스트 버튼(테마/검색)은 숨기고 로고만 남김 */
-   .theme-toggle,
-   .search-btn {
+   /* 화면이 좁아지면 테마 텍스트 버튼은 숨김 — 테마 전환은 Menu 오버레이 안에서 가능 */
+   .theme-toggle {
     display: none;
    }
 
@@ -190,75 +215,58 @@ import Search from "../components/Search.astro";
    }
   }
 
-  #top-btn {
-   display: none;
-   position: fixed;
-   /* pill-nav가 화면 하단에 고정되므로 그 위로 띄움 */
-   bottom: calc(var(--bottom-nav-height, 3.5rem) + 0.75rem);
-   right: 1rem;
-   z-index: 200;
-
-   background: var(--color-bg);
-   color: var(--color-text, currentColor);
-   font-family: inherit;
-   font-size: var(--font-size-s);
-   padding: var(--btn-padding);
-   border: 1px solid var(--border-color);
-   border-radius: 999px;
-   cursor: pointer;
-
-   opacity: 0;
-   transition: opacity 0.25s ease;
-  }
-
-  #top-btn.visible {
-   display: block;
-   opacity: 1;
-  }
  </style>
 
  <script>
   function initHeader() {
    const path = window.location.pathname;
-   document.querySelectorAll("header a[href], .pill-nav a[href]").forEach(a => {
+   document.querySelectorAll("header a[href], .pill-nav a[href], .mobile-menu-links a[href]").forEach(a => {
     const href = a.getAttribute("href");
     if (!href) return;
     a.classList.toggle("current", href !== "/" && path.startsWith(href));
    });
   }
 
-  // pill-nav가 화면 하단에 고정되므로 실제 높이를 CSS 변수로 노출 —
-  // body 하단 여백(footer 가림 방지)과 top-btn 위치가 여기에 맞춰 움직임
+  // pill-nav가 화면 하단에 고정되므로 실제 높이를 CSS 변수로 노출 — body 하단 여백(footer 가림 방지)에 사용
   function updateBottomNavHeight() {
    const nav = document.querySelector(".pill-nav");
    if (nav) document.documentElement.style.setProperty("--bottom-nav-height", nav.getBoundingClientRect().height + "px");
   }
 
+  // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
   function initTheme() {
-   const btn = document.getElementById("theme-toggle");
-   if (!btn || btn.dataset.initialized) return;
-   btn.dataset.initialized = "true";
-
-   const inner = btn.querySelector(".oh__inner");
+   const btns = Array.from(document.querySelectorAll<HTMLElement>(".theme-toggle-btn"));
+   if (btns.length === 0) return;
 
    const getEffective = () =>
     document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
+   const syncLabels = (theme: string) => {
+    btns.forEach(btn => {
+     const inner = btn.querySelector(".oh__inner");
+     if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
+    });
+   };
+
    const apply = (theme: string) => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
+    syncLabels(theme);
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
    };
 
    const initial = getEffective();
-   if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
+   syncLabels(initial);
    const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
    if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
-   btn.addEventListener("click", () => {
-    apply(getEffective() === "dark" ? "light" : "dark");
+   btns.forEach(btn => {
+    if (btn.dataset.initialized) return;
+    btn.dataset.initialized = "true";
+    btn.addEventListener("click", () => {
+     apply(getEffective() === "dark" ? "light" : "dark");
+    });
    });
   }
 
@@ -370,34 +378,11 @@ import Search from "../components/Search.astro";
   document.addEventListener("astro:page-load", initHeader);
   document.addEventListener("astro:page-load", initTheme);
   document.addEventListener("astro:page-load", initSearch);
-  document.addEventListener("astro:page-load", initTopBtn);
   document.addEventListener("astro:page-load", updateBottomNavHeight);
   window.addEventListener("resize", updateBottomNavHeight, { passive: true });
-
-  // ── Top 버튼 ─────────────────────────────────────────────
-  function initTopBtn() {
-   const btn = document.getElementById("top-btn");
-   if (!btn) return;
-
-   const THRESHOLD = window.innerHeight;
-
-   function onScroll() {
-    btn!.classList.toggle("visible", window.scrollY > THRESHOLD);
-   }
-
-   btn.addEventListener("click", () => {
-    if ((window as any).__lenis) {
-     (window as any).__lenis.scrollTo(0, { duration: 1.2 });
-    } else {
-     window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-   });
-
-   window.addEventListener("scroll", onScroll, { passive: true });
-   onScroll();
-  }
  </script>
 </header>
 
-<!-- Search 모달: header 밖에 두어 z-index 충돌 방지 -->
+<!-- Search 모달 / 모바일 메뉴: header 밖에 두어 z-index 충돌 방지 -->
 <Search />
+<MobileMenu />

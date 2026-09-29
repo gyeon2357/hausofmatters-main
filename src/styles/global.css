@@ -332,6 +332,13 @@ figure.video-embed iframe {
  margin-bottom: 1rem;
 }
 
+@media (max-width: 768px) {
+ /* 좁은 화면에서는 gap 대신 양 끝으로 펼쳐서 제목/View All을 좌우로 분리 */
+ .section-header {
+  justify-content: space-between;
+ }
+}
+
 .content-wrap {
  display: grid;
  gap: 2rem;

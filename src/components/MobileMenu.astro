@@ -1,0 +1,163 @@
+---
+import TextSlider from "../components/TextSlider.astro";
+---
+
+<!-- 모바일 전용 전체 메뉴 오버레이 — 하위 메뉴 + 검색/테마/인스타그램/메일을 한 화면에서 -->
+<dialog id="mobile-menu-dialog">
+ <button id="mobile-menu-close" type="button" aria-label="메뉴 닫기" class="mobile-menu-close">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+   <path d="M2 2l12 12M14 2 2 14" />
+  </svg>
+ </button>
+
+ <ul class="mobile-menu-links">
+  <li>
+   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
+  </li>
+  <li>
+   <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
+  </li>
+  <li>
+   <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
+  </li>
+  <li>
+   <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
+  </li>
+  <li>
+   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
+  </li>
+ </ul>
+
+ <div class="mobile-menu-utility">
+  <button id="mobile-menu-search" type="button" class="text-btn">
+   <TextSlider content="Search" />
+  </button>
+  <button id="mobile-menu-theme" type="button" class="text-btn theme-toggle-btn">
+   <TextSlider content="Dark" />
+  </button>
+  <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer" class="text-btn">Instagram</a>
+  <a href="mailto:khlhomofficial@gmail.com" class="text-btn">khlhomofficial@gmail.com</a>
+ </div>
+</dialog>
+
+<style>
+ dialog#mobile-menu-dialog {
+  border: 0;
+  margin: 0;
+  padding: 4.5rem 1.5rem 2.5rem;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--info-font);
+ }
+
+ /* dialog는 [open]이 아니면 UA 기본값이 display:none — [open]에만 flex를 걸어야
+    닫혀 있을 때 항상 보이는 사고를 막을 수 있음 */
+ dialog#mobile-menu-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+ }
+
+ .mobile-menu-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.5rem;
+ }
+
+ .mobile-menu-close svg {
+  width: 1rem;
+  height: 1rem;
+ }
+
+ .mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+ }
+
+ .mobile-menu-links a {
+  font-size: var(--font-size-l);
+  text-decoration: underline;
+  text-underline-position: under;
+ }
+
+ .mobile-menu-utility {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+ }
+
+ @media screen and (min-width: 769px) {
+  #mobile-menu-dialog {
+   display: none;
+  }
+ }
+</style>
+
+<script>
+ function initMobileMenu() {
+  const openBtn = document.getElementById("mobile-menu-open");
+  const dialog = document.getElementById("mobile-menu-dialog") as HTMLDialogElement | null;
+  const closeBtn = document.getElementById("mobile-menu-close");
+  const searchBtn = document.getElementById("mobile-menu-search");
+
+  if (!openBtn || !dialog) return;
+
+  // AbortController로 이전 페이지의 리스너를 정리하고 새로 바인딩
+  const ac = new AbortController();
+  const sig = ac.signal;
+  const prev = (openBtn as any).__mobileMenuAC as AbortController | undefined;
+  prev?.abort();
+  (openBtn as any).__mobileMenuAC = ac;
+
+  function open() {
+   dialog!.showModal();
+  }
+  function close() {
+   dialog!.close();
+  }
+
+  openBtn.addEventListener("click", open, { signal: sig });
+  closeBtn?.addEventListener("click", close, { signal: sig });
+  dialog.addEventListener(
+   "click",
+   e => {
+    if (e.target === dialog) close();
+   },
+   { signal: sig }
+  );
+  dialog.querySelectorAll("a[href]").forEach(a => {
+   a.addEventListener("click", close, { signal: sig });
+  });
+
+  // 검색은 별도 구현 없이 기존 Search 모달을 재사용 — 메뉴를 닫고 그 버튼을 대신 눌러줌
+  searchBtn?.addEventListener(
+   "click",
+   () => {
+    close();
+    setTimeout(() => document.getElementById("search-open-btn")?.click(), 50);
+   },
+   { signal: sig }
+  );
+ }
+
+ document.addEventListener("astro:page-load", initMobileMenu);
+</script>
