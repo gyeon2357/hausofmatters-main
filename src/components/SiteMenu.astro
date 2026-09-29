@@ -1,0 +1,167 @@
+---
+import TextSlider from "../components/TextSlider.astro";
+---
+
+<!-- 데스크톱/모바일 공용 메뉴 패널 — 전체화면이 아니라 헤더 바로 아래, 우측(모바일은 좌우 꽉 채움)에
+     떠 있는 드롭다운. show()로 열어 헤더(로고/검색/Menu 버튼)가 항상 그 위에 보이게 함 -->
+<dialog id="site-menu-dialog">
+ <ul class="site-menu-links">
+  <li>
+   <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
+  </li>
+  <li>
+   <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
+  </li>
+  <li>
+   <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
+  </li>
+  <li>
+   <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
+  </li>
+  <li>
+   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
+  </li>
+ </ul>
+
+ <div class="site-menu-utility">
+  <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer" class="text-btn">Instagram</a>
+  <a href="mailto:khlhomofficial@gmail.com" class="text-btn">khlhomofficial@gmail.com</a>
+ </div>
+</dialog>
+
+<style>
+ dialog#site-menu-dialog {
+  border: 1px solid var(--border-color);
+  margin: 0;
+  position: fixed;
+  top: var(--header-height, 4.5rem);
+  right: 1rem;
+  left: auto;
+  width: min(320px, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100vh - var(--header-height, 4.5rem) - var(--bottom-nav-height, 3.5rem) - 1rem);
+
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--info-font);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  z-index: 90;
+ }
+
+ /* dialog는 [open]이 아니면 UA 기본값이 display:none — [open]에만 flex를 걸어야
+    닫혀 있을 때 항상 보이는 사고를 막을 수 있음 */
+ dialog#site-menu-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+ }
+
+ .site-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+ }
+
+ .site-menu-links a {
+  font-size: var(--font-size-base);
+  text-decoration: underline;
+  text-underline-position: under;
+ }
+
+ /* 현재 페이지는 볼드가 아니라 밑줄을 굵게 해서 구분 */
+ .site-menu-links a.current {
+  font-weight: 400;
+  text-decoration-thickness: 2px;
+ }
+
+ .site-menu-utility {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+ }
+
+ @media screen and (max-width: 768px) {
+  dialog#site-menu-dialog {
+   left: 0.75rem;
+   right: 0.75rem;
+   width: auto;
+   border-radius: 0 0 12px 12px;
+  }
+ }
+</style>
+
+<script>
+ function initSiteMenu() {
+  const btn = document.getElementById("site-menu-open");
+  const dialog = document.getElementById("site-menu-dialog") as HTMLDialogElement | null;
+
+  if (!btn || !dialog) return;
+
+  // AbortController로 이전 페이지의 리스너를 정리하고 새로 바인딩
+  const ac = new AbortController();
+  const sig = ac.signal;
+  const prev = (btn as any).__siteMenuAC as AbortController | undefined;
+  prev?.abort();
+  (btn as any).__siteMenuAC = ac;
+
+  const label = () => btn.querySelector(".oh__inner");
+
+  function open() {
+   dialog!.show();
+   btn!.classList.add("is-open");
+   const inner = label();
+   if (inner) inner.textContent = "Close";
+  }
+
+  function close() {
+   dialog!.close();
+   btn!.classList.remove("is-open");
+   const inner = label();
+   if (inner) inner.textContent = "Menu";
+  }
+
+  btn.addEventListener(
+   "click",
+   () => {
+    if (dialog!.open) close();
+    else open();
+   },
+   { signal: sig }
+  );
+
+  // 바깥(메뉴 패널도, 토글 버튼도 아닌 곳) 클릭 시 닫기 — show()는 네이티브 backdrop이 없어 직접 구현
+  document.addEventListener(
+   "click",
+   e => {
+    if (!dialog!.open) return;
+    const target = e.target as Node;
+    if (dialog!.contains(target) || btn!.contains(target)) return;
+    close();
+   },
+   { signal: sig }
+  );
+
+  document.addEventListener(
+   "keydown",
+   e => {
+    if (e.key === "Escape" && dialog!.open) close();
+   },
+   { signal: sig }
+  );
+
+  dialog.querySelectorAll("a[href]").forEach(a => {
+   a.addEventListener("click", close, { signal: sig });
+  });
+ }
+
+ document.addEventListener("astro:page-load", initSiteMenu);
+</script>

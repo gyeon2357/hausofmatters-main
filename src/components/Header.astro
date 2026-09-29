@@ -1,12 +1,11 @@
 ---
 import TextSlider from "../components/TextSlider.astro";
 import Search from "../components/Search.astro";
-import MobileMenu from "../components/MobileMenu.astro";
+import SiteMenu from "../components/SiteMenu.astro";
 ---
 
-<!-- 데스크톱: 로고를 가운데 두고 좌우에 텍스트 버튼(테마/검색) 배치.
-     모바일: 테마 버튼은 숨기고, 검색 버튼 우측에 Menu 버튼을 추가 —
-     하위 메뉴/검색/테마/인스타그램/메일은 MobileMenu 오버레이에서 한 번에 노출 -->
+<!-- 로고를 가운데 두고 좌우에 텍스트 버튼 배치: 왼쪽 테마, 오른쪽 검색+Menu.
+     데스크톱/모바일 모두 동일 — 하위 메뉴/인스타그램/메일은 Menu가 여는 SiteMenu 패널에서 노출 -->
 <header class="full-bleed" transition:persist>
  <section class="header-bar">
   <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle theme-toggle-btn">
@@ -22,8 +21,8 @@ import MobileMenu from "../components/MobileMenu.astro";
    <button id="search-open-btn" aria-label="검색" class="text-btn search-btn">
     <TextSlider content="Search" />
    </button>
-   <!-- 모바일 전용: 하위 메뉴/검색/테마/인스타그램/메일을 모두 담은 오버레이를 여는 버튼 -->
-   <button id="mobile-menu-open" aria-label="전체 메뉴 열기" class="text-btn menu-btn">
+   <!-- 하위 메뉴/인스타그램/메일을 담은 SiteMenu 패널을 여닫는 버튼 — Menu/Close로 라벨만 바뀜 -->
+   <button id="site-menu-open" aria-label="전체 메뉴 열기" class="text-btn menu-btn">
     <TextSlider content="Menu" />
    </button>
   </div>
@@ -120,17 +119,6 @@ import MobileMenu from "../components/MobileMenu.astro";
    justify-self: end;
   }
 
-  /* 데스크톱에서는 Search 버튼만으로 충분 — Menu는 모바일에서만 노출 */
-  .menu-btn {
-   display: none;
-  }
-
-  @media screen and (max-width: 768px) {
-   .menu-btn {
-    display: flex;
-   }
-  }
-
   /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 헤더와 대칭으로 위로 갈수록
      옅어지는 스크림 배경을 써서 흰 박스처럼 보이지 않게 함 */
   .pill-nav {
@@ -196,11 +184,6 @@ import MobileMenu from "../components/MobileMenu.astro";
     height: 1.1rem;
    }
 
-   /* 화면이 좁아지면 테마 텍스트 버튼은 숨김 — 테마 전환은 Menu 오버레이 안에서 가능 */
-   .theme-toggle {
-    display: none;
-   }
-
    .pill-nav {
     padding: 1.25rem 0.75rem 0.75rem;
    }
@@ -220,7 +203,7 @@ import MobileMenu from "../components/MobileMenu.astro";
  <script>
   function initHeader() {
    const path = window.location.pathname;
-   document.querySelectorAll("header a[href], .pill-nav a[href], .mobile-menu-links a[href]").forEach(a => {
+   document.querySelectorAll("header a[href], .pill-nav a[href], .site-menu-links a[href]").forEach(a => {
     const href = a.getAttribute("href");
     if (!href) return;
     a.classList.toggle("current", href !== "/" && path.startsWith(href));
@@ -231,6 +214,12 @@ import MobileMenu from "../components/MobileMenu.astro";
   function updateBottomNavHeight() {
    const nav = document.querySelector(".pill-nav");
    if (nav) document.documentElement.style.setProperty("--bottom-nav-height", nav.getBoundingClientRect().height + "px");
+  }
+
+  // SiteMenu 패널이 헤더 바로 아래에 붙도록 헤더 실제 높이를 CSS 변수로 노출
+  function updateHeaderHeight() {
+   const header = document.querySelector("header");
+   if (header) document.documentElement.style.setProperty("--header-height", header.getBoundingClientRect().height + "px");
   }
 
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
@@ -379,10 +368,12 @@ import MobileMenu from "../components/MobileMenu.astro";
   document.addEventListener("astro:page-load", initTheme);
   document.addEventListener("astro:page-load", initSearch);
   document.addEventListener("astro:page-load", updateBottomNavHeight);
+  document.addEventListener("astro:page-load", updateHeaderHeight);
   window.addEventListener("resize", updateBottomNavHeight, { passive: true });
+  window.addEventListener("resize", updateHeaderHeight, { passive: true });
  </script>
 </header>
 
-<!-- Search 모달 / 모바일 메뉴: header 밖에 두어 z-index 충돌 방지 -->
+<!-- Search 모달 / 전체 메뉴 패널: header 밖에 두어 z-index 충돌 방지 -->
 <Search />
-<MobileMenu />
+<SiteMenu />

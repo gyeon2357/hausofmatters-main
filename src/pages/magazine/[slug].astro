@@ -82,8 +82,9 @@ const relatedAlbums = allAlbums
  .map(a => ({
   href: `/albums/${a.id}`,
   title: a.data.name,
-  image: a.data.image?.src,
-  imageAlt: a.data.image?.alt,
+  // albums 목록 페이지들과 동일하게, image 필드가 없으면 파일명 기반 경로로 폴백
+  image: a.data.image?.src ?? `/images/albums/${a.id}.jpg`,
+  imageAlt: a.data.image?.alt ?? a.data.name,
   meta: "Album",
  }));
 const relatedItems = [...relatedFeatures, ...relatedAlbums].slice(0, 6);

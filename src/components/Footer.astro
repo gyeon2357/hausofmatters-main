@@ -4,13 +4,16 @@ import Separator from "../components/Separator.astro";
 
 <Separator />
 <footer>
+ <!-- 화면에 고정된 플로팅 버튼이 아니라, 푸터까지 스크롤했을 때만 보이는 일반 링크 스타일 버튼 -->
+ <button id="footer-top-btn" type="button" class="nav-link footer-top-btn" aria-label="맨 위로">Back to Top</button>
+
  <p>Instagram</p>
  <div><p><a href="https://www.instagram.com/hausofmatters/">@HAUSOFMATTERS</a></p></div>
 
- <h2>© 2026 Hausofmatters All Rights Reserved.</h2>
+ <p>Mail</p>
+ <div><p><a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a></p></div>
 
- <!-- 화면에 고정된 플로팅 버튼이 아니라, 푸터까지 스크롤했을 때만 보이는 일반 버튼 -->
- <button id="footer-top-btn" type="button" class="footer-top-btn" aria-label="맨 위로">TOP</button>
+ <h2>© 2026 Hausofmatters All Rights Reserved.</h2>
 </footer>
 
 <style>
@@ -49,14 +52,7 @@ import Separator from "../components/Separator.astro";
  }
 
  .footer-top-btn {
-  margin-top: 1.5rem;
-  font-size: var(--font-size-s);
-  padding: var(--btn-padding);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  background: none;
-  color: inherit;
-  cursor: pointer;
+  margin: 0;
  }
 </style>
 
