@@ -19,7 +19,7 @@ const featureCards = allFeature
   <Separator />
 
   <div class="feature-page">
-    <ul class="grid">
+    <ul class="grid" data-load-more="12">
       {
         featureCards.map(card => (
           <li>
@@ -42,6 +42,11 @@ const featureCards = allFeature
                   <span class="meta-artist">{card.data.artist}</span>
                 )}
                 <span class="meta-category">{card.data.category}</span>
+                {card.data.tags && card.data.tags.length > 0 && (
+                  <ul class="tag-list">
+                    {card.data.tags.map(tag => <li class="tag-pill">{tag}</li>)}
+                  </ul>
+                )}
                 <span class="meta-date">
                   {new Date(card.data.date).toLocaleDateString("ko-KR")}
                 </span>
@@ -51,8 +56,11 @@ const featureCards = allFeature
         ))
       }
     </ul>
+    <button type="button" class="load-more-btn" data-load-more-btn>더보기</button>
   </div>
 </BaseLayout>
+
+<script src="../scripts/loadMore.js"></script>
 
 <style>
   .feature-page {

@@ -155,7 +155,7 @@ import Search from "../components/Search.astro";
    align-items: center;
    white-space: nowrap;
    font-size: var(--font-size-s);
-   padding: 0.35em 0.9em;
+   padding: var(--btn-padding);
    border: 1px solid var(--border-color);
    border-radius: 999px;
    transition:
@@ -179,12 +179,22 @@ import Search from "../components/Search.astro";
     padding: 0.75rem 0.75rem 1.5rem;
    }
 
+   .logo {
+    height: 1.1rem;
+   }
+
    .pill-nav {
     padding: 1.25rem 0.75rem 0.75rem;
    }
 
    .pill-links {
     justify-content: flex-start;
+    /* 실기기 소형 화면에서 pill 5개가 잘리지 않도록 간격/글자 크기를 살짝 줄임 */
+    gap: 0.35rem;
+   }
+
+   .pill-links a {
+    font-size: var(--font-size-xs);
    }
   }
 
@@ -200,7 +210,7 @@ import Search from "../components/Search.astro";
    color: var(--color-text, currentColor);
    font-family: inherit;
    font-size: var(--font-size-s);
-   padding: 0.375rem 0.7rem;
+   padding: var(--btn-padding);
    border: 1px solid var(--border-color);
    border-radius: 999px;
    cursor: pointer;

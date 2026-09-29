@@ -1,0 +1,98 @@
+---
+type Item = {
+  href: string;
+  title: string;
+  image?: string;
+  imageAlt?: string;
+  meta?: string;
+};
+
+type Props = {
+  title?: string;
+  items: Item[];
+};
+
+const { title = "Related", items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <div class="related-section">
+      <h5 class="related-heading">{title}</h5>
+      <ul class="related-grid">
+        {items.map(item => (
+          <li>
+            <a href={item.href} data-astro-prefetch>
+              <div class="related-thumb">
+                {item.image && <img src={item.image} alt={item.imageAlt ?? item.title} loading="lazy" />}
+              </div>
+              <span class="related-title">{item.title}</span>
+              {item.meta && <span class="related-meta">{item.meta}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  .related-section {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .related-heading {
+    font-size: var(--font-size-s);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 1rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .related-grid a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  .related-grid a:hover {
+    opacity: 0.7;
+  }
+
+  .related-thumb {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-placeholder);
+  }
+
+  .related-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .related-title {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .related-meta {
+    font-size: var(--font-size-xs);
+    opacity: 0.6;
+  }
+</style>

@@ -35,7 +35,7 @@ const homCards = allMagazines
  </header>
  <Separator />
 
- <ul class="grid">
+ <ul class="grid" data-load-more="12">
   {
    homCards.map(card => (
     <li>
@@ -52,7 +52,10 @@ const homCards = allMagazines
    ))
   }
  </ul>
+ <button type="button" class="load-more-btn" data-load-more-btn>더보기</button>
 </BaseLayout>
+
+<script src="../../scripts/loadMore.js"></script>
 
 <style>
  .grid {

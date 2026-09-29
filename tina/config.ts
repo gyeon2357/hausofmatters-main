@@ -262,6 +262,13 @@ export default defineConfig({
             description: "ex) 공연후기, 앨범리뷰, 칼럼",
           },
           {
+            type: "string",
+            name: "tags",
+            label: "태그",
+            list: true,
+            description: "ex) culture, movie, lifestyle — 목록/상세 페이지에 작은 태그로 표시됩니다",
+          },
+          {
             type: "object",
             name: "coverImage",
             label: "커버 이미지",
