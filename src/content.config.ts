@@ -68,6 +68,7 @@ const feature = defineCollection({
   artist: z.string().optional(),
   date: z.date(),
   category: z.string(),
+  tags: z.array(z.string()).optional(),
   coverImage: z.object({
    src: z.string(),
    alt: z.string().optional(),

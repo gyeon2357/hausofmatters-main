@@ -33,7 +33,7 @@ const interviewCards = allinterview
  <Separator />
 
  <div class="interview-page">
-  <ul class="grid">
+  <ul class="grid" data-load-more="12">
    {
     interviewCards.map(card => (
      <li>
@@ -49,8 +49,11 @@ const interviewCards = allinterview
     ))
    }
   </ul>
+  <button type="button" class="load-more-btn" data-load-more-btn>더보기</button>
  </div>
 </BaseLayout>
+
+<script src="../scripts/loadMore.js"></script>
 
 <style>
  .interview-page {

@@ -7,24 +7,29 @@ import Separator from "../../components/Separator.astro";
 import Flipbook from "../../components/Flipbook.astro";
 
 import Share from "../../components/Share.astro";
+import RelatedGrid from "../../components/RelatedGrid.astro";
 import fs from "node:fs";
 import path from "node:path";
 
 export async function getStaticPaths() {
  const issues = await getCollection("magazine");
+ const allFeature = await getCollection("feature");
+ const allAlbums = await getCollection("albums");
 
  return issues.map(issue => ({
   params: { slug: issue.data.slug ?? issue.id },
-  props: { issues, issue },
+  props: { issues, issue, allFeature, allAlbums },
  }));
 }
 
 type Props = {
  issues: CollectionEntry<"magazine">[];
  issue: CollectionEntry<"magazine">;
+ allFeature: CollectionEntry<"feature">[];
+ allAlbums: CollectionEntry<"albums">[];
 };
 
-const { issues, issue } = Astro.props;
+const { issues, issue, allFeature, allAlbums } = Astro.props;
 const id = issue.id;
 
 function formatTitle(id: string): string {
@@ -60,6 +65,28 @@ const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : issue.data.category === "special" ? "/magazine" : "/magazine/hom";
 const seoDescription =
  issue.data.category === "w-hom" ? "해외힙합 매거진 w/HOM" : issue.data.category === "special" ? "Hausofmatters Special Edition" : "한국힙합 매거진 HOM";
+
+// 이 호(issue)를 참조하는 feature/album을 역추적해 "Related"로 노출
+const issueRefs = [id.toLowerCase(), slug.toLowerCase()];
+const relatedFeatures = allFeature
+ .filter(f => f.data.published && f.data.link && issueRefs.includes(f.data.link.trim().toLowerCase()))
+ .map(f => ({
+  href: `/feature/${f.id}`,
+  title: f.id.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+  image: f.data.coverImage?.src,
+  imageAlt: f.data.coverImage?.alt,
+  meta: "Feature",
+ }));
+const relatedAlbums = allAlbums
+ .filter(a => a.data.magazine && issueRefs.includes(a.data.magazine.trim().toLowerCase()))
+ .map(a => ({
+  href: `/albums/${a.id}`,
+  title: a.data.name,
+  image: a.data.image?.src,
+  imageAlt: a.data.image?.alt,
+  meta: "Album",
+ }));
+const relatedItems = [...relatedFeatures, ...relatedAlbums].slice(0, 6);
 
 // --- 기존 변수들 아래에 추가 ---
 
@@ -152,6 +179,8 @@ const tocHtml = rawToc ? renderToc(rawToc) : "";
     </dl>
 
     <Share title={title} />
+
+    <RelatedGrid title="Related" items={relatedItems} />
    </div>
   </div>
  </section>

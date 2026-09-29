@@ -58,6 +58,10 @@
  --font-size-l: clamp(1rem, 1.5vw, 1.375rem); /* 18~22px — 소제목 */
  --font-size-xl: clamp(1.25rem, 2vw, 1.5rem); /* 20~24px — 섹션/페이지 제목(h2) */
  --font-size-2xl: clamp(1.5rem, 5vw, 2rem); /* 24~32px — 상세 페이지 대제목(h1), 화면폭에 따라 자동으로 줄어듦 */
+
+ /* 테두리 있는 pill형 버튼(메뉴, TOP, Read Now, Share 등) 전부 이 값 하나로 통일.
+    em 단위라 버튼마다 font-size가 달라도 글자 대비 여백 비율은 항상 동일하게 유지됨 */
+ --btn-padding: 0.35em 0.9em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -562,6 +566,24 @@ dd {
  font-size: var(--font-size-s);
 }
 
+/* feature 등에 붙는 태그 — pick-badge와 달리 굵지 않은 저채도 메타 정보 */
+.tag-list {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 0.4rem;
+ margin: 0;
+ padding: 0;
+ list-style: none;
+}
+
+.tag-pill {
+ font-size: var(--font-size-xs);
+ padding: 0.15em 0.6em;
+ border: 1px solid var(--border-color);
+ border-radius: 999px;
+ opacity: 0.75;
+}
+
 .pick-badge {
  display: inline-block;
  font-size: var(--font-size-xs);
@@ -622,9 +644,32 @@ dd {
 
 .share button {
  font-size: var(--font-size-xs);
- padding: 0.2rem 0.4rem;
+ padding: var(--btn-padding);
  border: 1px solid silver;
  border-radius: 999px;
+}
+
+/* "더보기" — feature/interview/magazine/album 목록 그리드 공통 로드모어 버튼 */
+.load-more-btn {
+ display: flex;
+ margin: 2rem auto 0;
+ font-size: var(--font-size-s);
+ padding: var(--btn-padding);
+ border: 1px solid var(--border-color);
+ border-radius: 999px;
+ transition: background-color 0.2s ease;
+}
+
+.load-more-btn:hover {
+ background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.load-more-btn.lm-hidden {
+ display: none;
+}
+
+[data-load-more] .lm-hidden {
+ display: none;
 }
 
 #copy-toast {

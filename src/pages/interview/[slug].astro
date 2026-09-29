@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Separator from "../../components/Separator.astro";
 import Share from "../../components/Share.astro";
+import RelatedGrid from "../../components/RelatedGrid.astro";
 
 export async function getStaticPaths() {
  const allinterview = await getCollection("interview");
@@ -10,11 +11,11 @@ export async function getStaticPaths() {
   .filter(i => i.data.published)
   .map(interview => ({
    params: { slug: interview.id },
-   props: { interview },
+   props: { interview, allinterview },
   }));
 }
 
-const { interview } = Astro.props;
+const { interview, allinterview } = Astro.props;
 const allArtists = await getCollection("artists");
 const { Content } = await render(interview);
 
@@ -38,6 +39,21 @@ const coverAlt = interview.data.coverImage?.alt ?? stageName;
 
 const title = `Hausofmatters - Interview: ${stageName}`;
 const seoDescription = `${stageName} | ${dateStr}`;
+
+// 다른 인터뷰 중 최신 3개를 "Related Interview"로 노출
+const relatedInterviews = allinterview
+ .filter(i => i.data.published && i.id !== interview.id)
+ .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+ .slice(0, 3)
+ .map(i => {
+  const relArtist = allArtists.find(a => a.id === i.id);
+  return {
+   href: `/interview/${i.id}`,
+   title: i.data.artist ?? relArtist?.data.stage_name ?? i.id,
+   image: i.data.coverImage?.src ?? relArtist?.data.image?.src,
+   imageAlt: i.data.coverImage?.alt,
+  };
+ });
 ---
 
 <BaseLayout title={title} description={seoDescription} ogImage={coverSrc || undefined}>
@@ -65,6 +81,7 @@ const seoDescription = `${stageName} | ${dateStr}`;
  <div class="interview-body">
   <Content />
   <Share title={stageName} />
+  <RelatedGrid title="Related Interview" items={relatedInterviews} />
  </div>
 </BaseLayout>
 

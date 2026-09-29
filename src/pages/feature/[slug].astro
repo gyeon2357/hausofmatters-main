@@ -3,6 +3,8 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Separator from "../../components/Separator.astro";
 import Share from "../../components/Share.astro";
+import TagList from "../../components/TagList.astro";
+import RelatedGrid from "../../components/RelatedGrid.astro";
 
 export async function getStaticPaths() {
   const allFeature = await getCollection("feature");
@@ -10,12 +12,25 @@ export async function getStaticPaths() {
     .filter(f => f.data.published)
     .map(feature => ({
       params: { slug: feature.id },
-      props: { feature },
+      props: { feature, allFeature },
     }));
 }
 
-const { feature } = Astro.props;
+const { feature, allFeature } = Astro.props;
 const { Content } = await render(feature);
+
+// 같은 카테고리의 다른 feature 최대 3개를 "Related Feature"로 노출
+const relatedFeatures = allFeature
+  .filter(f => f.data.published && f.id !== feature.id && f.data.category === feature.data.category)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3)
+  .map(f => ({
+    href: `/feature/${f.id}`,
+    title: f.id.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+    image: f.data.coverImage?.src,
+    imageAlt: f.data.coverImage?.alt,
+    meta: f.data.category,
+  }));
 
 const dateStr = new Date(feature.data.date).toLocaleDateString("ko-KR", {
   year: "numeric",
@@ -69,6 +84,7 @@ const seoDescription = feature.data.artist
       <span class="sep">·</span>
       <span>{dateStr}</span>
     </p>
+    {feature.data.tags && feature.data.tags.length > 0 && <TagList tags={feature.data.tags} />}
     <a class="nav-link" href="/feature">Back to Feature</a>
   </header>
 
@@ -87,6 +103,8 @@ const seoDescription = feature.data.artist
       }
       <Share title={displayTitle} />
     </div>
+
+    <RelatedGrid title="Related Feature" items={relatedFeatures} />
   </div>
 </BaseLayout>
 
@@ -130,6 +148,11 @@ const seoDescription = feature.data.artist
 
   .feature-header .nav-link {
     display: inline-block;
+  }
+
+  .feature-header :global(.tag-list) {
+    justify-content: center;
+    margin: 0 0 0.75rem;
   }
 
   .sep {
