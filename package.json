@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
     "start": "tinacms dev -c \"astro dev\"",
-    "build": "tinacms build --preview-base-branch main --preview-name \"${VERCEL_GIT_COMMIT_REF:-main}\" && astro check && astro build",
+    "build": "tinacms build --skip-cloud-checks && astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
