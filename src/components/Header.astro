@@ -3,21 +3,12 @@ import TextSlider from "../components/TextSlider.astro";
 import Search from "../components/Search.astro";
 ---
 
-<!-- fakemagazine.kr 레퍼런스: 로고를 가운데 두고 좌우에 아이콘 액션(테마/검색)을 배치.
-     카테고리 pill 내비게이션은 화면 하단에 고정된 별도 바로 분리해, 위/아래 모두
-     불투명한 흰 박스 대신 그라데이션 스크림으로 콘텐츠 위에 떠 있는 느낌을 줌 -->
+<!-- 데스크톱: 로고를 가운데 두고 좌우에 텍스트 버튼(테마/검색) 배치.
+     모바일: 화면이 좁아 텍스트 버튼은 숨기고 로고만 남김 — 카테고리는 하단 pill-nav가 전담 -->
 <header class="full-bleed" transition:persist>
  <section class="header-bar">
-  <button id="theme-toggle" aria-label="다크모드 전환" class="icon-btn theme-toggle">
-   <span class="theme-icon" aria-hidden="true">
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-     <circle cx="12" cy="12" r="4" />
-     <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
-    </svg>
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
-     <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" />
-    </svg>
-   </span>
+  <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle">
+   <TextSlider content="Dark" />
   </button>
 
   <a href="/" class="logo-link">
@@ -25,11 +16,8 @@ import Search from "../components/Search.astro";
   </a>
 
   <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
-  <button id="search-open-btn" aria-label="검색" class="icon-btn search-btn">
-   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <path d="M21 21l-4.35-4.35" />
-   </svg>
+  <button id="search-open-btn" aria-label="검색" class="text-btn search-btn">
+   <TextSlider content="Search" />
   </button>
  </section>
 </header>
@@ -95,7 +83,7 @@ import Search from "../components/Search.astro";
    width: auto;
   }
 
-  .icon-btn {
+  .text-btn {
    display: flex;
    align-items: center;
    background: none;
@@ -103,11 +91,10 @@ import Search from "../components/Search.astro";
    color: inherit;
    cursor: pointer;
    padding: 0;
-  }
-
-  .icon-btn svg {
-   width: 1.1rem;
-   height: 1.1rem;
+   font: inherit;
+   font-size: var(--font-size-s);
+   text-decoration: underline;
+   text-underline-position: under;
   }
 
   .theme-toggle {
@@ -183,12 +170,17 @@ import Search from "../components/Search.astro";
     height: 1.1rem;
    }
 
+   /* 화면이 좁아지면 텍스트 버튼(테마/검색)은 숨기고 로고만 남김 */
+   .theme-toggle,
+   .search-btn {
+    display: none;
+   }
+
    .pill-nav {
     padding: 1.25rem 0.75rem 0.75rem;
    }
 
    .pill-links {
-    justify-content: flex-start;
     /* 실기기 소형 화면에서 pill 5개가 잘리지 않도록 간격/글자 크기를 살짝 줄임 */
     gap: 0.35rem;
    }
@@ -247,18 +239,23 @@ import Search from "../components/Search.astro";
    if (!btn || btn.dataset.initialized) return;
    btn.dataset.initialized = "true";
 
+   const inner = btn.querySelector(".oh__inner");
+
    const getEffective = () =>
     document.documentElement.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
    const apply = (theme: string) => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
+    if (inner) inner.textContent = theme === "dark" ? "Light" : "Dark";
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
    };
 
+   const initial = getEffective();
+   if (inner) inner.textContent = initial === "dark" ? "Light" : "Dark";
    const logoInit = document.getElementById("site-logo") as HTMLImageElement | null;
-   if (logoInit) logoInit.src = getEffective() === "dark" ? "/images/logo-w.png" : "/images/logo.png";
+   if (logoInit) logoInit.src = initial === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
    btn.addEventListener("click", () => {
     apply(getEffective() === "dark" ? "light" : "dark");

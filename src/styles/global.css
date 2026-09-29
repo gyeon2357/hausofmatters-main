@@ -700,36 +700,6 @@ mark {
  opacity: 1;
 }
 
-/* 테마 토글 해/달 아이콘 — [data-theme]는 <html>에 붙는 속성이라 컴포넌트 스코프 CSS로는
-   매칭이 안 돼서(스코프 해시가 엉뚱한 쪽에 붙음) 전역 스타일시트에 둠 */
-.theme-icon svg {
- width: 0.85rem;
- height: 0.85rem;
-}
-
-.icon-sun {
- display: block;
-}
-.icon-moon {
- display: none;
-}
-
-[data-theme="dark"] .icon-sun {
- display: none;
-}
-[data-theme="dark"] .icon-moon {
- display: block;
-}
-
-@media (prefers-color-scheme: dark) {
- :root:not([data-theme="light"]) .icon-sun {
-  display: none;
- }
- :root:not([data-theme="light"]) .icon-moon {
-  display: block;
- }
-}
-
 /* search */
 
 .search-page {
