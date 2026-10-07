@@ -42,11 +42,11 @@ const latestInterviews = allInterviews
 const suggestions = [...latestAlbums, ...latestInterviews];
 ---
 
-<dialog id="search-dialog">
+<dialog id="search-dialog" class="anchored-panel">
  <form id="search-form">
   <!-- showModal()로 여는 진짜 모달이라 바깥 Search 버튼이 열려있는 동안 inert 처리됨 —
        그래서 Menu처럼 트리거 버튼으로 토글할 수 없고, 안쪽에 별도 닫기 버튼이 필요함 -->
-  <button id="close-dialog" type="button" aria-label="Close search">
+  <button id="close-dialog" type="button" aria-label="Close search" class="anchored-panel-close">
    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
     <path d="M2 2l12 12M14 2 2 14" />
    </svg>
@@ -90,43 +90,7 @@ const suggestions = [...latestAlbums, ...latestInterviews];
 </dialog>
 
 <style>
- dialog {
-  border: 0;
-  padding: 2.5rem 3rem 3rem;
-
-  background: var(--color-bg);
-  color: var(--color-text);
-  position: fixed;
-  top: 33.33%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
- }
-
- dialog::backdrop {
-  background: color-mix(in srgb, var(--color-text) 10%, transparent);
-  backdrop-filter: blur(4px);
- }
-
- #close-dialog {
-  display: flex;
-  align-items: center;
-
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.25s;
-  padding: 0.25rem;
- }
- #close-dialog:hover {
-  opacity: 1;
- }
-
+ /* 공통 위치/크기/닫기 버튼(.anchored-panel)은 global.css 참고 — 여기선 검색 전용 내부 레이아웃만 */
  .search-input-row {
   display: flex;
   align-items: center;

@@ -21,7 +21,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    <button id="search-open-btn" aria-label="검색" class="text-btn search-btn">
     <TextSlider content="Search" />
    </button>
-   <!-- 하위 메뉴/인스타그램/메일을 담은 SiteMenu 패널을 여닫는 버튼 — Menu/Close로 라벨만 바뀜 -->
+   <!-- 하위 메뉴/인스타그램/Contact를 담은 SiteMenu 패널을 여닫는 버튼 — 라벨은 항상 "Menu" -->
    <button id="site-menu-open" aria-label="전체 메뉴 열기" class="text-btn menu-btn">
     <TextSlider content="Menu" />
    </button>
@@ -44,9 +44,6 @@ import SiteMenu from "../components/SiteMenu.astro";
   <li>
    <a href="/feature/" data-astro-prefetch><TextSlider content="Feature" /></a>
   </li>
-  <li>
-   <a href="/about/" data-astro-prefetch><TextSlider content="About" /></a>
-  </li>
  </ul>
 </nav>
 
@@ -65,12 +62,18 @@ import SiteMenu from "../components/SiteMenu.astro";
    font-family: var(--info-font);
 
    padding: 1rem 1rem 2rem;
+
+   /* header 박스 자체는 아래쪽 그라데이션 여백(2rem)까지 포함해서 큰데, 그 빈 공간이
+      Search/Menu 패널의 닫기 버튼(z-index 100인 header보다 낮은 90)을 가로채지 않도록
+      기본은 클릭을 투과시키고, 실제 내용이 있는 .header-bar만 다시 받게 함 */
+   pointer-events: none;
   }
 
   /* 테마(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌우 칸의 콘텐츠 폭/노출 여부가
      달라도(예: 모바일에서 테마 버튼만 숨김) 로고가 항상 정중앙에 오도록,
      1fr의 암묵적 최소폭(auto)을 minmax(0, 1fr)로 제거해 두 칸을 강제로 동일하게 둠 */
   .header-bar {
+   pointer-events: auto;
    display: grid;
    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
    align-items: center;
@@ -90,20 +93,6 @@ import SiteMenu from "../components/SiteMenu.astro";
    display: block;
    height: 1.05rem; /* 1.5rem의 70% */
    width: auto;
-  }
-
-  .text-btn {
-   display: flex;
-   align-items: center;
-   background: none;
-   border: none;
-   color: inherit;
-   cursor: pointer;
-   padding: 0;
-   font: inherit;
-   font-size: var(--font-size-s);
-   text-decoration: underline;
-   text-underline-position: under;
   }
 
   .theme-toggle {

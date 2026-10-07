@@ -181,7 +181,15 @@ const whomEditors: Member[] = [
    함께 담아내보려 합니다.
   </h4>
 
-  <section class="members-container">
+  <section class="members-container" id="members-container">
+   <div class="contact-intro">
+    <p class="contact-intro-text">다양한 프로젝트와 협업에 대해 편하게 연락 바랍니다.</p>
+    <div class="contact-intro-mail">
+     <a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a>
+     <button id="mail-copy-btn" type="button" class="text-btn">Copy</button>
+     <button id="mail-share-btn" type="button" class="text-btn">Share</button>
+    </div>
+   </div>
    {
     [
      { label: "Directors", members: directors },
@@ -233,7 +241,67 @@ const whomEditors: Member[] = [
    </div>
   </section>
  </div>
+ <div id="copy-toast" aria-live="polite">이메일이 복사되었습니다</div>
 </BaseLayout>
+
+<script>
+ const CONTACT_EMAIL = "khlhomofficial@gmail.com";
+
+ function showToast(message: string) {
+  const toast = document.getElementById("copy-toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add("visible");
+  setTimeout(() => toast.classList.remove("visible"), 2000);
+ }
+
+ function initContactIntro() {
+  const copyBtn = document.getElementById("mail-copy-btn");
+  const shareBtn = document.getElementById("mail-share-btn");
+
+  if (!copyBtn || !shareBtn || copyBtn.dataset.initialized) return;
+  copyBtn.dataset.initialized = "true";
+  shareBtn.dataset.initialized = "true";
+
+  copyBtn.addEventListener("click", async () => {
+   try {
+    await navigator.clipboard.writeText(CONTACT_EMAIL);
+    showToast("이메일이 복사되었습니다.");
+   } catch {
+    // clipboard API 미지원 환경 fallback (일부 모바일 브라우저)
+    try {
+     const el = document.createElement("textarea");
+     el.value = CONTACT_EMAIL;
+     el.style.position = "fixed";
+     el.style.opacity = "0";
+     document.body.appendChild(el);
+     el.focus();
+     el.select();
+     document.execCommand("copy");
+     document.body.removeChild(el);
+     showToast("이메일이 복사되었습니다.");
+    } catch {
+     showToast("복사에 실패했습니다.");
+    }
+   }
+  });
+
+  shareBtn.addEventListener("click", async () => {
+   if (navigator.share) {
+    try {
+     await navigator.share({ title: "Hausofmatters Contact", text: CONTACT_EMAIL });
+    } catch (e: any) {
+     if (e?.name !== "AbortError") showToast("공유에 실패했습니다.");
+    }
+   } else {
+    showToast("공유 기능이 지원되지 않는 브라우저입니다.");
+   }
+  });
+ }
+
+ document.addEventListener("astro:page-load", initContactIntro);
+</script>
 
 <style>
  .info-page {
@@ -264,6 +332,33 @@ const whomEditors: Member[] = [
   display: flex;
   flex-direction: column;
   gap: 1rem;
+ }
+
+ /* members-container 맨 위에 두는 연락처 안내 — 아래 contact-section(Mail/Instagram)과는
+    별개로, 협업 제안을 바로 복사/공유할 수 있게 하는 용도 */
+ .contact-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+ }
+
+ .contact-intro-text {
+  font-size: var(--font-size-s);
+  color: var(--color-text-alt);
+  margin: 0;
+ }
+
+ .contact-intro-mail {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+ }
+
+ .contact-intro-mail a {
+  font-size: var(--font-size-base);
+  text-decoration: underline;
+  text-underline-position: under;
+  color: var(--color-text);
  }
 
  .group-title {
@@ -397,6 +492,11 @@ const whomEditors: Member[] = [
 
  /* 반응형 */
  @media (max-width: 44em) {
+  .contact-intro-mail {
+   flex-wrap: wrap;
+   gap: 0.5rem 1rem;
+  }
+
   .members-wrapper ol {
    grid-template-columns: 1fr;
   }

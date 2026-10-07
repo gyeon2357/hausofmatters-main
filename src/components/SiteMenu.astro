@@ -2,12 +2,12 @@
 import TextSlider from "../components/TextSlider.astro";
 ---
 
-<!-- 데스크톱: Menu 버튼 바로 아래 우측에 뜨는 비모달 드롭다운 (show()) — 헤더(로고/검색/Menu)가 항상 위에 보임,
-     버튼 라벨이 Menu↔Close로 토글됨.
-     모바일: Search 모달과 동일하게 showModal()로 열어 배경을 블러 처리하고, 전용 닫기 버튼으로 닫음 —
-     이쪽은 트리거 라벨이 Menu로 고정 -->
-<dialog id="site-menu-dialog">
- <button id="site-menu-close" type="button" aria-label="메뉴 닫기" class="site-menu-close">
+<!-- 데스크톱: Menu 버튼 바로 아래 우측에 뜨는 비모달 드롭다운 (show()) — 헤더(로고/검색/Menu)가 항상 위에 보임.
+     모바일: Search 모달과 동일하게 showModal()로 열어 배경을 블러 처리.
+     위치/너비/닫기 버튼은 Search 패널과 공유하는 .anchored-panel(global.css)로 통일 —
+     버튼 라벨은 열림/닫힘 상관없이 항상 "Menu" -->
+<dialog id="site-menu-dialog" class="anchored-panel">
+ <button id="site-menu-close" type="button" aria-label="메뉴 닫기" class="anchored-panel-close">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
    <path d="M2 2l12 12M14 2 2 14" />
   </svg>
@@ -49,57 +49,15 @@ import TextSlider from "../components/TextSlider.astro";
 
  <div class="site-menu-utility">
   <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer" class="text-btn">Instagram</a>
-  <a href="mailto:khlhomofficial@gmail.com" class="text-btn">khlhomofficial@gmail.com</a>
+  <!-- 메일 주소를 그대로 노출하지 않고 About의 연락처 섹션으로 보냄 -->
+  <a href="/about/#members-container" data-astro-prefetch class="text-btn">Contact</a>
  </div>
 </dialog>
 
 <style>
- dialog#site-menu-dialog {
-  border: 0;
-  margin: 0;
-  position: fixed;
-  top: calc(var(--menu-anchor-top, 3.5rem) + 0.5rem);
-  right: 1rem;
-  left: auto;
-  width: min(320px, calc(100vw - 2rem));
-  max-width: none;
-  max-height: calc(100vh - var(--menu-anchor-top, 3.5rem) - var(--bottom-nav-height, 3.5rem) - 1.5rem);
-
-  padding: 1.5rem;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--info-font);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  overflow-y: auto;
-  z-index: 90;
- }
-
- /* dialog는 [open]이 아니면 UA 기본값이 display:none — [open]에만 flex를 걸어야
-    닫혀 있을 때 항상 보이는 사고를 막을 수 있음 */
+ /* 공통 위치/크기(.anchored-panel)는 global.css 참고 — 여기선 메뉴 전용 내부 레이아웃만 */
  dialog#site-menu-dialog[open] {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
- }
-
- /* 데스크톱 드롭다운에는 필요 없음 — 모바일 모달에서만 노출 */
- .site-menu-close {
-  display: none;
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  align-items: center;
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.25s;
-  padding: 0.25rem;
- }
-
- .site-menu-close:hover {
-  opacity: 1;
+  gap: 1rem;
  }
 
  .site-menu-links {
@@ -132,9 +90,18 @@ import TextSlider from "../components/TextSlider.astro";
   padding: 0 0 0 1rem;
  }
 
+ /* 상위 링크와 달리 기본은 밑줄 없음 — 활성 상태일 때만 밑줄로 표시 */
  .site-menu-sublinks a {
   font-size: var(--font-size-s);
+  text-decoration: none;
   opacity: 0.8;
+ }
+
+ .site-menu-sublinks a.current {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-position: under;
+  opacity: 1;
  }
 
  .site-menu-subtext {
@@ -148,24 +115,6 @@ import TextSlider from "../components/TextSlider.astro";
   gap: 0.75rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
- }
-
- @media screen and (max-width: 768px) {
-  dialog#site-menu-dialog {
-   left: 0.75rem;
-   right: 0.75rem;
-   width: auto;
-  }
-
-  .site-menu-close {
-   display: flex;
-  }
-
-  /* Search 모달과 동일한 배경 블러 — showModal()로 열렸을 때만 그려짐 */
-  dialog#site-menu-dialog::backdrop {
-   background: color-mix(in srgb, var(--color-text) 10%, transparent);
-   backdrop-filter: blur(4px);
-  }
  }
 </style>
 
@@ -185,29 +134,19 @@ import TextSlider from "../components/TextSlider.astro";
   (btn as any).__siteMenuAC = ac;
 
   const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
-  const label = () => btn!.querySelector(".oh__inner");
 
   function open() {
-   if (isMobile()) {
-    // 모바일: Search와 동일하게 진짜 모달로 열어 배경을 블러 처리 — 트리거 라벨은 Menu로 고정
-    dialog!.showModal();
-   } else {
-    dialog!.show();
-    btn!.classList.add("is-open");
-    const inner = label();
-    if (inner) inner.textContent = "Close";
-   }
+   // 모바일: Search와 동일하게 진짜 모달로 열어 배경을 블러 처리.
+   // 데스크톱: 헤더가 계속 보이고 클릭 가능해야 하므로 비모달 show().
+   // 버튼 라벨은 두 경우 모두 "Menu"로 고정 — 닫기는 전용 닫기 버튼/바깥 클릭/Escape가 담당
+   if (isMobile()) dialog!.showModal();
+   else dialog!.show();
   }
 
   function close() {
    dialog!.close();
-   btn!.classList.remove("is-open");
-   const inner = label();
-   if (inner) inner.textContent = "Menu";
   }
 
-  // showModal()로 열려있는 동안 트리거 버튼 자체가 inert(클릭 불가)라, 토글이 아니라
-  // 열기 전용으로만 쓰임 — 닫기는 모바일에서 전용 닫기 버튼이 담당
   btn.addEventListener(
    "click",
    () => {
