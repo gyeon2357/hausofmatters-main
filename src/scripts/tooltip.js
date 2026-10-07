@@ -303,11 +303,13 @@ let tooltip;
 const handlePageEvent = (type) => {
   const page = document.documentElement.getAttribute('data-page');
   if (page !== 'artists') return;
+  // 커서를 따라다니며 슬라이드하는 툴팁이라 모션 민감 사용자에겐 불편할 수 있어 아예 생략
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   if (type === 'load') {
     tooltip = new Tooltip(document.querySelector('[data-grid]'));
   } else if (type === 'before-swap') {
-    tooltip.destroy();
+    tooltip?.destroy();
   }
 };
 

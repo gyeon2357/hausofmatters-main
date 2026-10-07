@@ -12,7 +12,7 @@ const { albumsTotal, title = "Review" } = Astro.props;
 
 <header class="title-header title-header--initial">
  <div class="title-row">
-  <h2><TextSlider content={title} /></h2>
+  <h1><TextSlider content={title} /></h1>
   <span class="total-num"><TextSlider content={"(" + albumsTotal + ")"} /></span>
  </div>
  <section>
@@ -35,7 +35,7 @@ const { albumsTotal, title = "Review" } = Astro.props;
   gap: 0.4rem;
  }
 
- .title-row h2 {
+ .title-row h1 {
   text-wrap: nowrap;
  }
 

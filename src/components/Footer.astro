@@ -65,10 +65,11 @@ import Separator from "../components/Separator.astro";
   btn.dataset.initialized = "true";
 
   btn.addEventListener("click", () => {
+   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
    if ((window as any).__lenis) {
-    (window as any).__lenis.scrollTo(0, { duration: 1.2 });
+    (window as any).__lenis.scrollTo(0, { duration: reduceMotion ? 0 : 1.2 });
    } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
    }
   });
  }

@@ -52,10 +52,10 @@ const { Content } = await render(artist);
 <BaseLayout title={artist.data.stage_name ?? artist.data.name ?? artist.id}>
  <section>
   <header class="title-header">
-   <h2>
+   <h1>
     {artist.data.stage_name}
     <span class="faded">({artist.data.name})</span>
-   </h2>
+   </h1>
    <div>
     <a class="nav-link" href="/">View all</a>
     <span class="faded">/</span>

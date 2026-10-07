@@ -91,10 +91,11 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
   <link rel="stylesheet" href="/styles/font-awesome.css" />
  </head>
  <body>
+  <a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
   <Preloader />
   <SmoothScroll />
   <Header />
-  <main><slot /></main>
+  <main id="main-content" tabindex="-1"><slot /></main>
   <Footer />
   <script src="../scripts/imageFade.js"></script>
  </body>

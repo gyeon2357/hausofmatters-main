@@ -77,11 +77,11 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
 <BaseLayout title={album.data.name} description={seoDescription} ogImage={album.data.image?.src ?? `/images/albums/${album.id}.jpg`}>
  <section>
   <header class="title-header">
-   <h2>
+   <h1>
     {album.data.recommended && <span class="pick-badge">pick</span>}
     {album.data.name}
     {artistName && <span class="faded">by {artistName}</span>}
-   </h2>
+   </h1>
    <div>
     <a class="nav-link" href={backHref}>{backLabel}</a>
     {

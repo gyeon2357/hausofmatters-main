@@ -54,10 +54,13 @@ const toggleLoading = async () => {
   show();
   try {
     await loadAssets();
+  } catch (error) {
+    // 이미지 하나라도 404 등으로 실패하면 loadAssets()가 reject되는데, 여기서 멈추면
+    // 로딩 화면이 전체 사이트를 영구적으로 가려버림 — 실패해도 반드시 가려줌
+    console.error('Failed to load assets or animate:', error);
+  } finally {
     sessionStorage.setItem('preloadComplete', 'true');
     hide();
-  } catch (error) {
-    console.error('Failed to load assets or animate:', error);
   }
 };
 

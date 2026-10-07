@@ -18,11 +18,25 @@ import SiteMenu from "../components/SiteMenu.astro";
 
   <div class="header-actions">
    <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
-   <button id="search-open-btn" aria-label="검색" class="text-btn search-btn">
+   <button
+    id="search-open-btn"
+    aria-label="검색"
+    aria-haspopup="dialog"
+    aria-controls="search-dialog"
+    aria-expanded="false"
+    class="text-btn search-btn"
+   >
     <TextSlider content="Search" />
    </button>
    <!-- 하위 메뉴/인스타그램/Contact를 담은 SiteMenu 패널을 여닫는 버튼 — 라벨은 항상 "Menu" -->
-   <button id="site-menu-open" aria-label="전체 메뉴 열기" class="text-btn menu-btn">
+   <button
+    id="site-menu-open"
+    aria-label="전체 메뉴 열기"
+    aria-haspopup="dialog"
+    aria-controls="site-menu-dialog"
+    aria-expanded="false"
+    class="text-btn menu-btn"
+   >
     <TextSlider content="Menu" />
    </button>
   </div>
@@ -192,10 +206,17 @@ import SiteMenu from "../components/SiteMenu.astro";
  <script>
   function initHeader() {
    const path = window.location.pathname;
-   document.querySelectorAll("header a[href], .pill-nav a[href], .site-menu-links a[href]").forEach(a => {
+   // "header a[href]"처럼 느슨하게 쓰면 매거진 상세 등 페이지 자체의 <header class="title-header">
+   // (예: "View All" 백링크)까지 걸려서 무관한 링크에 current가 붙는 버그가 있었음 —
+   // 사이트 전역 헤더(.full-bleed)로만 범위를 한정
+   document.querySelectorAll("header.full-bleed a[href], .pill-nav a[href], .site-menu-links a[href]").forEach(a => {
     const href = a.getAttribute("href");
     if (!href) return;
-    a.classList.toggle("current", href !== "/" && path.startsWith(href));
+    const isCurrent = href !== "/" && path.startsWith(href);
+    a.classList.toggle("current", isCurrent);
+    // 클래스만으로는 스크린리더가 "현재 페이지"임을 알 수 없어 aria-current도 함께 반영
+    if (isCurrent) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
    });
   }
 
@@ -289,6 +310,7 @@ import SiteMenu from "../components/SiteMenu.astro";
 
    function openDialog() {
     dialog!.showModal();
+    openBtn!.setAttribute("aria-expanded", "true");
     input!.value = "";
     hint!.textContent = "아티스트 · 앨범 · 인터뷰 · 공연정보";
     suggestions?.classList.remove("suggestions-hidden");
@@ -298,6 +320,10 @@ import SiteMenu from "../components/SiteMenu.astro";
    function closeDialog() {
     dialog!.close();
    }
+
+   // Escape 키로 닫히는 경우(브라우저 기본 동작) 등 닫히는 경로가 여러 개라,
+   // dialog 자체의 close 이벤트 하나로 aria-expanded 동기화를 통일
+   dialog.addEventListener("close", () => openBtn!.setAttribute("aria-expanded", "false"), { signal: sig });
 
    // showModal() 특성상 열려있는 동안 openBtn 자체가 inert(클릭 불가)라
    // 트리거 버튼을 닫기로 재사용할 수 없음 — 별도 닫기 버튼(closeBtn) 필요

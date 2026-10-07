@@ -42,7 +42,7 @@ const latestInterviews = allInterviews
 const suggestions = [...latestAlbums, ...latestInterviews];
 ---
 
-<dialog id="search-dialog" class="anchored-panel">
+<dialog id="search-dialog" class="anchored-panel" aria-label="검색">
  <form id="search-form">
   <!-- showModal()로 여는 진짜 모달이라 바깥 Search 버튼이 열려있는 동안 inert 처리됨 —
        그래서 Menu처럼 트리거 버튼으로 토글할 수 없고, 안쪽에 별도 닫기 버튼이 필요함 -->

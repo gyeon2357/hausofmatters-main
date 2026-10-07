@@ -21,6 +21,14 @@ const initializeVariables = () => {
 const animateHomepageElements = () => {
   if (!gridContainer || !gridItems.length) return;
 
+  // 모션 민감 사용자는 스태거 페이드인 없이 바로 보이게
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    gsap.set(gridContainer, { autoAlpha: 1 });
+    gsap.set(gridItems, { autoAlpha: 1 });
+    document.dispatchEvent(new CustomEvent('gridRendered'));
+    return;
+  }
+
   // Hide the grid container before starting the animation.
   animationTimeline = gsap.set(gridContainer, { autoAlpha: 0 });
 

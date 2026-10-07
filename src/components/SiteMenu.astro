@@ -6,7 +6,7 @@ import TextSlider from "../components/TextSlider.astro";
      모바일: Search 모달과 동일하게 showModal()로 열어 배경을 블러 처리.
      위치/너비/닫기 버튼은 Search 패널과 공유하는 .anchored-panel(global.css)로 통일 —
      버튼 라벨은 열림/닫힘 상관없이 항상 "Menu" -->
-<dialog id="site-menu-dialog" class="anchored-panel">
+<dialog id="site-menu-dialog" class="anchored-panel" aria-label="전체 메뉴">
  <button id="site-menu-close" type="button" aria-label="메뉴 닫기" class="anchored-panel-close">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
    <path d="M2 2l12 12M14 2 2 14" />
@@ -146,11 +146,26 @@ import TextSlider from "../components/TextSlider.astro";
    // 버튼 라벨은 두 경우 모두 "Menu"로 고정 — 닫기는 전용 닫기 버튼/바깥 클릭/Escape가 담당
    if (isMobile()) dialog!.showModal();
    else dialog!.show();
+   btn!.setAttribute("aria-expanded", "true");
+   // show()(데스크톱 비모달)는 showModal()과 달리 포커스를 자동으로 옮겨주지 않아서,
+   // 키보드 사용자가 Menu 버튼 다음 Tab에서 바로 패널 안으로 들어가도록 직접 포커스 이동
+   closeBtn?.focus();
   }
 
   function close() {
    dialog!.close();
   }
+
+  // Escape 키 등 닫히는 경로가 여러 개라, dialog 자체의 close 이벤트 하나로
+  // aria-expanded 동기화 + 포커스를 트리거 버튼으로 되돌리는 걸 통일해서 처리
+  dialog.addEventListener(
+   "close",
+   () => {
+    btn!.setAttribute("aria-expanded", "false");
+    btn!.focus();
+   },
+   { signal: sig }
+  );
 
   btn.addEventListener(
    "click",

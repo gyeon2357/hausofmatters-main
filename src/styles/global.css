@@ -7,6 +7,20 @@
  }
 }
 
+/* 모션에 민감한 사용자를 위한 전역 설정 — CSS 트랜지션/애니메이션과 스무스 스크롤을
+   전부 사실상 즉시 전환으로 축소. Lenis(JS 스크롤)·GSAP 애니메이션은 각 스크립트에서
+   별도로 matchMedia 체크해 아예 생략함 (CSS만으로는 JS 트윈 자체를 막을 수 없음) */
+@media (prefers-reduced-motion: reduce) {
+ *,
+ *::before,
+ *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+ }
+}
+
 @font-face {
  /* 라틴 문자 전용 — Arial Narrow엔 한글 글리프가 없어 자동으로 다음(Noto Sans KR 등)으로 폴백됨.
     Bold 전용 파일이 없어 700 요청은 브라우저가 합성(faux-bold)함 */
@@ -312,6 +326,30 @@ figure.video-embed iframe {
  border: 0;
 }
 
+/* 키보드 사용자가 반복되는 헤더/메뉴/하단 내비를 매번 Tab으로 거치지 않고
+   바로 본문(main)으로 건너뛸 수 있게 하는 링크. 평소엔 sr-only처럼 숨겨뒀다가
+   포커스를 받으면 화면 좌상단에 나타남 */
+.skip-link {
+ position: fixed;
+ top: -4rem;
+ left: 1rem;
+ z-index: 1000;
+
+ background: var(--color-bg);
+ color: var(--color-text);
+ padding: 0.6em 1.2em;
+ font-size: var(--font-size-s);
+ text-decoration: underline;
+ text-underline-position: under;
+ border: 1px solid var(--border-color);
+
+ transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+ top: 1rem;
+}
+
 .faded {
  color: var(--color-faded);
 }
@@ -497,6 +535,9 @@ dd {
  width: 100%;
 }
 
+/* 페이지 제목은 시맨틱하게 h1이어야 하지만(페이지당 단 하나), 예전에 h2로 쓰인 곳이
+   남아있을 수도 있어 둘 다 선택자에 포함 — 실제 마크업은 전부 h1로 통일함 */
+.title-header h1,
 .title-header h2 {
  text-wrap: nowrap;
  font-weight: 400;
