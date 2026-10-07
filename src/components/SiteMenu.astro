@@ -2,15 +2,39 @@
 import TextSlider from "../components/TextSlider.astro";
 ---
 
-<!-- 데스크톱/모바일 공용 메뉴 패널 — 전체화면이 아니라 헤더 바로 아래, 우측(모바일은 좌우 꽉 채움)에
-     떠 있는 드롭다운. show()로 열어 헤더(로고/검색/Menu 버튼)가 항상 그 위에 보이게 함 -->
+<!-- 데스크톱: Menu 버튼 바로 아래 우측에 뜨는 비모달 드롭다운 (show()) — 헤더(로고/검색/Menu)가 항상 위에 보임,
+     버튼 라벨이 Menu↔Close로 토글됨.
+     모바일: Search 모달과 동일하게 showModal()로 열어 배경을 블러 처리하고, 전용 닫기 버튼으로 닫음 —
+     이쪽은 트리거 라벨이 Menu로 고정 -->
 <dialog id="site-menu-dialog">
+ <button id="site-menu-close" type="button" aria-label="메뉴 닫기" class="site-menu-close">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+   <path d="M2 2l12 12M14 2 2 14" />
+  </svg>
+ </button>
+
  <ul class="site-menu-links">
-  <li>
+  <li class="site-menu-item">
    <a href="/magazine/" data-astro-prefetch><TextSlider content="Magazine" /></a>
+   <ul class="site-menu-sublinks">
+    <li>
+     <a href="/magazine/hom" data-astro-prefetch>HOM <span class="site-menu-subtext">국내힙합매거진</span></a>
+    </li>
+    <li>
+     <a href="/magazine/w-hom" data-astro-prefetch>w/HOM <span class="site-menu-subtext">해외힙합매거진</span></a>
+    </li>
+   </ul>
   </li>
-  <li>
+  <li class="site-menu-item">
    <a href="/albums/" data-astro-prefetch><TextSlider content="Album" /></a>
+   <ul class="site-menu-sublinks">
+    <li>
+     <a href="/albums/hom" data-astro-prefetch>국내리뷰</a>
+    </li>
+    <li>
+     <a href="/albums/w-hom" data-astro-prefetch>해외리뷰</a>
+    </li>
+   </ul>
   </li>
   <li>
    <a href="/interview/" data-astro-prefetch><TextSlider content="Interview" /></a>
@@ -31,18 +55,17 @@ import TextSlider from "../components/TextSlider.astro";
 
 <style>
  dialog#site-menu-dialog {
-  border: 1px solid var(--border-color);
+  border: 0;
   margin: 0;
   position: fixed;
-  top: var(--header-height, 4.5rem);
+  top: calc(var(--menu-anchor-top, 3.5rem) + 0.5rem);
   right: 1rem;
   left: auto;
   width: min(320px, calc(100vw - 2rem));
   max-width: none;
-  max-height: calc(100vh - var(--header-height, 4.5rem) - var(--bottom-nav-height, 3.5rem) - 1rem);
+  max-height: calc(100vh - var(--menu-anchor-top, 3.5rem) - var(--bottom-nav-height, 3.5rem) - 1.5rem);
 
   padding: 1.5rem;
-  border-radius: 12px;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--info-font);
@@ -57,6 +80,26 @@ import TextSlider from "../components/TextSlider.astro";
   display: flex;
   flex-direction: column;
   gap: 2rem;
+ }
+
+ /* 데스크톱 드롭다운에는 필요 없음 — 모바일 모달에서만 노출 */
+ .site-menu-close {
+  display: none;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  align-items: center;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.25s;
+  padding: 0.25rem;
+ }
+
+ .site-menu-close:hover {
+  opacity: 1;
  }
 
  .site-menu-links {
@@ -80,6 +123,24 @@ import TextSlider from "../components/TextSlider.astro";
   text-decoration-thickness: 2px;
  }
 
+ .site-menu-sublinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0 0 0 1rem;
+ }
+
+ .site-menu-sublinks a {
+  font-size: var(--font-size-s);
+  opacity: 0.8;
+ }
+
+ .site-menu-subtext {
+  opacity: 0.6;
+ }
+
  .site-menu-utility {
   display: flex;
   flex-direction: column;
@@ -94,7 +155,16 @@ import TextSlider from "../components/TextSlider.astro";
    left: 0.75rem;
    right: 0.75rem;
    width: auto;
-   border-radius: 0 0 12px 12px;
+  }
+
+  .site-menu-close {
+   display: flex;
+  }
+
+  /* Search 모달과 동일한 배경 블러 — showModal()로 열렸을 때만 그려짐 */
+  dialog#site-menu-dialog::backdrop {
+   background: color-mix(in srgb, var(--color-text) 10%, transparent);
+   backdrop-filter: blur(4px);
   }
  }
 </style>
@@ -103,6 +173,7 @@ import TextSlider from "../components/TextSlider.astro";
  function initSiteMenu() {
   const btn = document.getElementById("site-menu-open");
   const dialog = document.getElementById("site-menu-dialog") as HTMLDialogElement | null;
+  const closeBtn = document.getElementById("site-menu-close");
 
   if (!btn || !dialog) return;
 
@@ -113,13 +184,19 @@ import TextSlider from "../components/TextSlider.astro";
   prev?.abort();
   (btn as any).__siteMenuAC = ac;
 
-  const label = () => btn.querySelector(".oh__inner");
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+  const label = () => btn!.querySelector(".oh__inner");
 
   function open() {
-   dialog!.show();
-   btn!.classList.add("is-open");
-   const inner = label();
-   if (inner) inner.textContent = "Close";
+   if (isMobile()) {
+    // 모바일: Search와 동일하게 진짜 모달로 열어 배경을 블러 처리 — 트리거 라벨은 Menu로 고정
+    dialog!.showModal();
+   } else {
+    dialog!.show();
+    btn!.classList.add("is-open");
+    const inner = label();
+    if (inner) inner.textContent = "Close";
+   }
   }
 
   function close() {
@@ -129,6 +206,8 @@ import TextSlider from "../components/TextSlider.astro";
    if (inner) inner.textContent = "Menu";
   }
 
+  // showModal()로 열려있는 동안 트리거 버튼 자체가 inert(클릭 불가)라, 토글이 아니라
+  // 열기 전용으로만 쓰임 — 닫기는 모바일에서 전용 닫기 버튼이 담당
   btn.addEventListener(
    "click",
    () => {
@@ -138,14 +217,25 @@ import TextSlider from "../components/TextSlider.astro";
    { signal: sig }
   );
 
-  // 바깥(메뉴 패널도, 토글 버튼도 아닌 곳) 클릭 시 닫기 — show()는 네이티브 backdrop이 없어 직접 구현
+  closeBtn?.addEventListener("click", close, { signal: sig });
+
+  // 바깥 클릭 시 닫기 — show() 모달(데스크톱)은 네이티브 backdrop이 없어 직접 감지해야 하고,
+  // showModal() 모달(모바일)은 클릭 대상이 dialog 자신일 때(= backdrop) 아래 리스너로 처리됨
   document.addEventListener(
    "click",
    e => {
-    if (!dialog!.open) return;
+    if (!dialog!.open || isMobile()) return;
     const target = e.target as Node;
     if (dialog!.contains(target) || btn!.contains(target)) return;
     close();
+   },
+   { signal: sig }
+  );
+
+  dialog.addEventListener(
+   "click",
+   e => {
+    if (e.target === dialog) close();
    },
    { signal: sig }
   );

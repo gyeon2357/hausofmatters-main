@@ -88,7 +88,7 @@ import SiteMenu from "../components/SiteMenu.astro";
 
   .logo {
    display: block;
-   height: 1.5rem;
+   height: 1.05rem; /* 1.5rem의 70% */
    width: auto;
   }
 
@@ -181,7 +181,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    }
 
    .logo {
-    height: 1.1rem;
+    height: 0.88rem; /* 1.1rem의 80% */
    }
 
    .pill-nav {
@@ -216,10 +216,11 @@ import SiteMenu from "../components/SiteMenu.astro";
    if (nav) document.documentElement.style.setProperty("--bottom-nav-height", nav.getBoundingClientRect().height + "px");
   }
 
-  // SiteMenu 패널이 헤더 바로 아래에 붙도록 헤더 실제 높이를 CSS 변수로 노출
+  // SiteMenu 패널이 Menu 버튼 바로 아래 가깝게 붙도록, header 전체(아래 그라데이션 여백 포함)가
+  // 아니라 버튼이 실제로 있는 header-bar 줄의 bottom 좌표만 노출
   function updateHeaderHeight() {
-   const header = document.querySelector("header");
-   if (header) document.documentElement.style.setProperty("--header-height", header.getBoundingClientRect().height + "px");
+   const bar = document.querySelector(".header-bar");
+   if (bar) document.documentElement.style.setProperty("--menu-anchor-top", bar.getBoundingClientRect().bottom + "px");
   }
 
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화

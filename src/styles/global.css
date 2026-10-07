@@ -568,9 +568,12 @@ dd {
  line-height: 1.3;
 }
 
-.album-year {
- margin: 0;
- font-size: var(--font-size-s);
+/* 카드형 목록(앨범/매거진/인터뷰/feature)에 공통으로 쓰는 작은 날짜·연도 라벨.
+   페이지마다 .album-year / .magazine-date / .meta-date로 제각각이던 걸 하나로 통일 */
+.meta-date {
+ margin-top: 0.25rem;
+ font-size: var(--font-size-xs);
+ color: var(--color-faded);
 }
 
 /* feature 등에 붙는 태그 — pick-badge와 달리 굵지 않은 저채도 메타 정보 */
