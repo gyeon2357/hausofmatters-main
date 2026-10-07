@@ -863,8 +863,11 @@ mark {
 }
 
 /* ── 이미지 ── */
+/* 썸네일 원본 비율이 제각각이라, 정사각형으로 고정 크롭해야 결과 목록이 가지런해짐.
+   height를 명시해야 object-fit: cover가 실제로 동작함 (height:auto면 크롭되지 않고 원본 비율대로 넘침) */
 .result-image {
  width: 8rem;
+ aspect-ratio: 1;
 
  flex-shrink: 0;
  overflow: hidden;
@@ -872,6 +875,7 @@ mark {
 
 .result-image img {
  width: 100%;
+ height: 100%;
 
  object-fit: cover;
  display: block;
@@ -946,6 +950,5 @@ mark {
 
  .result-image {
   width: 6rem;
-  height: 6rem;
  }
 }

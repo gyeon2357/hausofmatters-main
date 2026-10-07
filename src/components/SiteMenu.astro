@@ -49,8 +49,8 @@ import TextSlider from "../components/TextSlider.astro";
 
  <div class="site-menu-utility">
   <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer" class="text-btn">Instagram</a>
-  <!-- 메일 주소를 그대로 노출하지 않고 About의 연락처 섹션으로 보냄 -->
-  <a href="/about/#members-container" data-astro-prefetch class="text-btn">Contact</a>
+  <!-- 메일 주소를 그대로 노출하지 않고 About의 연락처 블록으로 보냄 -->
+  <a href="/about/#contact-intro" data-astro-prefetch class="text-btn">Contact</a>
  </div>
 </dialog>
 
@@ -115,6 +115,11 @@ import TextSlider from "../components/TextSlider.astro";
   gap: 0.75rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
+ }
+
+ /* Instagram/Contact는 .text-btn 기본 밑줄 없이, 호버로만 상태 표시 */
+ .site-menu-utility a {
+  text-decoration: none;
  }
 </style>
 

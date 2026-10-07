@@ -182,7 +182,7 @@ const whomEditors: Member[] = [
   </h4>
 
   <section class="members-container" id="members-container">
-   <div class="contact-intro">
+   <div class="contact-intro" id="contact-intro">
     <p class="contact-intro-text">다양한 프로젝트와 협업에 대해 편하게 연락 바랍니다.</p>
     <div class="contact-intro-mail">
      <a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a>
@@ -256,7 +256,30 @@ const whomEditors: Member[] = [
   setTimeout(() => toast.classList.remove("visible"), 2000);
  }
 
+ // Menu의 Contact 링크(#contact-intro)로 들어왔을 때, 네이티브 해시 점프는 타깃을
+ // 화면 맨 위에 딱 붙여버려 어색함 — 화면 상단에서 30% 지점(중앙보다 살짝 위)에 오도록 보정
+ function scrollToContactIntro() {
+  if (window.location.hash !== "#contact-intro") return;
+  const target = document.getElementById("contact-intro");
+  if (!target) return;
+
+  const targetY = target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.3;
+  window.scrollTo({ top: Math.max(targetY, 0), behavior: "auto" });
+ }
+
+ let popstateBound = false;
+
  function initContactIntro() {
+  // 다른 페이지에서 들어올 때는 astro:page-load 시점에 보정하면 되지만, About 페이지에
+  // 이미 있는 상태에서 Menu의 Contact를 클릭하는 경우는 astro:page-load가 다시 발화하지
+  // 않고 popstate만 발생한 뒤 브라우저가 자체적으로 해시 위치로 스크롤함 — 그 네이티브
+  // 스크롤이 끝난 뒤에 보정해야 해서 popstate에도 별도로 걸어둠
+  scrollToContactIntro();
+  if (!popstateBound) {
+   popstateBound = true;
+   window.addEventListener("popstate", () => setTimeout(scrollToContactIntro, 50));
+  }
+
   const copyBtn = document.getElementById("mail-copy-btn");
   const shareBtn = document.getElementById("mail-share-btn");
 
