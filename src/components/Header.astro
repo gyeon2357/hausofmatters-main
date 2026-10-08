@@ -69,18 +69,23 @@ import SiteMenu from "../components/SiteMenu.astro";
    position: sticky;
    top: 0;
    z-index: 100;
-   /* 불투명한 흰 박스 대신 아래로 갈수록 옅어지는 스크림 — 콘텐츠(특히 커버 이미지) 위에
-      떠 있는 느낌을 주고, 스크롤해도 텍스트가 완전히 가려지지 않게 함 */
-   background: linear-gradient(to bottom, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 55%, transparent) 65%, transparent 100%);
+   /* 맨 위에서는 배경 없이 콘텐츠 위에 떠 있다가, 스크롤하면 흰 바가 나타나 텍스트를
+      가려주지 않게 함 (아래 .header--scrolled, 스크립트가 스크롤 위치에 따라 토글) */
+   background: transparent;
+   transition: background-color 0.2s ease;
 
    font-family: var(--info-font);
 
-   padding: 1rem 1rem 2rem;
+   padding: 1rem;
 
-   /* header 박스 자체는 아래쪽 그라데이션 여백(2rem)까지 포함해서 큰데, 그 빈 공간이
+   /* header 박스 자체는 내용(.header-bar)보다 넓게 패딩이 있는데, 그 빈 공간이
       Search/Menu 패널의 닫기 버튼(z-index 100인 header보다 낮은 90)을 가로채지 않도록
       기본은 클릭을 투과시키고, 실제 내용이 있는 .header-bar만 다시 받게 함 */
    pointer-events: none;
+  }
+
+  header.header--scrolled {
+   background: var(--color-bg);
   }
 
   /* 테마(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌우 칸의 콘텐츠 폭/노출 여부가
@@ -122,8 +127,8 @@ import SiteMenu from "../components/SiteMenu.astro";
    justify-self: end;
   }
 
-  /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 헤더와 대칭으로 위로 갈수록
-     옅어지는 스크림 배경을 써서 흰 박스처럼 보이지 않게 함 */
+  /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 내비 바 자체엔 배경을 두지 않고,
+     각 pill 버튼이 테마색 배경을 각자 갖고 있어 어떤 콘텐츠 위에서도 또렷하게 보임 */
   .pill-nav {
    position: fixed;
    left: 0;
@@ -132,8 +137,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    z-index: 100;
    width: 100%;
 
-   padding: 1.5rem 1rem 1rem;
-   background: linear-gradient(to top, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 55%, transparent) 65%, transparent 100%);
+   padding: 1rem;
 
    overflow-x: auto;
    scrollbar-width: none;
@@ -160,6 +164,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    white-space: nowrap;
    font-size: var(--font-size-s);
    padding: var(--btn-padding);
+   background: var(--color-bg);
    border: 1px solid var(--border-color);
    border-radius: 999px;
    transition:
@@ -176,11 +181,15 @@ import SiteMenu from "../components/SiteMenu.astro";
    background: var(--color-text);
    border-color: var(--color-text);
    color: var(--color-bg);
+   /* global.css의 .current { font-weight: 700 }를 그대로 두면 페이지 이동 시마다
+      글자 폭이 바뀌어 pill 크기가 들썩이는("깜빡임") 원인이 됨 — 배경 반전만으로
+      충분히 구분되니 굵기는 바꾸지 않음 */
+   font-weight: inherit;
   }
 
   @media screen and (max-width: 768px) {
    header {
-    padding: 0.75rem 0.75rem 1.5rem;
+    padding: 0.75rem;
    }
 
    .logo {
@@ -188,7 +197,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    }
 
    .pill-nav {
-    padding: 1.25rem 0.75rem 0.75rem;
+    padding: 0.75rem;
    }
 
    .pill-links {
@@ -226,11 +235,30 @@ import SiteMenu from "../components/SiteMenu.astro";
    if (nav) document.documentElement.style.setProperty("--bottom-nav-height", nav.getBoundingClientRect().height + "px");
   }
 
-  // SiteMenu 패널이 Menu 버튼 바로 아래 가깝게 붙도록, header 전체(아래 그라데이션 여백 포함)가
+  // SiteMenu 패널이 Menu 버튼 바로 아래 가깝게 붙도록, header 전체(아래 패딩 포함)가
   // 아니라 버튼이 실제로 있는 header-bar 줄의 bottom 좌표만 노출
   function updateHeaderHeight() {
    const bar = document.querySelector(".header-bar");
    if (bar) document.documentElement.style.setProperty("--menu-anchor-top", bar.getBoundingClientRect().bottom + "px");
+  }
+
+  // 맨 위에서는 배경 없이 콘텐츠 위에 떠 있다가, 스크롤하면 흰 바(테마 배경)가 나타나
+  // 텍스트가 콘텐츠에 섞여 안 보이는 걸 방지.
+  function updateHeaderScrollBg() {
+   const header = document.querySelector("header.full-bleed");
+   header?.classList.toggle("header--scrolled", window.scrollY > 4);
+  }
+
+  // header는 transition:persist라 리스너가 페이지 이동마다 중복으로 쌓이지 않도록
+  // 바인딩 여부를 header 자신의 dataset에 기록해두고(모듈 스코프 변수는 페이지 전환 때
+  // 다시 초기화될 수 있어 신뢰할 수 없음), 상태 동기화(updateHeaderScrollBg)는 매번 호출함 —
+  // 그래야 이전 페이지에서 스크롤해둔 상태가 새 페이지(스크롤 0)에 잘못 남지 않음
+  function initHeaderScrollBg() {
+   updateHeaderScrollBg();
+   const header = document.querySelector("header.full-bleed") as HTMLElement | null;
+   if (!header || header.dataset.scrollBgBound) return;
+   header.dataset.scrollBgBound = "true";
+   window.addEventListener("scroll", updateHeaderScrollBg, { passive: true });
   }
 
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
@@ -385,6 +413,7 @@ import SiteMenu from "../components/SiteMenu.astro";
   document.addEventListener("astro:page-load", initSearch);
   document.addEventListener("astro:page-load", updateBottomNavHeight);
   document.addEventListener("astro:page-load", updateHeaderHeight);
+  document.addEventListener("astro:page-load", initHeaderScrollBg);
   window.addEventListener("resize", updateBottomNavHeight, { passive: true });
   window.addEventListener("resize", updateHeaderHeight, { passive: true });
  </script>

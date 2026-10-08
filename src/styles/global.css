@@ -536,9 +536,12 @@ dd {
 }
 
 /* 페이지 제목은 시맨틱하게 h1이어야 하지만(페이지당 단 하나), 예전에 h2로 쓰인 곳이
-   남아있을 수도 있어 둘 다 선택자에 포함 — 실제 마크업은 전부 h1로 통일함 */
+   남아있을 수도 있어 둘 다 선택자에 포함 — 실제 마크업은 전부 h1로 통일함.
+   font-size를 명시하지 않으면 브라우저 기본 h1(2em)/h2(1.5em)이 그대로 적용돼
+   의도보다 훨씬 커짐 — .title-header(--initial)가 정한 크기를 1:1로 그대로 쓰게 함 */
 .title-header h1,
 .title-header h2 {
+ font-size: 1em;
  text-wrap: nowrap;
  font-weight: 400;
 }
@@ -549,6 +552,13 @@ dd {
  @media screen and (min-width: 50em) {
   grid-template-columns: 20vw 1fr auto;
   gap: 1rem;
+ }
+}
+
+/* Magazine/Album처럼 목록 페이지 제목(h1)은 모바일에서 다른 요소 대비 과하게 커서 75%로 축소 */
+@media (max-width: 768px) {
+ .title-header--initial h1 {
+  font-size: 75%;
  }
 }
 
@@ -696,7 +706,6 @@ dd {
 /* showModal()로 연 경우에만 실제로 그려짐(Search는 항상, Menu는 모바일에서만 모달) */
 .anchored-panel::backdrop {
  background: color-mix(in srgb, var(--color-text) 10%, transparent);
- backdrop-filter: blur(4px);
 }
 
 .anchored-panel-close {
