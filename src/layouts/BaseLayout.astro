@@ -90,7 +90,9 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
   <link rel="stylesheet" href="/styles/flipbook.style.css" />
   <link rel="stylesheet" href="/styles/font-awesome.css" />
  </head>
- <body>
+ <!-- Astro 기본 페이지 전환 애니메이션(크로스페이드)이 전환 중 화면이 탁해 보이는
+      "깜빡임"으로 보여서 끔 — 콘텐츠가 그냥 즉시 바뀌는 쪽이 더 자연스러움 -->
+ <body transition:animate="none">
   <a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
   <Preloader />
   <SmoothScroll />

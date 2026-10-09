@@ -24,6 +24,9 @@ import Separator from "../components/Separator.astro";
   align-items: start;
 
   padding: 1rem 0;
+  /* body의 전역 letter-spacing(-0.02px)이 button엔 적용 안 돼 Back to Top만 미묘하게
+     달라 보였음 — 푸터 안에서는 모두 기본값으로 통일 */
+  letter-spacing: normal;
  }
 
  footer div {

@@ -187,6 +187,17 @@ import SiteMenu from "../components/SiteMenu.astro";
    font-weight: inherit;
   }
 
+  /* global.css의 a:focus:not(:focus-visible) { background-color: transparent }가
+     마우스로 클릭하는 순간(= focus지만 focus-visible은 아님) pill의 배경을 지워버려서
+     누를 때마다 버튼이 투명해졌다 돌아오는 것처럼 보였음 — 상태별 배경을 그대로 복원 */
+  .pill-links a:focus:not(:focus-visible) {
+   background: var(--color-bg);
+  }
+
+  .pill-links a.current:focus:not(:focus-visible) {
+   background: var(--color-text);
+  }
+
   @media screen and (max-width: 768px) {
    header {
     padding: 0.75rem;
@@ -282,6 +293,17 @@ import SiteMenu from "../components/SiteMenu.astro";
     syncLabels(theme);
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
+
+    // 일부 모바일 브라우저는 position:fixed/sticky 요소의 배경이 CSS 커스텀 프로퍼티
+    // (--color-bg)로만 바뀌면 리페인트를 건너뛰어, 라이트→다크→라이트로 되돌려도
+    // 상/하단 바가 이전 테마 배경인 채로 남는 경우가 있음 — 강제로 리페인트시킴
+    [document.querySelector("header.full-bleed"), document.querySelector(".pill-nav")].forEach(el => {
+     if (!(el instanceof HTMLElement)) return;
+     const prevDisplay = el.style.display;
+     el.style.display = "none";
+     void el.offsetHeight;
+     el.style.display = prevDisplay;
+    });
    };
 
    const initial = getEffective();
