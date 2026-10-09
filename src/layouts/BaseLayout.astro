@@ -96,6 +96,12 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
   <a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
   <Preloader />
   <SmoothScroll />
+  <!-- 헤더가 스크롤됐는지 감지하는 1px 센티넬. scroll 이벤트 대신 IntersectionObserver로
+       관찰하는 이유: iOS Safari는 관성(모멘텀) 스크롤 중엔 scroll 이벤트를 거의/전혀 쏘지
+       않아서, 빠르게 스크롤하면 헤더 배경이 갱신될 기회를 놓쳐 콘텐츠가 헤더 위로 비쳐
+       보이는 문제가 있었음 — IntersectionObserver는 메인 스레드 스크롤 이벤트에 의존하지
+       않아 이 문제가 없음 -->
+  <div id="scroll-sentinel" aria-hidden="true"></div>
   <Header />
   <main id="main-content" tabindex="-1"><slot /></main>
   <Footer />

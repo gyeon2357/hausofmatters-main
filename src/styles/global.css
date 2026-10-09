@@ -350,6 +350,16 @@ figure.video-embed iframe {
  top: 1rem;
 }
 
+/* 헤더 스크롤 배경 전환용 센티넬 — 문서 맨 위에 0 크기로 붙어있다가 스크롤되면
+   뷰포트 밖으로 나가는 것만으로 IntersectionObserver가 감지하게 함 */
+#scroll-sentinel {
+ position: absolute;
+ top: 0;
+ width: 1px;
+ height: 1px;
+ pointer-events: none;
+}
+
 .faded {
  color: var(--color-faded);
 }

@@ -176,9 +176,13 @@ import SiteMenu from "../components/SiteMenu.astro";
     color 0.2s ease;
   }
 
+  /* color-mix(…, transparent)는 불투명한 기본 배경을 "희석"해버려서(거의 투명하게 만듦)
+     pill처럼 배경 자체가 핵심 스타일인 요소엔 안 맞음 — 모바일은 탭하면 hover가 그대로
+     눌러붙어서("sticky hover") 계속 반투명하게 보이는 문제로 이어졌음. transparent 대신
+     기존 배경색과 섞어서 완전히 불투명한 톤 변화만 주도록 함 */
   .pill-links a:hover {
    color: inherit;
-   background: color-mix(in srgb, currentColor 8%, transparent);
+   background: color-mix(in srgb, currentColor 8%, var(--color-bg));
   }
 
   .pill-links a.current {
@@ -267,21 +271,17 @@ import SiteMenu from "../components/SiteMenu.astro";
 
   // 맨 위에서는 배경 없이 콘텐츠 위에 떠 있다가, 스크롤하면 흰 바(테마 배경)가 나타나
   // 텍스트가 콘텐츠에 섞여 안 보이는 걸 방지.
-  function updateHeaderScrollBg() {
-   const header = document.querySelector("header.full-bleed");
-   header?.classList.toggle("header--scrolled", window.scrollY > 4);
-  }
-
-  // header는 transition:persist라 리스너가 페이지 이동마다 중복으로 쌓이지 않도록
-  // 바인딩 여부를 header 자신의 dataset에 기록해두고(모듈 스코프 변수는 페이지 전환 때
-  // 다시 초기화될 수 있어 신뢰할 수 없음), 상태 동기화(updateHeaderScrollBg)는 매번 호출함 —
-  // 그래야 이전 페이지에서 스크롤해둔 상태가 새 페이지(스크롤 0)에 잘못 남지 않음
+  // scroll 이벤트 대신 문서 맨 위의 #scroll-sentinel을 IntersectionObserver로 관찰함 —
+  // iOS Safari는 관성 스크롤 중 scroll 이벤트를 거의/전혀 쏘지 않아서, scroll 이벤트
+  // 기반으로는 빠르게 스크롤할 때 헤더 배경이 갱신될 기회를 놓쳐 콘텐츠가 헤더 위로
+  // 비쳐 보였음 — IntersectionObserver는 메인 스레드 이벤트 루프에 의존하지 않음.
+  // sentinel은 persist 요소가 아니라 페이지마다 새로 생기므로, 매번 새로 관찰해야 함
   function initHeaderScrollBg() {
-   updateHeaderScrollBg();
-   const header = document.querySelector("header.full-bleed") as HTMLElement | null;
-   if (!header || header.dataset.scrollBgBound) return;
-   header.dataset.scrollBgBound = "true";
-   window.addEventListener("scroll", updateHeaderScrollBg, { passive: true });
+   const header = document.querySelector("header.full-bleed");
+   const sentinel = document.getElementById("scroll-sentinel");
+   if (!header || !sentinel) return;
+
+   new IntersectionObserver(([entry]) => header.classList.toggle("header--scrolled", !entry.isIntersecting), { threshold: 0 }).observe(sentinel);
   }
 
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
