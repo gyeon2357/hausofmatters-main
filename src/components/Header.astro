@@ -73,6 +73,10 @@ import SiteMenu from "../components/SiteMenu.astro";
       가려주지 않게 함 (아래 .header--scrolled, 스크립트가 스크롤 위치에 따라 토글) */
    background: transparent;
    transition: background-color 0.2s ease;
+   /* 모바일 Safari는 주소창이 접히는 스크롤 중에 position:sticky 요소를 한 프레임
+      늦게 따라오는 경우가 있어서, 스크롤된 뒤에도 헤더 위로 콘텐츠가 잠깐 보이는
+      현상이 있었음 — 별도 GPU 레이어로 승격시켜 리페인트를 더 즉각적으로 만듦 */
+   transform: translateZ(0);
 
    font-family: var(--info-font);
 
@@ -187,15 +191,23 @@ import SiteMenu from "../components/SiteMenu.astro";
    font-weight: inherit;
   }
 
-  /* global.css의 a:focus:not(:focus-visible) { background-color: transparent }가
-     마우스로 클릭하는 순간(= focus지만 focus-visible은 아님) pill의 배경을 지워버려서
-     누를 때마다 버튼이 투명해졌다 돌아오는 것처럼 보였음 — 상태별 배경을 그대로 복원 */
-  .pill-links a:focus:not(:focus-visible) {
+  /* global.css의 a:focus { background-color: lightgrey; &:not(:focus-visible){transparent}
+     &:focus-visible{opacity:.5; transparent} }가 포커스(마우스 클릭/터치 모두 포함 —
+     모바일 Safari는 탭도 focus-visible로 취급함)를 받을 때마다 pill의 배경을 지워버려서
+     누를 때마다 버튼이 투명해지는 것처럼 보였음 — focus-visible 여부와 상관없이
+     상태별 배경을 그대로 복원하고, 키보드 포커스 표시는 outline으로 대체 */
+  .pill-links a:focus {
    background: var(--color-bg);
+   opacity: 1;
   }
 
-  .pill-links a.current:focus:not(:focus-visible) {
+  .pill-links a.current:focus {
    background: var(--color-text);
+  }
+
+  .pill-links a:focus-visible {
+   outline: 2px solid currentColor;
+   outline-offset: 2px;
   }
 
   @media screen and (max-width: 768px) {
