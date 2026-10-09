@@ -565,13 +565,6 @@ dd {
  }
 }
 
-/* Magazine/Album처럼 목록 페이지 제목(h1)은 모바일에서 다른 요소 대비 과하게 커서 75%로 축소 */
-@media (max-width: 768px) {
- .title-header--initial h1 {
-  font-size: 75%;
- }
-}
-
 .album-card {
  text-decoration: none;
  color: inherit;

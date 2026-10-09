@@ -240,15 +240,28 @@ import SiteMenu from "../components/SiteMenu.astro";
  </style>
 
  <script>
+  // 끝 슬래시 유무와 무관하게 비교하기 위해 "/" 자체가 아닌 한 끝 슬래시를 떼어냄 —
+  // trailingSlash 설정상 "/albums"와 "/albums/" 둘 다 같은 페이지로 렌더되는데,
+  // 내비게이션 href는 전부 끝 슬래시 포함("/albums/")이라, 끝 슬래시 없이 직접 주소를
+  // 입력해 들어온 경우(북마크 등) path.startsWith(href)가 항상 false가 되어 active
+  // 표시가 전혀 안 되는 버그가 있었음
+  function stripTrailingSlash(p: string) {
+   return p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
+  }
+
   function initHeader() {
-   const path = window.location.pathname;
+   const path = stripTrailingSlash(window.location.pathname);
    // "header a[href]"처럼 느슨하게 쓰면 매거진 상세 등 페이지 자체의 <header class="title-header">
    // (예: "View All" 백링크)까지 걸려서 무관한 링크에 current가 붙는 버그가 있었음 —
    // 사이트 전역 헤더(.full-bleed)로만 범위를 한정
    document.querySelectorAll("header.full-bleed a[href], .pill-nav a[href], .site-menu-links a[href]").forEach(a => {
     const href = a.getAttribute("href");
-    if (!href) return;
-    const isCurrent = href !== "/" && path.startsWith(href);
+    if (!href || href === "/") return;
+    const hrefPath = stripTrailingSlash(href);
+    // 정확히 같은 페이지이거나("/magazine"), 그 하위 상세 페이지("/magazine/hom-1")일 때만
+    // — 경계(슬래시) 없이 이어 붙여 비교하면 "/album"이 "/albums"에도 매치되는 식의
+    // 오탐이 생길 수 있어 반드시 "/"를 넣어 구분함
+    const isCurrent = path === hrefPath || path.startsWith(hrefPath + "/");
     a.classList.toggle("current", isCurrent);
     // 클래스만으로는 스크린리더가 "현재 페이지"임을 알 수 없어 aria-current도 함께 반영
     if (isCurrent) a.setAttribute("aria-current", "page");

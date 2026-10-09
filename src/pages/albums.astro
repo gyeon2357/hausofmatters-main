@@ -118,10 +118,11 @@ const intlCards = intlAlbums.map(makeCard);
 
  /* 기본값(margin-top만 2rem)을 그대로 두면 버튼 위(자기 섹션)와 아래(다음 섹션) 여백이
     .albums-page의 gap(2rem)과 똑같아져서 어느 섹션 소속인지 구분이 안 됐음 —
-    위는 좁게, 아래는 넓게 둬서 "이 섹션의 더보기"라는 게 분명해지도록 함 */
+    위는 확 좁히고 아래는 .albums-page의 gap(2rem)에 더해 추가로 벌려서, 눈으로 봐도
+    "이 섹션의 더보기"라는 게 분명하도록 함 */
  .load-more-btn {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 3rem;
  }
 
  .section-title {

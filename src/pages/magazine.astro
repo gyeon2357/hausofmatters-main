@@ -118,9 +118,10 @@ const whomEntries = magazineEntries.filter(e => e.data.category === "w-hom").sli
 
  /* 기본값(margin-top만 2rem)을 그대로 두면 버튼 위(자기 섹션)와 아래(다음 섹션, gap 4rem이지만
     체감상 분간이 안 됐음) 여백 차이가 뚜렷하지 않아서 더보기가 어느 섹션 소속인지 애매했음 —
-    위를 좁혀서 "이 섹션의 더보기"라는 소속감을 분명히 함 */
+    위를 확 좁히고 아래는 더 벌려서 "이 섹션의 더보기"라는 소속감을 분명히 함 */
  .load-more-btn {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 2rem;
  }
 
  .grid {
