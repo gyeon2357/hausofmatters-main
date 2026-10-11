@@ -284,17 +284,38 @@ import SiteMenu from "../components/SiteMenu.astro";
 
   // 맨 위에서는 배경 없이 콘텐츠 위에 떠 있다가, 스크롤하면 흰 바(테마 배경)가 나타나
   // 텍스트가 콘텐츠에 섞여 안 보이는 걸 방지.
-  // scroll 이벤트 대신 문서 맨 위의 #scroll-sentinel을 IntersectionObserver로 관찰함 —
-  // iOS Safari는 관성 스크롤 중 scroll 이벤트를 거의/전혀 쏘지 않아서, scroll 이벤트
-  // 기반으로는 빠르게 스크롤할 때 헤더 배경이 갱신될 기회를 놓쳐 콘텐츠가 헤더 위로
-  // 비쳐 보였음 — IntersectionObserver는 메인 스레드 이벤트 루프에 의존하지 않음.
-  // sentinel은 persist 요소가 아니라 페이지마다 새로 생기므로, 매번 새로 관찰해야 함
-  function initHeaderScrollBg() {
-   const header = document.querySelector("header.full-bleed");
-   const sentinel = document.getElementById("scroll-sentinel");
-   if (!header || !sentinel) return;
+  function updateHeaderScrollBg() {
+   document.querySelector("header.full-bleed")?.classList.toggle("header--scrolled", window.scrollY > 4);
+  }
 
-   new IntersectionObserver(([entry]) => header.classList.toggle("header--scrolled", !entry.isIntersecting), { threshold: 0 }).observe(sentinel);
+  // IntersectionObserver(문서 맨 위 #scroll-sentinel 관찰)를 기본으로 쓰되 — iOS Safari는
+  // 관성 스크롤 중 scroll 이벤트를 거의/전혀 쏘지 않아서, scroll 이벤트만으로는 빠르게
+  // 스크롤할 때 헤더 배경이 갱신될 기회를 놓쳐 콘텐츠가 헤더 위로 비쳐 보였음 —
+  // IntersectionObserver는 메인 스레드 이벤트 루프에 의존하지 않아 이 문제가 없음.
+  // 그래도 간헐적으로 놓치는 경우가 보고돼서, scroll 이벤트와 bfcache 복원(pageshow)
+  // 시점에도 같은 상태 동기화 함수를 한 번 더 걸어 이중으로 보강함.
+  // header는 transition:persist라 리스너가 페이지 이동마다 쌓이지 않도록 AbortController로
+  // 이전 리스너를 정리하고 새로 바인딩
+  function initHeaderScrollBg() {
+   const header = document.querySelector("header.full-bleed") as HTMLElement | null;
+   if (!header) return;
+
+   updateHeaderScrollBg();
+
+   const ac = new AbortController();
+   const prev = (header as any).__scrollBgAC as AbortController | undefined;
+   prev?.abort();
+   (header as any).__scrollBgAC = ac;
+
+   const sentinel = document.getElementById("scroll-sentinel");
+   if (sentinel) {
+    const observer = new IntersectionObserver(updateHeaderScrollBg, { threshold: 0 });
+    observer.observe(sentinel);
+    ac.signal.addEventListener("abort", () => observer.disconnect());
+   }
+
+   window.addEventListener("scroll", updateHeaderScrollBg, { passive: true, signal: ac.signal });
+   window.addEventListener("pageshow", updateHeaderScrollBg, { signal: ac.signal });
   }
 
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화

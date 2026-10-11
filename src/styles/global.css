@@ -741,6 +741,10 @@ dd {
 /* 페이지 내 텍스트형 내비게이션 링크 (Back / View All / Prev·Next / Back to X 등).
    전부 같은 스타일이라 하나의 클래스로 통일 — 나중에 여기 한 곳만 고치면 전체 반영됨 */
 .nav-link {
+ /* 대부분 <a>라 문제없었는데, Footer의 Back to Top처럼 <button>에 쓰이면 브라우저가
+    폼 컨트롤에 OS 기본 폰트를 적용해서 본문과 다른 폰트로 보임 — .text-btn처럼 명시적으로
+    상속받게 함 */
+ font-family: inherit;
  font-size: var(--font-size-base);
  font-weight: 400;
 
