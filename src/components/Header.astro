@@ -316,6 +316,13 @@ import SiteMenu from "../components/SiteMenu.astro";
 
    window.addEventListener("scroll", updateHeaderScrollBg, { passive: true, signal: ac.signal });
    window.addEventListener("pageshow", updateHeaderScrollBg, { signal: ac.signal });
+   // 모바일에서 Search/Menu를 showModal()로 열었다 닫으면, 배경 콘텐츠가 inert였던 동안
+   // IntersectionObserver/scroll 이벤트가 갱신될 기회를 놓쳐 헤더가 스크롤된 상태인데도
+   // 다시 투명하게 "뚫려" 보이는 경우가 있었음 — Search/SiteMenu가 닫힐 때 이 이벤트를
+   // 쏴서 명시적으로 다시 동기화함 (이름 충돌 방지용 네임스페이스)
+   document.addEventListener("hom:resync-header-bg", updateHeaderScrollBg, { signal: ac.signal });
+   // 키보드가 열렸다 닫히는 것도 뷰포트 리사이즈라 같은 증상을 낼 수 있어 보강
+   window.addEventListener("resize", updateHeaderScrollBg, { passive: true, signal: ac.signal });
   }
 
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
@@ -419,7 +426,16 @@ import SiteMenu from "../components/SiteMenu.astro";
 
    // Escape 키로 닫히는 경우(브라우저 기본 동작) 등 닫히는 경로가 여러 개라,
    // dialog 자체의 close 이벤트 하나로 aria-expanded 동기화를 통일
-   dialog.addEventListener("close", () => openBtn!.setAttribute("aria-expanded", "false"), { signal: sig });
+   dialog.addEventListener(
+    "close",
+    () => {
+     openBtn!.setAttribute("aria-expanded", "false");
+     // showModal()로 열려있는 동안 배경(헤더 포함)이 inert라, 스크롤 상태 감지가 갱신될
+     // 기회를 놓쳐서 닫은 뒤 헤더가 다시 투명해 보일 수 있었음 — 직접 재동기화를 요청
+     document.dispatchEvent(new Event("hom:resync-header-bg"));
+    },
+    { signal: sig }
+   );
 
    // showModal() 특성상 열려있는 동안 openBtn 자체가 inert(클릭 불가)라
    // 트리거 버튼을 닫기로 재사용할 수 없음 — 별도 닫기 버튼(closeBtn) 필요

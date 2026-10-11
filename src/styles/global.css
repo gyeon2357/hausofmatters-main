@@ -264,6 +264,11 @@ button {
  padding: 0;
  border: 0;
  cursor: pointer;
+ /* 브라우저가 폼 컨트롤엔 OS 기본 폰트를 적용하고 페이지 폰트를 상속시키지 않음 —
+    font-size/weight는 여기 이미 있었는데 font-family가 빠져서, 이 전역 리셋에
+    기대고 있던 버튼들(더보기, Share/Copy, 정렬·셔플, Flipbook의 Read Now 등)이
+    전부 사이트 폰트 대신 기본 Arial로 보이고 있었음 */
+ font-family: inherit;
  font-size: inherit;
  font-weight: inherit;
  color: inherit;

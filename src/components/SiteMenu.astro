@@ -163,6 +163,10 @@ import TextSlider from "../components/TextSlider.astro";
    () => {
     btn!.setAttribute("aria-expanded", "false");
     btn!.focus();
+    // 모바일에서 showModal()로 열려있는 동안 배경(헤더 포함)이 inert라, 스크롤
+    // 상태 감지가 갱신될 기회를 놓쳐서 닫은 뒤 헤더가 다시 투명해 보일 수 있었음 —
+    // Header.astro에 직접 재동기화를 요청
+    document.dispatchEvent(new Event("hom:resync-header-bg"));
    },
    { signal: sig }
   );
