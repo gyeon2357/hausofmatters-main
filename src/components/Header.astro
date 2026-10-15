@@ -415,8 +415,9 @@ import SiteMenu from "../components/SiteMenu.astro";
     dialog!.showModal();
     openBtn!.setAttribute("aria-expanded", "true");
     input!.value = "";
-    hint!.textContent = "아티스트 · 앨범 · 인터뷰 · 공연정보";
-    suggestions?.classList.remove("suggestions-hidden");
+    hint!.textContent = "";
+    // 처음 열었을 때는 추천 5개 중 3개만(.suggestions-expanded 없는 기본 상태)
+    suggestions?.classList.remove("suggestions-hidden", "suggestions-expanded");
     setTimeout(() => input!.focus(), 50);
    }
 
@@ -454,23 +455,38 @@ import SiteMenu from "../components/SiteMenu.astro";
    input.addEventListener(
     "input",
     () => {
-     suggestions?.classList.toggle("suggestions-hidden", input!.value.trim() !== "");
      clearTimeout(debounce);
+     const submitBtn = document.getElementById("search-submit");
+     const q = input!.value.trim();
+
+     if (!q) {
+      // 입력을 지워 다시 빈 상태가 되면 디바운스 없이 바로 초기 상태(추천 3개)로 복귀
+      hint!.textContent = "";
+      submitBtn?.classList.remove("has-results");
+      suggestions?.classList.remove("suggestions-hidden", "suggestions-expanded");
+      return;
+     }
+
      debounce = setTimeout(async () => {
-      const q = input!.value.trim().toLowerCase();
-      const submitBtn = document.getElementById("search-submit");
-      if (!q) {
-       hint!.textContent = "아티스트 · 앨범 · 인터뷰 · 공연정보";
-       submitBtn?.classList.remove("has-results");
-       return;
-      }
       await loadSearchIndex();
+      const lower = q.toLowerCase();
       const count = searchCache.index.filter((item: any) => {
-       if (item.displayTitle.toLowerCase().includes(q)) return true;
-       return Object.values(item.fields as Record<string, string>).some(v => v.toLowerCase().includes(q));
+       if (item.displayTitle.toLowerCase().includes(lower)) return true;
+       return Object.values(item.fields as Record<string, string>).some(v => v.toLowerCase().includes(lower));
       }).length;
-      hint!.textContent = count > 0 ? `${count} result${count > 1 ? "s" : ""}` : "검색결과가 없습니다";
       submitBtn?.classList.toggle("has-results", count > 0);
+
+      if (count > 0) {
+       // 결과가 있으면 추천 영역은 숨기고(제출하면 /search 결과 페이지에서 확인) 개수만 안내
+       hint!.textContent = `${count} result${count > 1 ? "s" : ""}`;
+       suggestions?.classList.add("suggestions-hidden");
+       suggestions?.classList.remove("suggestions-expanded");
+      } else {
+       // 결과가 없으면 추천 5개를 전부 보여줘서 빈 손으로 돌려보내지 않음
+       hint!.textContent = "검색결과가 없습니다";
+       suggestions?.classList.remove("suggestions-hidden");
+       suggestions?.classList.add("suggestions-expanded");
+      }
      }, 100);
     },
     { signal: sig }

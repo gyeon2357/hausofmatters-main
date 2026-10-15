@@ -736,12 +736,17 @@ dd {
 }
 
 @media (max-width: 768px) {
- /* 기존엔 거의 화면 꽉 채우듯 떴는데, 데스크톱처럼 떠 있는 미니창 느낌이 나도록
-    화면의 90%로 줄이고(좌우 동일 여백이라 자연히 중앙 정렬) 둠 */
+ /* left/right를 5vw씩 대칭으로 줘서 "90%"를 만들었던 이전 방식은 width:auto라
+    실제 계산값이 90vw(390px 화면에서 351px)가 되어, 오히려 데스크톱의 고정폭
+    320px보다 더 커져버렸음 — 데스크톱과 동일하게 320px(좁은 화면은 85vw)로
+    고정 폭을 캡 하고, left:50%+transform으로 중앙 정렬. 세로도 꽉 차 보이지
+    않도록 높이를 더 낮게 캡해서(넘치는 내용은 내부 스크롤) 진짜 미니창처럼 보이게 함 */
  .anchored-panel {
-  left: 5vw;
-  right: 5vw;
-  width: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: min(320px, 85vw);
+  max-height: 70vh;
  }
 }
 
@@ -1010,6 +1015,13 @@ mark {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  /* .results의 gap(1rem)만으로는 모바일에서 항목 간 구분이 좁아 보여서 각 항목
+     자체에도 위쪽 여백을 더 줌 */
+  margin-top: 1rem;
+ }
+
+ .result-item:first-child {
+  margin-top: 0;
  }
 
  .result-type {
