@@ -69,8 +69,6 @@ const whomCards = sorted
   imageAlt: m.data.image?.alt ?? m.id,
  }));
 
-// 히어로: 국내/해외 매거진 최신호 커버 각 1장씩 — 둘 다 있을 때만 슬라이드 보여줌
-const heroSlides = [homCards[0], whomCards[0]].filter((card): card is NonNullable<typeof card> => Boolean(card));
 ---
 
 <BaseLayout title={title}>
@@ -78,18 +76,8 @@ const heroSlides = [homCards[0], whomCards[0]].filter((card): card is NonNullabl
       스크린리더 사용자가 페이지 제목을 들을 수 있도록 실제 h1은 둠 -->
  <h1 class="sr-only">Hausofmatters</h1>
 
- <!-- ── 히어로: 국내/해외 매거진 최신호 커버를 빠르게 크로스페이드, 클릭하면 해당 호로 이동.
-      이미지가 하나도 없으면(컨텐츠 준비 전) 배경색 박스만 자리를 잡음 ── -->
- <section class="hero-placeholder full-bleed" id="hero-placeholder">
-  {
-   heroSlides.map((slide, i) => (
-    <a class="hero-slide" href={slide.href} data-astro-prefetch style={`animation-delay: ${i * 3}s;`}>
-     <img src={slide.imageSrc} alt={`${slide.title} 커버`} loading="eager" />
-     <span class="hero-slide-caption">{slide.title}</span>
-    </a>
-   ))
-  }
- </section>
+ <!-- 메인 이미지 자리 확보 (컨텐츠 준비 전) -->
+ <section class="hero-placeholder full-bleed" id="hero-placeholder"></section>
 
  <section class="latest-magazine">
   <div class="section-header">
@@ -164,84 +152,9 @@ const heroSlides = [homCards[0], whomCards[0]].filter((card): card is NonNullabl
  /* 화면 끝까지 채우는 건 global.css의 .full-bleed 클래스(grid-column: 1 / -1)가 담당.
     여기서는 높이/배경만 지정 — 좌우 여백 관련 margin 계산이 필요 없음 */
  .hero-placeholder {
-  position: relative;
   height: 100vh;
   margin-bottom: 4rem;
   background: var(--color-placeholder);
- }
-
- /* 커버가 1장뿐이면 애니메이션 없이 그냥 보여주고, 2장이면 서로 번갈아 크로스페이드 —
-    opacity만 바뀌므로 prefers-reduced-motion 전역 규칙(animation-duration 강제 축소)에
-    자동으로 걸려서 모션 민감 사용자에게는 그냥 즉시 전환됨 */
- .hero-slide {
-  position: absolute;
-  inset: 0;
-  display: block;
-  opacity: 0;
-  /* 두 슬라이드가 같은 자리에 겹쳐 있어서, opacity만으로는 안 보이는(opacity:0) 슬라이드가
-     DOM 순서상 위에 있으면 클릭이 그쪽으로 가로채임 — pointer-events도 opacity와 같은
-     타이밍에 꺼줘야 실제로 보이는 슬라이드만 클릭됨 */
-  pointer-events: none;
-  text-decoration: none;
-  color: inherit;
- }
-
- .hero-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
- }
-
- .hero-slide:only-child {
-  opacity: 1;
-  pointer-events: auto;
- }
-
- .hero-slide:not(:only-child) {
-  animation: hero-crossfade 6s ease-in-out infinite;
- }
-
- /* 0~41.6%(0~2.5s) 보임 → 41.6~50%(2.5~3s) 페이드아웃(0.5s, 빠른 전환) → 91.6%(5.5s)까지
-    숨김 → 다시 페이드인. 두 번째 슬라이드는 animation-delay로 정확히 절반(3s)만큼 밀려서
-    서로 어긋나게(한쪽이 보일 때 다른 쪽은 숨김) 돎 */
- @keyframes hero-crossfade {
-  0%,
-  41.6% {
-   opacity: 1;
-   pointer-events: auto;
-  }
-  50%,
-  91.6% {
-   opacity: 0;
-   pointer-events: none;
-  }
-  100% {
-   opacity: 1;
-   pointer-events: auto;
-  }
- }
-
- /* .hero-placeholder는 고정 헤더 아래에서 시작하면서 height:100vh라, 섹션 자체의
-    바닥은 뷰포트 fold보다 헤더 높이(--menu-anchor-top)만큼 더 아래에 있음 — 거기에
-    하단 고정 pill-nav(--bottom-nav-height) 높이까지 더해서 띄워야 캡션이 스크롤 없이
-    보이고 nav에도 가려지지 않음 */
- .hero-slide-caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(var(--bottom-nav-height, 3.5rem) + var(--menu-anchor-top, 3.5rem));
-  padding: 2rem 2rem 1.5rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
-  color: #fff;
-  font-size: var(--font-size-l);
-  font-weight: 700;
- }
-
- /* 이미지 로드 실패 시 깨진 아이콘 대신 .hero-placeholder 배경색만 보이게 숨김
-    (아래 스크립트가 error 이벤트에서 추가) */
- .hero-slide--missing {
-  display: none;
  }
 
  /* ── 기존 스타일 ── */
@@ -277,10 +190,11 @@ const heroSlides = [homCards[0], whomCards[0]].filter((card): card is NonNullabl
   margin: 4rem 0 6rem;
  }
 
+ /* HOM/w-HOM을 좌우로 나란히 두지 않고, 화면 크기와 무관하게 항상 위아래로 쌓음 */
  .magazine-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
   max-width: 1200px;
  }
 
@@ -352,41 +266,7 @@ const heroSlides = [homCards[0], whomCards[0]].filter((card): card is NonNullabl
   .albums-grid {
    grid-template-columns: repeat(2, 1fr);
   }
-  .magazine-columns {
-   grid-template-columns: 1fr;
-   gap: 2.5rem;
-  }
  }
 </style>
 
 <script src="../scripts/index.js"></script>
-
-<script>
- // 커버 이미지가 깨져 있으면(잘못된 경로 등) 아이콘 대신 .hero-placeholder 배경색만
- // 보이도록 조용히 숨김 — 슬라이드가 하나뿐이면 :only-child가 안 맞게 되므로,
- // 숨긴 뒤 남은 슬라이드가 1장이면 애니메이션 없이 바로 보이도록 다시 계산함.
- // 슬라이드는 <a class="hero-slide"><img>…</a> 구조라, error는 안쪽 img에서 듣고
- // --missing 클래스는 바깥 <a>에 붙임
- function initHeroFallback() {
-  const slides = Array.from(document.querySelectorAll<HTMLAnchorElement>(".hero-slide"));
-  if (slides.length === 0) return;
-
-  const hide = (slide: HTMLAnchorElement) => {
-   slide.classList.add("hero-slide--missing");
-   const remaining = slides.filter(s => !s.classList.contains("hero-slide--missing"));
-   if (remaining.length === 1) {
-    remaining[0].style.animation = "none";
-    remaining[0].style.opacity = "1";
-   }
-  };
-
-  slides.forEach(slide => {
-   const img = slide.querySelector<HTMLImageElement>("img");
-   if (!img) return;
-   if (img.complete && img.naturalWidth === 0) hide(slide);
-   else img.addEventListener("error", () => hide(slide), { once: true });
-  });
- }
-
- document.addEventListener("astro:page-load", initHeroFallback);
-</script>

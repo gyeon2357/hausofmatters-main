@@ -4,14 +4,10 @@ import Search from "../components/Search.astro";
 import SiteMenu from "../components/SiteMenu.astro";
 ---
 
-<!-- 로고를 가운데 두고 좌우에 텍스트 버튼 배치: 왼쪽 테마, 오른쪽 검색+Menu.
-     데스크톱/모바일 모두 동일 — 하위 메뉴/인스타그램/메일은 Menu가 여는 SiteMenu 패널에서 노출 -->
+<!-- 로고를 좌측에 두고, 우측에 검색+Menu 배치. 데스크톱/모바일 모두 동일 —
+     테마 전환/하위 메뉴/인스타그램/메일은 Menu가 여는 SiteMenu 패널에서 노출 -->
 <header class="full-bleed" transition:persist>
  <section class="header-bar">
-  <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle theme-toggle-btn">
-   <TextSlider content="Dark" />
-  </button>
-
   <a href="/" class="logo-link">
    <img id="site-logo" src="/images/logo.png" alt="HAUSOFMATTERS" class="logo" />
   </a>
@@ -92,24 +88,18 @@ import SiteMenu from "../components/SiteMenu.astro";
    background: var(--color-bg);
   }
 
-  /* 테마(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌우 칸의 콘텐츠 폭/노출 여부가
-     달라도(예: 모바일에서 테마 버튼만 숨김) 로고가 항상 정중앙에 오도록,
-     1fr의 암묵적 최소폭(auto)을 minmax(0, 1fr)로 제거해 두 칸을 강제로 동일하게 둠 */
+  /* 로고(좌) - 검색/Menu(우) */
   .header-bar {
    pointer-events: auto;
-   display: grid;
-   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+   display: flex;
    align-items: center;
+   justify-content: space-between;
    width: 100%;
   }
 
   .logo-link {
-   /* theme-toggle이 모바일에서 display:none이 되면 grid auto-placement가
-      나머지 아이템을 앞 칸으로 당겨버려서, 항상 2번째 칸으로 명시 고정 */
-   grid-column: 2;
    display: flex;
    align-items: center;
-   justify-content: center;
   }
 
   .logo {
@@ -118,17 +108,10 @@ import SiteMenu from "../components/SiteMenu.astro";
    width: auto;
   }
 
-  .theme-toggle {
-   grid-column: 1;
-   justify-self: start;
-  }
-
   .header-actions {
-   grid-column: 3;
    display: flex;
    align-items: center;
    gap: 1rem;
-   justify-self: end;
   }
 
   /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 내비 바 자체엔 배경을 두지 않고,
