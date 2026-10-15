@@ -416,6 +416,7 @@ import SiteMenu from "../components/SiteMenu.astro";
     openBtn!.setAttribute("aria-expanded", "true");
     input!.value = "";
     hint!.textContent = "";
+    hint!.classList.remove("search-hint--emphasized");
     // 처음 열었을 때는 추천 5개 중 3개만(.suggestions-expanded 없는 기본 상태)
     suggestions?.classList.remove("suggestions-hidden", "suggestions-expanded");
     setTimeout(() => input!.focus(), 50);
@@ -462,6 +463,7 @@ import SiteMenu from "../components/SiteMenu.astro";
      if (!q) {
       // 입력을 지워 다시 빈 상태가 되면 디바운스 없이 바로 초기 상태(추천 3개)로 복귀
       hint!.textContent = "";
+      hint!.classList.remove("search-hint--emphasized");
       submitBtn?.classList.remove("has-results");
       suggestions?.classList.remove("suggestions-hidden", "suggestions-expanded");
       return;
@@ -479,11 +481,14 @@ import SiteMenu from "../components/SiteMenu.astro";
       if (count > 0) {
        // 결과가 있으면 추천 영역은 숨기고(제출하면 /search 결과 페이지에서 확인) 개수만 안내
        hint!.textContent = `${count} result${count > 1 ? "s" : ""}`;
+       hint!.classList.remove("search-hint--emphasized");
        suggestions?.classList.add("suggestions-hidden");
        suggestions?.classList.remove("suggestions-expanded");
       } else {
-       // 결과가 없으면 추천 5개를 전부 보여줘서 빈 손으로 돌려보내지 않음
+       // 결과가 없으면 추천 5개를 전부 보여주고(빈 손으로 돌려보내지 않음), 안내 문구를
+       // 그 위에 여백을 넉넉히 줘서 눈에 띄게 함
        hint!.textContent = "검색결과가 없습니다";
+       hint!.classList.add("search-hint--emphasized");
        suggestions?.classList.remove("suggestions-hidden");
        suggestions?.classList.add("suggestions-expanded");
       }

@@ -739,12 +739,11 @@ dd {
  /* left/right를 5vw씩 대칭으로 줘서 "90%"를 만들었던 이전 방식은 width:auto라
     실제 계산값이 90vw(390px 화면에서 351px)가 되어, 오히려 데스크톱의 고정폭
     320px보다 더 커져버렸음 — 데스크톱과 동일하게 320px(좁은 화면은 85vw)로
-    고정 폭을 캡 하고, left:50%+transform으로 중앙 정렬. 세로도 꽉 차 보이지
-    않도록 높이를 더 낮게 캡해서(넘치는 내용은 내부 스크롤) 진짜 미니창처럼 보이게 함 */
+    고정 폭을 캡 하고, Menu/Search 버튼이 있는 우측에 그대로 붙임(데스크톱과 동일한
+    anchoring). 세로도 꽉 차 보이지 않도록 높이를 더 낮게 캡해서(넘치는 내용은
+    내부 스크롤) 진짜 미니창처럼 보이게 함 */
  .anchored-panel {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
+  right: 1rem;
   width: min(320px, 85vw);
   max-height: 70vh;
  }

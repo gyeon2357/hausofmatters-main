@@ -67,6 +67,10 @@ const suggestions = [...latestAlbums, ...latestInterviews];
    <button type="submit" id="search-submit">Search</button>
   </div>
 
+  <!-- 검색결과 없음 안내는 추천 컨텐츠보다 위에 와야 해서 먼저 둠 — 그 외 상태(초기/결과 있음)는
+       추천 영역이 숨겨져 있거나 비어 있어서 순서가 바뀌어도 눈에 띄는 차이가 없음 -->
+  <p id="search-hint" class="search-hint"></p>
+
   <div id="search-suggestions" class="search-suggestions">
    <p class="suggestions-label">추천 컨텐츠</p>
    <div class="suggestion-list">
@@ -84,8 +88,6 @@ const suggestions = [...latestAlbums, ...latestInterviews];
     }
    </div>
   </div>
-
-  <p id="search-hint" class="search-hint"></p>
  </form>
 </dialog>
 
@@ -145,6 +147,12 @@ const suggestions = [...latestAlbums, ...latestInterviews];
   opacity: 0.75;
   margin: 0.5rem 0 0;
   min-height: 1.4em;
+ }
+
+ /* 검색결과가 없을 때만(Header.astro에서 토글) — 추천 컨텐츠 위에서 상하 여백을
+    넉넉히 줘서 눈에 띄는 별도 안내처럼 보이게 함 */
+ .search-hint--emphasized {
+  margin: 1.5rem 0 1.75rem;
  }
 
  .search-suggestions.suggestions-hidden {

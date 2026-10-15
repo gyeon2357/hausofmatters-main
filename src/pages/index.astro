@@ -68,6 +68,9 @@ const whomCards = sorted
   imageSrc: m.data.image?.src ?? `/images/magazine/thumb/${m.id}.jpg`,
   imageAlt: m.data.image?.alt ?? m.id,
  }));
+
+// 히어로: 국내/해외 매거진 최신호 커버 각 1장씩 — 둘 다 있을 때만 슬라이드 보여줌
+const heroSlides = [homCards[0], whomCards[0]].filter((card): card is NonNullable<typeof card> => Boolean(card));
 ---
 
 <BaseLayout title={title}>
@@ -75,10 +78,20 @@ const whomCards = sorted
       스크린리더 사용자가 페이지 제목을 들을 수 있도록 실제 h1은 둠 -->
  <h1 class="sr-only">Hausofmatters</h1>
 
- <!-- ── 히어로: 디자인 리뉴얼 예정. public/images/hero.jpg를 넣으면 바로 노출되고,
-      아직 없으면(현재 상태) 이미지가 조용히 숨고 배경색 박스만 자리를 잡음 ── -->
+ <!-- ── 히어로: 국내/해외 매거진 최신호 커버를 아주 느리게 크로스페이드.
+      이미지가 하나도 없으면(컨텐츠 준비 전) 배경색 박스만 자리를 잡음 ── -->
  <section class="hero-placeholder full-bleed" id="hero-placeholder">
-  <img class="hero-image fade-in" src="/images/hero.jpg" alt="" loading="eager" />
+  {
+   heroSlides.map((slide, i) => (
+    <img
+     class="hero-slide"
+     src={slide.imageSrc}
+     alt={`${slide.title} 커버`}
+     loading="eager"
+     style={`animation-delay: ${i * 12}s;`}
+    />
+   ))
+  }
  </section>
 
  <section class="latest-magazine">
@@ -160,17 +173,46 @@ const whomCards = sorted
   background: var(--color-placeholder);
  }
 
- .hero-image {
+ /* 커버가 1장뿐이면 애니메이션 없이 그냥 보여주고, 2장이면 서로 번갈아 크로스페이드 —
+    opacity만 바뀌므로 prefers-reduced-motion 전역 규칙(animation-duration 강제 축소)에
+    자동으로 걸려서 모션 민감 사용자에게는 그냥 즉시 전환됨 */
+ .hero-slide {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
  }
 
- /* public/images/hero.jpg가 아직 없는 동안엔 깨진 이미지 아이콘 대신
-    .hero-placeholder의 배경색만 보이게 숨김 (아래 스크립트가 로드 실패 시 추가) */
- .hero-image--missing {
+ .hero-slide:only-child {
+  opacity: 1;
+ }
+
+ .hero-slide:not(:only-child) {
+  animation: hero-crossfade 24s ease-in-out infinite;
+ }
+
+ /* 0~41.6%(0~10s) 보임 → 41.6~50%(10~12s) 페이드아웃 → 91.6%(22s)까지 숨김 →
+    다시 페이드인. 두 번째 슬라이드는 animation-delay로 정확히 절반(12s)만큼 밀려서
+    서로 어긋나게(한쪽이 보일 때 다른 쪽은 숨김) 돎 */
+ @keyframes hero-crossfade {
+  0%,
+  41.6% {
+   opacity: 1;
+  }
+  50%,
+  91.6% {
+   opacity: 0;
+  }
+  100% {
+   opacity: 1;
+  }
+ }
+
+ /* 이미지 로드 실패 시 깨진 아이콘 대신 .hero-placeholder 배경색만 보이게 숨김
+    (아래 스크립트가 error 이벤트에서 추가) */
+ .hero-slide--missing {
   display: none;
  }
 
@@ -292,17 +334,26 @@ const whomCards = sorted
 <script src="../scripts/index.js"></script>
 
 <script>
- // public/images/hero.jpg를 아직 넣지 않았다면 깨진 이미지 아이콘 대신
- // .hero-placeholder 배경색만 보이도록 조용히 숨김
+ // 커버 이미지가 깨져 있으면(잘못된 경로 등) 아이콘 대신 .hero-placeholder 배경색만
+ // 보이도록 조용히 숨김 — 슬라이드가 하나뿐이면 :only-child가 안 맞게 되므로,
+ // 숨긴 뒤 남은 슬라이드가 1장이면 애니메이션 없이 바로 보이도록 다시 계산함
  function initHeroFallback() {
-  const img = document.querySelector<HTMLImageElement>(".hero-image");
-  if (!img) return;
+  const slides = Array.from(document.querySelectorAll<HTMLImageElement>(".hero-slide"));
+  if (slides.length === 0) return;
 
-  if (img.complete && img.naturalWidth === 0) {
-   img.classList.add("hero-image--missing");
-   return;
-  }
-  img.addEventListener("error", () => img.classList.add("hero-image--missing"), { once: true });
+  const hide = (img: HTMLImageElement) => {
+   img.classList.add("hero-slide--missing");
+   const remaining = slides.filter(s => !s.classList.contains("hero-slide--missing"));
+   if (remaining.length === 1) {
+    remaining[0].style.animation = "none";
+    remaining[0].style.opacity = "1";
+   }
+  };
+
+  slides.forEach(img => {
+   if (img.complete && img.naturalWidth === 0) hide(img);
+   else img.addEventListener("error", () => hide(img), { once: true });
+  });
  }
 
  document.addEventListener("astro:page-load", initHeroFallback);
