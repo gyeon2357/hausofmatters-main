@@ -736,9 +736,11 @@ dd {
 }
 
 @media (max-width: 768px) {
+ /* 기존엔 거의 화면 꽉 채우듯 떴는데, 데스크톱처럼 떠 있는 미니창 느낌이 나도록
+    화면의 90%로 줄이고(좌우 동일 여백이라 자연히 중앙 정렬) 둠 */
  .anchored-panel {
-  left: 0.75rem;
-  right: 0.75rem;
+  left: 5vw;
+  right: 5vw;
   width: auto;
  }
 }
