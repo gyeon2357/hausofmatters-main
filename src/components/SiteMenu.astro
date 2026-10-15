@@ -109,8 +109,11 @@ import TextSlider from "../components/TextSlider.astro";
   opacity: 1;
  }
 
+ /* 기존엔 0.6 opacity가 부모(.site-menu-sublinks a, 0.8)에 곱해져 체감상 눈에 띄게
+    흐린 회색으로 보였음 — 별도로 더 흐리게 하지 않고 "HOM"/"w/HOM" 라벨과 같은
+    톤(부모의 0.8)으로 맞춤 */
  .site-menu-subtext {
-  opacity: 0.6;
+  opacity: 1;
  }
 
  .site-menu-utility {

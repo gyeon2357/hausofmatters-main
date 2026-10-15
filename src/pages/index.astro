@@ -203,9 +203,10 @@ const whomCards = sorted
   font-size: var(--font-size-l);
  }
 
+ /* HOM/w-HOM 각 섹션 내부는 3장을 한 줄에 나란히 보여주는 3단 그리드 */
  .magazine-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
  }
 
@@ -256,6 +257,9 @@ const whomCards = sorted
   .albums-grid {
    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
+  .magazine-list {
+   grid-template-columns: repeat(2, 1fr);
+  }
  }
 
  @media (max-width: 480px) {
@@ -265,6 +269,9 @@ const whomCards = sorted
   }
   .albums-grid {
    grid-template-columns: repeat(2, 1fr);
+  }
+  .magazine-list {
+   grid-template-columns: 1fr;
   }
  }
 </style>

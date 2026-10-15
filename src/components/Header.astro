@@ -4,7 +4,8 @@ import Search from "../components/Search.astro";
 import SiteMenu from "../components/SiteMenu.astro";
 ---
 
-<!-- 로고를 좌측에 두고, 우측에 검색+Menu 배치. 데스크톱/모바일 모두 동일 —
+<!-- 로고를 가운데 두고 우측에 검색+Menu 배치(왼쪽 칸은 로고를 정중앙에 두기 위한
+     빈 자리 — grid-template-columns로 우측 칸과 동일한 폭을 확보). 데스크톱/모바일 모두 동일 —
      테마 전환/하위 메뉴/인스타그램/메일은 Menu가 여는 SiteMenu 패널에서 노출 -->
 <header class="full-bleed" transition:persist>
  <section class="header-bar">
@@ -88,18 +89,22 @@ import SiteMenu from "../components/SiteMenu.astro";
    background: var(--color-bg);
   }
 
-  /* 로고(좌) - 검색/Menu(우) */
+  /* 빈 칸(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌측 칸은 내용 없이
+     우측 칸(header-actions)과 같은 minmax(0, 1fr) 폭만 차지해서, 로고가 항상
+     정중앙에 오도록 함 */
   .header-bar {
    pointer-events: auto;
-   display: flex;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
    align-items: center;
-   justify-content: space-between;
    width: 100%;
   }
 
   .logo-link {
+   grid-column: 2;
    display: flex;
    align-items: center;
+   justify-content: center;
   }
 
   .logo {
@@ -109,9 +114,11 @@ import SiteMenu from "../components/SiteMenu.astro";
   }
 
   .header-actions {
+   grid-column: 3;
    display: flex;
    align-items: center;
    gap: 1rem;
+   justify-self: end;
   }
 
   /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 내비 바 자체엔 배경을 두지 않고,
