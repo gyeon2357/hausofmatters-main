@@ -34,13 +34,11 @@ const { title } = Astro.props;
   const url = window.location.href;
   const title = document.title;
 
-  // 네이티브 공유
   shareBtn.addEventListener("click", async () => {
    if (navigator.share) {
     try {
      await navigator.share({ title, url });
     } catch (e) {
-     // AbortError: 사용자가 직접 취소한 경우 → 토스트 없이 무시
      if (e?.name !== "AbortError") {
       showToast("공유에 실패했습니다.");
      }
@@ -50,13 +48,11 @@ const { title } = Astro.props;
    }
   });
 
-  // 링크 복사
   copyBtn.addEventListener("click", async () => {
    try {
     await navigator.clipboard.writeText(url);
     showToast("링크가 복사되었습니다.");
    } catch {
-    // clipboard API 미지원 환경 fallback (일부 모바일 브라우저)
     try {
      const el = document.createElement("textarea");
      el.value = url;
@@ -75,10 +71,8 @@ const { title } = Astro.props;
   });
  }
 
- // astro:page-load: View Transitions 이후 네비게이션마다 발화
  document.addEventListener("astro:page-load", initShare);
 
- // 첫 페이지 로드(모바일 직접 진입) 대응: DOMContentLoaded 또는 즉시 실행
  if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initShare);
  } else {

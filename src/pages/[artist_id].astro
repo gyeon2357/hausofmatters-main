@@ -8,7 +8,6 @@ import AlbumGrid from "../components/AlbumGrid.astro";
 export const getStaticPaths = async () => {
  const artists = await getCollection("artists");
 
- // admin, search 등 예약 경로는 동적 라우트에서 제외
  const RESERVED = new Set(["admin", "search"]);
 
  const paths = artists
@@ -24,28 +23,22 @@ export const getStaticPaths = async () => {
 };
 
 type Props = {
- artists: CollectionEntry<"artists">[]; // Array of all artists in the collection
- artist: CollectionEntry<"artists">; // Current artist being rendered
+ artists: CollectionEntry<"artists">[];
+ artist: CollectionEntry<"artists">;
 };
 
-const { artists, artist } = Astro.props; // Extract the artists list and current artist from the props
+const { artists, artist } = Astro.props;
 
-// Extract the ID of the current artist
 const artist_id = artist.id;
 
-// Find the index of the current artist in the artists array
 const currentArtistIndex = artists.findIndex(a => a.id === artist_id);
 
-// Calculate the index of the "next" artist in the array (wrap around if at the last artist)
 const nextArtistIndex = (currentArtistIndex + 1) % artists.length;
 
-// Get the "next" artist based on the calculated index
 const nextArtist = artists[nextArtistIndex];
 
-// Fetch all albums that belong to the current artist
 const albums = await getCollection("albums", ({ data }) => data.artist === artist_id);
 
-// Render the content of the current artist (e.g., markdown or MDX)
 const { Content } = await render(artist);
 ---
 

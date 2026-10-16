@@ -19,10 +19,8 @@ const { interview, allinterview } = Astro.props;
 const allArtists = await getCollection("artists");
 const { Content } = await render(interview);
 
-// 파일명(interview.id)으로 artists 컬렉션 조회 → 장르·이미지 연결용
 const artist = allArtists.find(a => a.id === interview.id);
 
-// 페이지 표시명: artist 필드 → artists 컬렉션 stage_name → 파일명 순으로 fallback
 const stageName =
   interview.data.artist ??
   artist?.data.stage_name ??
@@ -40,7 +38,6 @@ const coverAlt = interview.data.coverImage?.alt ?? stageName;
 const title = `Hausofmatters - Interview: ${stageName}`;
 const seoDescription = `${stageName} | ${dateStr}`;
 
-// 다른 인터뷰 중 최신 3개를 "Related Interview"로 노출
 const relatedInterviews = allinterview
  .filter(i => i.data.published && i.id !== interview.id)
  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
@@ -127,14 +124,12 @@ const relatedInterviews = allinterview
 
  .sep { opacity: 0.5; }
 
- /* ── 본문 ── */
  .interview-body {
   margin: 1rem auto 6rem;
   max-width: 720px;
   word-break: keep-all;
  }
 
- /* **볼드 단락** = 질문 */
  .interview-body :global(p > strong:only-child) {
   display: block;
   font-size: var(--font-size-base);
@@ -143,12 +138,10 @@ const relatedInterviews = allinterview
   margin-bottom: 0.75rem;
  }
 
- /* 첫 번째 질문은 위 마진 없음 */
  .interview-body :global(p:first-child > strong:only-child) {
   margin-top: 0;
  }
 
- /* 일반 단락 = 답변 */
  .interview-body :global(p) {
   margin: 0 0 0.75rem;
   line-height: 1.8;
@@ -156,13 +149,11 @@ const relatedInterviews = allinterview
   padding-left: 0.75rem;
  }
 
- /* 질문 단락은 padding 없음 */
  .interview-body :global(p:has(> strong:only-child)) {
   padding-left: 0;
   margin-bottom: 0;
  }
 
- /* 인터뷰 중 삽입 이미지 */
  .interview-body :global(img) {
   width: 100%;
   height: auto;

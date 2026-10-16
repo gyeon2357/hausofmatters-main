@@ -43,7 +43,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
  let index: SearchItem[] = [];
 
  async function loadIndex() {
-  // Header의 전역 캐시가 있으면 재사용, 없으면 fetch
   const cache = (window as any).__searchCache as { index: any[]; loaded: boolean; promise: Promise<void> | null } | undefined;
   if (cache?.loaded) {
    index = cache.index;
@@ -85,7 +84,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
    }
 
    for (const [label, value] of Object.entries(item.fields)) {
-    // Title 필드는 이미 displayTitle로 처리하므로 중복 제거
     if (label === "Title") continue;
     if (value.toLowerCase().includes(q)) {
      matches.push({
@@ -126,7 +124,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
    .map(item => {
     const typeLabel = TYPE_LABELS[item.type] ?? item.type;
 
-    // 매칭 필드 배지 (Title 제외, 최대 4개)
     const fieldMatches = item.matches.filter(m => m.label !== "Title").slice(0, 4);
 
     const badges = fieldMatches
@@ -140,7 +137,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     const titleDisplay = item.matches.find(m => m.label === "Title") ? highlight(item.displayTitle, query) : item.displayTitle;
 
-    // 타입별 이미지
     const imageHtml = item.image
      ? `<div class="result-image">
                <img src="${item.image}" alt="${item.displayTitle}" loading="lazy" />
@@ -168,7 +164,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   const urlQuery = new URLSearchParams(window.location.search).get("q") ?? "";
   if (!urlQuery) return;
 
-  // Header와 동일한 전역 캐시 공유 → 이미 로드됐으면 즉시 렌더링
   const cache = (window as any).__searchCache as { index: any[]; loaded: boolean; promise: Promise<void> | null } | undefined;
 
   function run() {
@@ -178,9 +173,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   if (cache?.loaded) {
-   run(); // 캐시 있으면 즉시
+   run();
   } else {
-   loadIndex().then(run); // 없으면 fetch 후 렌더링
+   loadIndex().then(run);
   }
  }
 

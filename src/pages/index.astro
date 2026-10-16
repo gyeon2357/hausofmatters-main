@@ -21,7 +21,6 @@ function formatTitle(id: string): string {
  return id.toUpperCase();
 }
 
-// 마크다운 서식을 걷어내고 리뷰 본문 일부만 미리보기로 보여줄 때 사용
 function excerpt(markdown: string, maxLength = 140): string {
  const plain = markdown
   .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
@@ -46,7 +45,6 @@ const albumCards = recentAlbums.map((album, index) => {
 
 const sorted = allMagazines.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-// ✅ category 기반, 각 최신 3개
 const homCards = sorted
  .filter(m => m.data.category === "hom")
  .slice(0, 3)
@@ -72,11 +70,8 @@ const whomCards = sorted
 ---
 
 <BaseLayout title={title}>
- <!-- 로고가 시각적으로 h1 역할을 하므로 화면에는 안 보이게(sr-only) 하되,
-      스크린리더 사용자가 페이지 제목을 들을 수 있도록 실제 h1은 둠 -->
  <h1 class="sr-only">Hausofmatters</h1>
 
- <!-- 메인 이미지 자리 확보 (컨텐츠 준비 전) -->
  <section class="hero-placeholder full-bleed" id="hero-placeholder"></section>
 
  <section class="latest-magazine">
@@ -148,16 +143,12 @@ const whomCards = sorted
 </BaseLayout>
 
 <style>
- /* ── 히어로 플레이스홀더 ── */
- /* 화면 끝까지 채우는 건 global.css의 .full-bleed 클래스(grid-column: 1 / -1)가 담당.
-    여기서는 높이/배경만 지정 — 좌우 여백 관련 margin 계산이 필요 없음 */
  .hero-placeholder {
   height: 100vh;
   margin-bottom: 4rem;
   background: var(--color-placeholder);
  }
 
- /* ── 기존 스타일 ── */
  .featured-albums {
   margin: 4rem 0;
  }
@@ -169,7 +160,6 @@ const whomCards = sorted
   margin-bottom: 4rem;
  }
 
- /* 처음 2개(추천 앨범)는 2칸을 차지하는 큰 카드로 보여주고, 리뷰 일부를 함께 노출 */
  .album-card--featured {
   grid-column: span 2;
  }
@@ -190,7 +180,6 @@ const whomCards = sorted
   margin: 4rem 0 6rem;
  }
 
- /* HOM/w-HOM을 좌우로 나란히 두지 않고, 화면 크기와 무관하게 항상 위아래로 쌓음 */
  .magazine-columns {
   display: grid;
   grid-template-columns: 1fr;
@@ -203,7 +192,6 @@ const whomCards = sorted
   font-size: var(--font-size-l);
  }
 
- /* HOM/w-HOM 각 섹션 내부는 3장을 한 줄에 나란히 보여주는 3단 그리드 */
  .magazine-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -19,7 +19,6 @@ const { title, description = "HAUSOFMATTERS", ogImage = "/og-image.jpg" } = Astr
 const site = Astro.site;
 const ogImageUrl = new URL(ogImage, site).href;
 
-// Current page value (/home, /about, /404 ...)
 const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "home";
 ---
 
@@ -48,7 +47,6 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
     creator: "@zamso",
    }}
    extend={{
-    // extending the default link tags
     link: [
      {
       rel: "icon",
@@ -70,7 +68,6 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
      { rel: "manifest", href: "/favicon/site.webmanifest" },
      { rel: "sitemap", href: "/sitemap-index.xml" },
     ],
-    // extending the default meta tags
     meta: [
      { name: "twitter:image", content: ogImageUrl },
      { name: "twitter:title", content: title },
@@ -83,12 +80,6 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
    }}
   />
 
-  <!-- <meta name="theme-color">가 #ffffff로 고정돼 있으면, 다크 모드에서도 iOS Safari의
-       상태바/툴바 영역이 라이트 배경으로 합성돼 스크롤(특히 overscroll/바운스) 중에
-       실제 페이지 배경(검정)과 어긋나며 콘텐츠가 그 틈으로 비쳐 보이는 원인이 됨 —
-       <SEO>가 렌더링된 직후(이 메타 태그가 DOM에 존재하는 시점) 저장된/시스템 테마에
-       맞는 색으로 즉시 덮어써서 첫 페인트부터 올바른 값이 적용되게 함.
-       Header.astro의 테마 토글(initTheme)도 전환 시 같은 값을 다시 씀 -->
   <script is:inline>
    (function () {
     var saved = localStorage.getItem("theme");
@@ -100,14 +91,11 @@ const currentPage = Astro.url.pathname.replace(/\/$/, "").split("/").pop() || "h
 
   <ClientRouter />
 
-  <!-- Flipbook 라이브러리 사전 로드 -->
   <script is:inline src="/scripts/jquery-3.6.0.min.js"></script>
   <script is:inline src="/scripts/flipbook.min.js"></script>
   <link rel="stylesheet" href="/styles/flipbook.style.css" />
   <link rel="stylesheet" href="/styles/font-awesome.css" />
  </head>
- <!-- Astro 기본 페이지 전환 애니메이션(크로스페이드)이 전환 중 화면이 탁해 보이는
-      "깜빡임"으로 보여서 끔 — 콘텐츠가 그냥 즉시 바뀌는 쪽이 더 자연스러움 -->
  <body transition:animate="none">
   <a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
   <Preloader />

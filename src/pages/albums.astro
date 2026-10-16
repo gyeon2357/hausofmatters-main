@@ -7,13 +7,11 @@ const title = "Hausofmatters - Albums";
 
 const allAlbums = await getCollection("albums");
 
-// category 필드 기준으로 분리, 날짜 내림차순
 const sorted = allAlbums.sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime());
 
 const domesticAlbums = sorted.filter(a => a.data.category === "hom").slice(0, 6);
 const intlAlbums = sorted.filter(a => a.data.category === "w-hom").slice(0, 6);
 
-// 마크다운 서식을 걷어내고 리뷰 본문 일부만 미리보기로 보여줄 때 사용
 function excerpt(markdown: string, maxLength = 140): string {
  const plain = markdown
   .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
@@ -52,7 +50,6 @@ const intlCards = intlAlbums.map(makeCard);
  <Separator />
 
  <div class="albums-page">
-  <!-- 국내 섹션 -->
   <section>
    <div class="section-header">
     <h3 class="section-title">국내리뷰</h3>
@@ -75,7 +72,6 @@ const intlCards = intlAlbums.map(makeCard);
    <a href="/albums/hom" class="load-more-btn" data-astro-prefetch>더보기</a>
   </section>
 
-  <!-- 해외 섹션 -->
   {
    intlCards.length > 0 && (
     <section>
@@ -116,10 +112,6 @@ const intlCards = intlAlbums.map(makeCard);
   margin: 0rem 0;
  }
 
- /* 기본값(margin-top만 2rem)을 그대로 두면 버튼 위(자기 섹션)와 아래(다음 섹션) 여백이
-    .albums-page의 gap(2rem)과 똑같아져서 어느 섹션 소속인지 구분이 안 됐음 —
-    위는 확 좁히고 아래는 .albums-page의 gap(2rem)에 더해 추가로 벌려서, 눈으로 봐도
-    "이 섹션의 더보기"라는 게 분명하도록 함 */
  .load-more-btn {
   margin-top: 0.75rem;
   margin-bottom: 3rem;
@@ -129,7 +121,6 @@ const intlCards = intlAlbums.map(makeCard);
   margin: 0;
  }
 
- /* 각 섹션 맨 위 앨범(최신 리뷰)은 2칸을 차지하는 큰 카드로 보여주고, 리뷰 일부를 함께 노출 */
  .album-card--featured {
   grid-column: span 2;
  }

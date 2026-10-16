@@ -46,13 +46,11 @@ const date = issue.data.date;
 
 const { Content } = await render(issue);
 
-// 같은 category 내에서 다음 호 계산
 const sameCategory = issues
  .filter(i => i.data.category === issue.data.category)
  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const currentIndex = sameCategory.findIndex(i => (i.data.slug ?? i.id) === slug);
-// sameCategory는 최신순 정렬 → +1 은 더 과거 호(Prev), -1 은 더 최신 호(Next)
 const hasSiblings = sameCategory.length > 1;
 const prevIndex = (currentIndex + 1) % sameCategory.length;
 const prevIssue = sameCategory[prevIndex];
@@ -61,12 +59,10 @@ const nextIndex = (currentIndex - 1 + sameCategory.length) % sameCategory.length
 const nextIssue = sameCategory[nextIndex];
 const nextSlug = nextIssue.data.slug ?? nextIssue.id;
 
-// 목록으로 돌아가는 링크 (category 기반)
 const backHref = issue.data.category === "w-hom" ? "/magazine/w-hom" : issue.data.category === "special" ? "/magazine" : "/magazine/hom";
 const seoDescription =
  issue.data.category === "w-hom" ? "해외힙합 매거진 w/HOM" : issue.data.category === "special" ? "Hausofmatters Special Edition" : "한국힙합 매거진 HOM";
 
-// 이 호(issue)를 참조하는 feature/album을 역추적해 "Related"로 노출
 const issueRefs = [id.toLowerCase(), slug.toLowerCase()];
 const relatedFeatures = allFeature
  .filter(f => f.data.published && f.data.link && issueRefs.includes(f.data.link.trim().toLowerCase()))
@@ -82,21 +78,17 @@ const relatedAlbums = allAlbums
  .map(a => ({
   href: `/albums/${a.id}`,
   title: a.data.name,
-  // albums 목록 페이지들과 동일하게, image 필드가 없으면 파일명 기반 경로로 폴백
   image: a.data.image?.src ?? `/images/albums/${a.id}.jpg`,
   imageAlt: a.data.image?.alt ?? a.data.name,
   meta: "Album",
  }));
 const relatedItems = [...relatedFeatures, ...relatedAlbums].slice(0, 6);
 
-// --- 기존 변수들 아래에 추가 ---
-
 function renderToc(text: string): string {
  const lines = text.split("\n");
  const out: string[] = [];
  for (const line of lines) {
   if (!line.trim()) {
-   // 빈 줄: 직전이 이미 빈 줄이면 무시, 아니면 간격 하나
    if (out.length > 0 && out[out.length - 1] !== "") out.push("");
   } else {
    out.push(
@@ -114,7 +106,6 @@ function renderToc(text: string): string {
  return out.map(l => (l === "" ? "<br>" : l + "<br>")).join("\n");
 }
 
-// toc 필드 우선, 없으면 파일 본문에서 읽기
 function readBody(id: string): string {
  try {
   const fp = path.resolve(`./src/data/magazine/${id}.md`);

@@ -12,7 +12,6 @@ const interviewCards = allinterview
  .filter(i => i.data.published)
  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
  .map(interview => {
-  // interview.data.artist = 표시명, interview.id(파일명)으로 artists 조회
   const artist = allArtists.find(a => a.id === interview.id);
 
   return {

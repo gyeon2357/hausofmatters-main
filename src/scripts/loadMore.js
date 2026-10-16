@@ -1,5 +1,3 @@
-// 목록 그리드 공통 "더보기" — data-load-more="N" 값만큼만 먼저 보여주고,
-// 옆의 [data-load-more-btn]을 누르면 나머지를 한 번에 펼침 (실제 페이지네이션 없이 클라이언트에서 토글)
 function initLoadMore() {
   document.querySelectorAll("[data-load-more]").forEach(grid => {
     if (grid.dataset.lmInitialized) return;

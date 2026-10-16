@@ -183,11 +183,14 @@ const whomEditors: Member[] = [
 
   <section class="members-container" id="members-container">
    <div class="contact-intro" id="contact-intro">
-    <p class="contact-intro-text">다양한 프로젝트와 협업에 대해 편하게 연락 바랍니다.</p>
+    <p class="contact-intro-text">오픈 마인드로 다양한 제안을 검토하고 있습니다. 언제든 편하게 메시지 남겨주세요.</p>
     <div class="contact-intro-mail">
      <a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a>
      <button id="mail-copy-btn" type="button" class="text-btn">Copy</button>
      <button id="mail-share-btn" type="button" class="text-btn">Share</button>
+    </div>
+    <div class="contact-intro-social">
+     <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer">@hausofmatters</a>
     </div>
    </div>
    {
@@ -256,8 +259,6 @@ const whomEditors: Member[] = [
   setTimeout(() => toast.classList.remove("visible"), 2000);
  }
 
- // Menu의 Contact 링크(#contact-intro)로 들어왔을 때, 네이티브 해시 점프는 타깃을
- // 화면 맨 위에 딱 붙여버려 어색함 — 화면 상단에서 30% 지점(중앙보다 살짝 위)에 오도록 보정
  function scrollToContactIntro() {
   if (window.location.hash !== "#contact-intro") return;
   const target = document.getElementById("contact-intro");
@@ -270,10 +271,6 @@ const whomEditors: Member[] = [
  let popstateBound = false;
 
  function initContactIntro() {
-  // 다른 페이지에서 들어올 때는 astro:page-load 시점에 보정하면 되지만, About 페이지에
-  // 이미 있는 상태에서 Menu의 Contact를 클릭하는 경우는 astro:page-load가 다시 발화하지
-  // 않고 popstate만 발생한 뒤 브라우저가 자체적으로 해시 위치로 스크롤함 — 그 네이티브
-  // 스크롤이 끝난 뒤에 보정해야 해서 popstate에도 별도로 걸어둠
   scrollToContactIntro();
   if (!popstateBound) {
    popstateBound = true;
@@ -292,7 +289,6 @@ const whomEditors: Member[] = [
     await navigator.clipboard.writeText(CONTACT_EMAIL);
     showToast("이메일이 복사되었습니다.");
    } catch {
-    // clipboard API 미지원 환경 fallback (일부 모바일 브라우저)
     try {
      const el = document.createElement("textarea");
      el.value = CONTACT_EMAIL;
@@ -342,7 +338,6 @@ const whomEditors: Member[] = [
   text-wrap: pretty;
  }
 
- /* 멤버 컨테이너 */
  .members-container {
   display: flex;
   flex-direction: column;
@@ -357,8 +352,6 @@ const whomEditors: Member[] = [
   gap: 1rem;
  }
 
- /* members-container 맨 위에 두는 연락처 안내 — 아래 contact-section(Mail/Instagram)과는
-    별개로, 협업 제안을 바로 복사/공유할 수 있게 하는 용도 */
  .contact-intro {
   display: flex;
   flex-direction: column;
@@ -378,6 +371,13 @@ const whomEditors: Member[] = [
  }
 
  .contact-intro-mail a {
+  font-size: var(--font-size-base);
+  text-decoration: underline;
+  text-underline-position: under;
+  color: var(--color-text);
+ }
+
+ .contact-intro-social a {
   font-size: var(--font-size-base);
   text-decoration: underline;
   text-underline-position: under;
@@ -412,7 +412,6 @@ const whomEditors: Member[] = [
   border-top: 1px solid var(--border-color);
  }
 
- /* 텍스트 영역 */
  .member-info {
   display: flex;
   flex-direction: column;
@@ -435,7 +434,6 @@ const whomEditors: Member[] = [
   color: var(--color-text-alt);
  }
 
- /* 이미지 + 링크 */
  .members-wrapper figure {
   display: flex;
   flex-direction: column;
@@ -476,7 +474,6 @@ const whomEditors: Member[] = [
   line-height: 1.3;
  }
 
- /* 연락처 */
  .contact-section {
   display: flex;
   flex-direction: column;
@@ -513,7 +510,6 @@ const whomEditors: Member[] = [
   opacity: 0.6;
  }
 
- /* 반응형 */
  @media (max-width: 44em) {
   .contact-intro-mail {
    flex-wrap: wrap;

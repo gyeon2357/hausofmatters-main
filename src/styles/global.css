@@ -7,9 +7,6 @@
  }
 }
 
-/* 모션에 민감한 사용자를 위한 전역 설정 — CSS 트랜지션/애니메이션과 스무스 스크롤을
-   전부 사실상 즉시 전환으로 축소. Lenis(JS 스크롤)·GSAP 애니메이션은 각 스크립트에서
-   별도로 matchMedia 체크해 아예 생략함 (CSS만으로는 JS 트윈 자체를 막을 수 없음) */
 @media (prefers-reduced-motion: reduce) {
  *,
  *::before,
@@ -22,8 +19,6 @@
 }
 
 @font-face {
- /* 라틴 문자 전용 — Arial Narrow엔 한글 글리프가 없어 자동으로 다음(Noto Sans KR 등)으로 폴백됨.
-    Bold 전용 파일이 없어 700 요청은 브라우저가 합성(faux-bold)함 */
  font-family: "Arial Narrow";
  src:
   url("/fonts/ArialNarrow-Regular.woff2") format("woff2"),
@@ -37,7 +32,6 @@
 }
 
 @font-face {
- /* 한글/기호 등 Arial Narrow가 커버하지 못하는 글리프를 담당 (Bold 파일 없음 → 합성) */
  font-family: "Noto Sans KR";
  src:
   url("/fonts/NotoSansKR-Regular.woff2") format("woff2"),
@@ -64,17 +58,13 @@
  --info-font: "Arial Narrow", "Noto Sans KR", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
  --main-font: "Arial Narrow", "Noto Sans KR", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
 
- /* 글자 크기 스케일 — 전 사이트에서 이 6단계만 사용.
-    위계는 크기 차이보다 margin/여백/위치로 표현할 것 */
- --font-size-xs: 0.75rem; /* 12px — 날짜, 캡션, 배지 등 가장 작은 메타 정보 */
- --font-size-s: 0.875rem; /* 14px — 보조 텍스트, 내비게이션, 버튼, 목록 메타 */
- --font-size-base: 1rem; /* 16px — 본문 기본 크기 */
- --font-size-l: clamp(1rem, 1.5vw, 1.375rem); /* 18~22px — 소제목 */
- --font-size-xl: clamp(1.25rem, 2vw, 1.5rem); /* 20~24px — 섹션/페이지 제목(h2) */
- --font-size-2xl: clamp(1.5rem, 5vw, 2rem); /* 24~32px — 상세 페이지 대제목(h1), 화면폭에 따라 자동으로 줄어듦 */
+ --font-size-xs: 0.75rem;
+ --font-size-s: 0.875rem;
+ --font-size-base: 1rem;
+ --font-size-l: clamp(1rem, 1.5vw, 1.375rem);
+ --font-size-xl: clamp(1.25rem, 2vw, 1.5rem);
+ --font-size-2xl: clamp(1.5rem, 5vw, 2rem);
 
- /* 테두리 있는 pill형 버튼(메뉴, TOP, Read Now, Share 등) 전부 이 값 하나로 통일.
-    em 단위라 버튼마다 font-size가 달라도 글자 대비 여백 비율은 항상 동일하게 유지됨 */
  --btn-padding: 0.35em 0.9em;
 }
 
@@ -130,20 +120,11 @@ body {
  color: var(--color-text);
  background-color: var(--color-bg);
 
- /* 좌우 여백을 padding 대신 grid 트랙으로 관리.
-    기본 자식은 가운데(2번) 트랙에 들어가 자동으로 여백이 생기고,
-    화면 끝까지 채워야 하는 요소만 .full-bleed로 1~3번 트랙을 전부 차지하게 함.
-    (음수 마진/vw 없이 반응형 여백을 한 곳에서만 관리)
-
-    행(row)은 header / main / footer 3단만 두고, main을 1fr로 늘려서
-    콘텐츠가 짧아도 footer가 항상 뷰포트 하단에 붙도록 함 */
  display: grid;
  grid-template-columns: 1rem 1fr 1rem;
  grid-template-rows: auto 1fr auto;
  min-height: 100vh;
 
- /* 카테고리 pill-nav가 화면 하단에 고정되므로, footer 등 마지막 콘텐츠가
-    그 밑에 가려지지 않도록 같은 높이만큼 여백을 둠 (Header.astro에서 갱신) */
  padding-bottom: var(--bottom-nav-height, 3.5rem);
 
  &.blurred {
@@ -157,8 +138,6 @@ body > * {
  min-width: 0;
 }
 
-/* main은 header/footer 사이의 1fr 행 전체(3트랙)를 차지한 뒤,
-   내부에서 다시 같은 3트랙 여백 구조를 반복해 .full-bleed가 그 안에서도 동작하게 함 */
 main {
  display: grid;
  grid-template-columns: 1rem 1fr 1rem;
@@ -264,10 +243,6 @@ button {
  padding: 0;
  border: 0;
  cursor: pointer;
- /* 브라우저가 폼 컨트롤엔 OS 기본 폰트를 적용하고 페이지 폰트를 상속시키지 않음 —
-    font-size/weight는 여기 이미 있었는데 font-family가 빠져서, 이 전역 리셋에
-    기대고 있던 버튼들(더보기, Share/Copy, 정렬·셔플, Flipbook의 Read Now 등)이
-    전부 사이트 폰트 대신 기본 Arial로 보이고 있었음 */
  font-family: inherit;
  font-size: inherit;
  font-weight: inherit;
@@ -331,9 +306,6 @@ figure.video-embed iframe {
  border: 0;
 }
 
-/* 키보드 사용자가 반복되는 헤더/메뉴/하단 내비를 매번 Tab으로 거치지 않고
-   바로 본문(main)으로 건너뛸 수 있게 하는 링크. 평소엔 sr-only처럼 숨겨뒀다가
-   포커스를 받으면 화면 좌상단에 나타남 */
 .skip-link {
  position: fixed;
  top: -4rem;
@@ -376,7 +348,6 @@ figure.video-embed iframe {
 }
 
 @media (max-width: 768px) {
- /* 좁은 화면에서는 gap 대신 양 끝으로 펼쳐서 제목/View All을 좌우로 분리 */
  .section-header {
   justify-content: space-between;
  }
@@ -523,10 +494,6 @@ dd {
  margin-top: 1rem;
 }
 
-/* 제목(항상 첫 번째 자식)은 좌측, 꼬리 nav-link(Back/View All 등, 마지막 자식일 때)는
-   우측 — 화면 크기와 무관하게 항상 같은 줄에 둠. 그 사이에 정렬 버튼 그룹 같은 다른
-   콘텐츠가 더 있으면(.title-header > :not(:first-child):not(nav-link 계열) 규칙)
-   전체 폭을 차지하며 자기 줄로 내려감 */
 .title-header {
  position: relative;
  display: grid;
@@ -549,14 +516,6 @@ dd {
  grid-row: 1;
 }
 
-/* 꼬리 nav-link: <a class="nav-link">(hom.astro 등) 또는 여러 nav-link를 담은
-   wrapper <div class="title-nav-links">(앨범/매거진/아티스트 상세 페이지) 둘 다 지원.
-   title-row/section처럼 다른 역할의 마지막 자식(예: ArtistGridHeader의 <section>)은
-   이 클래스들이 없어 매치되지 않고 아래 "나머지" 규칙으로 자기 줄에 남음.
-   grid item은 기본 min-width:auto라 content(= 여러 링크가 한 줄로 이어진 폭)보다
-   좁아질 수 없어서, 좁은 화면에서는 auto 트랙이 그 폭을 그대로 요구하며 화면 밖으로
-   넘쳐버렸음(모바일 앨범 상세 "Back / Prev Album / Next Album" 등) — min-width:0으로
-   줄어들 수 있게 열어주고, 실제 줄바꿈은 .title-nav-links의 flex-wrap이 담당 */
 .title-header > .nav-link:last-child,
 .title-header > .title-nav-links:last-child {
  grid-column: 2;
@@ -573,10 +532,6 @@ dd {
  gap: 0.25rem 0.5rem;
 }
 
-/* "Back / Prev Album / Next Album"처럼 nav-link가 여러 개 이어진 경우, 좁은 화면에서는
-   auto 칼럼 폭 안에서 억지로 줄바꿈되면 (단어 단위로 쪼개지며) 세로로 길게 늘어져 제목과
-   균형이 안 맞았음 — 이 경우만 제목 줄 아래 자기 줄로 내려 전체 폭에서 넉넉히 줄바꿈되게 함.
-   링크 하나뿐인 경우(.nav-link 단독, 예: "Back")는 폭이 좁아 항상 한 줄에 들어가므로 그대로 둠 */
 @media (max-width: 768px) {
  .title-header > .title-nav-links:last-child {
   grid-column: 1 / -1;
@@ -589,12 +544,6 @@ dd {
  grid-column: 1 / -1;
 }
 
-/* 페이지 제목은 시맨틱하게 h1이어야 하지만(페이지당 단 하나), 예전에 h2로 쓰인 곳이
-   남아있을 수도 있어 둘 다 선택자에 포함 — 실제 마크업은 전부 h1로 통일함.
-   font-size를 명시하지 않으면 브라우저 기본 h1(2em)/h2(1.5em)이 그대로 적용돼
-   의도보다 훨씬 커짐 — .title-header가 정한 크기를 1:1로 그대로 쓰게 함.
-   margin도 리셋하지 않으면 브라우저 기본 h1 margin(0.67em)이 그대로 남아서, 같은 grid
-   행에 함께 있는 Back/View All 등 옆 링크와 세로 위치가 어긋나 보임(h1만 아래로 밀림) */
 .title-header h1,
 .title-header h2 {
  margin: 0;
@@ -660,15 +609,12 @@ dd {
  line-height: 1.3;
 }
 
-/* 카드형 목록(앨범/매거진/인터뷰/feature)에 공통으로 쓰는 작은 날짜·연도 라벨.
-   페이지마다 .album-year / .magazine-date / .meta-date로 제각각이던 걸 하나로 통일 */
 .meta-date {
  margin-top: 0.25rem;
  font-size: var(--font-size-xs);
  color: var(--color-faded);
 }
 
-/* feature 등에 붙는 태그 — pick-badge와 달리 굵지 않은 저채도 메타 정보 */
 .tag-list {
  display: flex;
  flex-wrap: wrap;
@@ -701,8 +647,6 @@ dd {
  line-height: 1.3;
 }
 
-/* 헤더의 테마/검색/Menu 버튼과, Menu 패널 안의 Instagram/Contact 링크가 공유하는 텍스트 버튼 스타일.
-   컴포넌트가 달라도 항상 같은 모양이어야 해서 scoped style이 아니라 global에 둠 */
 .text-btn {
  display: flex;
  align-items: center;
@@ -717,9 +661,6 @@ dd {
  text-underline-position: under;
 }
 
-/* 헤더에서 여는 패널(검색/메뉴)의 공통 위치·크기·닫기 버튼.
-   Menu 버튼 바로 아래 우측에 고정폭으로 뜨고, 모바일에서는 화면 좌우로 늘어남 —
-   두 패널이 서로 다른 자리에 뜨면 어색하므로 여기 한 곳에서만 관리 */
 .anchored-panel {
  border: 0;
  margin: 0;
@@ -744,7 +685,6 @@ dd {
  flex-direction: column;
 }
 
-/* showModal()로 연 경우에만 실제로 그려짐(Search는 항상, Menu는 모바일에서만 모달) */
 .anchored-panel::backdrop {
  background: color-mix(in srgb, var(--color-text) 10%, transparent);
 }
@@ -769,12 +709,6 @@ dd {
 }
 
 @media (max-width: 768px) {
- /* left/right를 5vw씩 대칭으로 줘서 "90%"를 만들었던 이전 방식은 width:auto라
-    실제 계산값이 90vw(390px 화면에서 351px)가 되어, 오히려 데스크톱의 고정폭
-    320px보다 더 커져버렸음 — 데스크톱과 동일하게 320px(좁은 화면은 화면의 75%)로
-    고정 폭을 캡 하고, Menu/Search 버튼이 있는 우측에 그대로 붙임(데스크톱과 동일한
-    anchoring). 세로도 꽉 차 보이지 않도록 높이를 더 낮게 캡해서(넘치는 내용은
-    내부 스크롤) 진짜 미니창처럼 보이게 함 */
  .anchored-panel {
   right: 1rem;
   width: min(320px, 75vw);
@@ -782,12 +716,7 @@ dd {
  }
 }
 
-/* 페이지 내 텍스트형 내비게이션 링크 (Back / View All / Prev·Next / Back to X 등).
-   전부 같은 스타일이라 하나의 클래스로 통일 — 나중에 여기 한 곳만 고치면 전체 반영됨 */
 .nav-link {
- /* 대부분 <a>라 문제없었는데, Footer의 Back to Top처럼 <button>에 쓰이면 브라우저가
-    폼 컨트롤에 OS 기본 폰트를 적용해서 본문과 다른 폰트로 보임 — .text-btn처럼 명시적으로
-    상속받게 함 */
  font-family: inherit;
  font-size: var(--font-size-base);
  font-weight: 400;
@@ -802,12 +731,10 @@ dd {
  opacity: 1;
 }
 
-/* 헤더/메뉴 내비게이션에서 현재 페이지에 해당하는 링크 표시 */
 .current {
  font-weight: 700;
 }
 
-/* 다른 콘텐츠로 연결되는 관련 링크 (앨범→매거진, 피처→앨범/매거진 등) */
 .related-link {
  display: inline-block;
  font-weight: 600;
@@ -836,13 +763,8 @@ dd {
  border-radius: 999px;
 }
 
-/* "더보기" — feature/interview/magazine/album 목록 그리드 공통 로드모어 버튼 */
 .load-more-btn {
  display: flex;
- /* <button>은 폼 컨트롤이라 display:flex여도 내용 크기만큼만 차지하는 반면,
-    <a>(카테고리 허브 페이지의 "더보기" 링크 등)는 같은 display:flex에서도 블록처럼
-    컨테이너 전체 폭을 채워버려서 pill이 가로로 쭉 늘어났었음 — 태그 종류와 무관하게
-    항상 내용 크기만큼만 차지하도록 명시 */
  width: fit-content;
  margin: 2rem auto 0;
  font-size: var(--font-size-s);
@@ -892,8 +814,6 @@ mark {
  opacity: 1;
 }
 
-/* search */
-
 .search-page {
  max-width: 720px;
  margin: 0 auto;
@@ -910,7 +830,6 @@ mark {
  opacity: 0.5;
 }
 
-/* ── States ── */
 .initial-state,
 .empty-state {
  text-align: center;
@@ -919,7 +838,6 @@ mark {
  margin-top: 4rem;
 }
 
-/* ── Results ── */
 .results {
  display: flex;
  flex-direction: column;
@@ -968,9 +886,6 @@ mark {
  font-weight: 700;
 }
 
-/* ── 이미지 ── */
-/* 썸네일 원본 비율이 제각각이라, 정사각형으로 고정 크롭해야 결과 목록이 가지런해짐.
-   height를 명시해야 object-fit: cover가 실제로 동작함 (height:auto면 크롭되지 않고 원본 비율대로 넘침) */
 .result-image {
  width: 8rem;
  aspect-ratio: 1;
@@ -991,10 +906,9 @@ mark {
  background: color-mix(in srgb, currentColor 6%, transparent);
 }
 
-/* ── Match badges — block 구분 ── */
 .result-fields {
  display: flex;
- flex-direction: column; /* block 줄바꿈 */
+ flex-direction: column;
  gap: 0.3rem;
 }
 
@@ -1028,7 +942,6 @@ mark {
  word-break: break-all;
 }
 
-/* ── Highlight mark ── */
 :global(mark) {
  background: none;
  color: inherit;
@@ -1047,8 +960,6 @@ mark {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  /* .results의 gap(1rem)만으로는 모바일에서 항목 간 구분이 좁아 보여서 각 항목
-     자체에도 위쪽 여백을 더 줌 */
   margin-top: 1rem;
  }
 

@@ -4,8 +4,6 @@ import Search from "../components/Search.astro";
 import SiteMenu from "../components/SiteMenu.astro";
 ---
 
-<!-- 로고를 가운데 두고 좌우에 텍스트 버튼 배치: 왼쪽 테마, 오른쪽 검색+Menu.
-     데스크톱/모바일 모두 동일 — 하위 메뉴/인스타그램/메일은 Menu가 여는 SiteMenu 패널에서 노출 -->
 <header class="full-bleed" transition:persist>
  <section class="header-bar">
   <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle theme-toggle-btn">
@@ -17,7 +15,6 @@ import SiteMenu from "../components/SiteMenu.astro";
   </a>
 
   <div class="header-actions">
-   <!-- Search 링크 → button으로 교체, 모달 직접 제어 -->
    <button
     id="search-open-btn"
     aria-label="검색"
@@ -28,7 +25,6 @@ import SiteMenu from "../components/SiteMenu.astro";
    >
     <TextSlider content="Search" />
    </button>
-   <!-- 하위 메뉴/인스타그램/Contact를 담은 SiteMenu 패널을 여닫는 버튼 — 라벨은 항상 "Menu" -->
    <button
     id="site-menu-open"
     aria-label="전체 메뉴 열기"
@@ -43,7 +39,6 @@ import SiteMenu from "../components/SiteMenu.astro";
  </section>
 </header>
 
-<!-- 카테고리 내비게이션: 헤더와 분리해 화면 하단에 고정 -->
 <nav class="pill-nav full-bleed" aria-label="주요 메뉴" transition:persist>
  <ul class="pill-links">
   <li>
@@ -69,32 +64,17 @@ import SiteMenu from "../components/SiteMenu.astro";
    position: sticky;
    top: 0;
    z-index: 100;
-   /* 예전엔 맨 위에서 배경을 투명하게 뒀다가 스크롤하면 JS(스크롤 이벤트 +
-      IntersectionObserver + resize/pageshow 리스너 등)로 배경을 채우는 방식이었는데,
-      iOS Safari에서 주소창이 접히는 스크롤 중 이 토글이 늦게 따라오거나 아예 누락되는
-      경우가 반복적으로 보고됨(헤더 위/틈으로 콘텐츠가 계속 비쳐 보임) — 근본 원인은
-      "배경을 스크롤 위치에 따라 JS로 토글한다"는 설계 자체였음. 스크롤 감지를 완전히
-      없애고 처음부터 항상 불투명 배경으로 고정해 이 버그 자체가 성립하지 않게 함 */
    background: var(--color-bg);
    transition: background-color 0.2s ease;
-   /* 모바일 Safari는 주소창이 접히는 스크롤 중에 position:sticky 요소를 한 프레임
-      늦게 따라오는 경우가 있어서, 스크롤된 뒤에도 헤더 위로 콘텐츠가 잠깐 보이는
-      현상이 있었음 — 별도 GPU 레이어로 승격시켜 리페인트를 더 즉각적으로 만듦 */
    transform: translateZ(0);
 
    font-family: var(--info-font);
 
    padding: 1rem;
 
-   /* header 박스 자체는 내용(.header-bar)보다 넓게 패딩이 있는데, 그 빈 공간이
-      Search/Menu 패널의 닫기 버튼(z-index 100인 header보다 낮은 90)을 가로채지 않도록
-      기본은 클릭을 투과시키고, 실제 내용이 있는 .header-bar만 다시 받게 함 */
    pointer-events: none;
   }
 
-  /* 테마(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌우 칸의 콘텐츠 폭/노출 여부가
-     달라도(예: 모바일에서 테마 버튼만 숨김) 로고가 항상 정중앙에 오도록,
-     1fr의 암묵적 최소폭(auto)을 minmax(0, 1fr)로 제거해 두 칸을 강제로 동일하게 둠 */
   .header-bar {
    pointer-events: auto;
    display: grid;
@@ -104,8 +84,6 @@ import SiteMenu from "../components/SiteMenu.astro";
   }
 
   .logo-link {
-   /* theme-toggle이 모바일에서 display:none이 되면 grid auto-placement가
-      나머지 아이템을 앞 칸으로 당겨버려서, 항상 2번째 칸으로 명시 고정 */
    grid-column: 2;
    display: flex;
    align-items: center;
@@ -114,7 +92,7 @@ import SiteMenu from "../components/SiteMenu.astro";
 
   .logo {
    display: block;
-   height: 1.05rem; /* 1.5rem의 70% */
+   height: 1.05rem;
    width: auto;
   }
 
@@ -131,8 +109,6 @@ import SiteMenu from "../components/SiteMenu.astro";
    justify-self: end;
   }
 
-  /* 카테고리 pill 내비게이션 — 화면 하단에 고정. 내비 바 자체엔 배경을 두지 않고,
-     각 pill 버튼이 테마색 배경을 각자 갖고 있어 어떤 콘텐츠 위에서도 또렷하게 보임 */
   .pill-nav {
    position: fixed;
    left: 0;
@@ -157,9 +133,13 @@ import SiteMenu from "../components/SiteMenu.astro";
    list-style: none;
    gap: 0.5rem;
    margin: 0;
-   padding: 0;
+   padding: 0.4rem;
    width: max-content;
    min-width: 100%;
+   background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+   backdrop-filter: blur(20px);
+   -webkit-backdrop-filter: blur(20px);
+   border-radius: 999px;
   }
 
   .pill-links a {
@@ -176,10 +156,6 @@ import SiteMenu from "../components/SiteMenu.astro";
     color 0.2s ease;
   }
 
-  /* color-mix(…, transparent)는 불투명한 기본 배경을 "희석"해버려서(거의 투명하게 만듦)
-     pill처럼 배경 자체가 핵심 스타일인 요소엔 안 맞음 — 모바일은 탭하면 hover가 그대로
-     눌러붙어서("sticky hover") 계속 반투명하게 보이는 문제로 이어졌음. transparent 대신
-     기존 배경색과 섞어서 완전히 불투명한 톤 변화만 주도록 함 */
   .pill-links a:hover {
    color: inherit;
    background: color-mix(in srgb, currentColor 8%, var(--color-bg));
@@ -189,17 +165,9 @@ import SiteMenu from "../components/SiteMenu.astro";
    background: var(--color-text);
    border-color: var(--color-text);
    color: var(--color-bg);
-   /* global.css의 .current { font-weight: 700 }를 그대로 두면 페이지 이동 시마다
-      글자 폭이 바뀌어 pill 크기가 들썩이는("깜빡임") 원인이 됨 — 배경 반전만으로
-      충분히 구분되니 굵기는 바꾸지 않음 */
    font-weight: inherit;
   }
 
-  /* global.css의 a:focus { background-color: lightgrey; &:not(:focus-visible){transparent}
-     &:focus-visible{opacity:.5; transparent} }가 포커스(마우스 클릭/터치 모두 포함 —
-     모바일 Safari는 탭도 focus-visible로 취급함)를 받을 때마다 pill의 배경을 지워버려서
-     누를 때마다 버튼이 투명해지는 것처럼 보였음 — focus-visible 여부와 상관없이
-     상태별 배경을 그대로 복원하고, 키보드 포커스 표시는 outline으로 대체 */
   .pill-links a:focus {
    background: var(--color-bg);
    opacity: 1;
@@ -220,7 +188,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    }
 
    .logo {
-    height: 0.88rem; /* 1.1rem의 80% */
+    height: 0.88rem;
    }
 
    .pill-nav {
@@ -228,7 +196,6 @@ import SiteMenu from "../components/SiteMenu.astro";
    }
 
    .pill-links {
-    /* 실기기 소형 화면에서 pill 5개가 잘리지 않도록 간격/글자 크기를 살짝 줄임 */
     gap: 0.35rem;
    }
 
@@ -240,49 +207,33 @@ import SiteMenu from "../components/SiteMenu.astro";
  </style>
 
  <script>
-  // 끝 슬래시 유무와 무관하게 비교하기 위해 "/" 자체가 아닌 한 끝 슬래시를 떼어냄 —
-  // trailingSlash 설정상 "/albums"와 "/albums/" 둘 다 같은 페이지로 렌더되는데,
-  // 내비게이션 href는 전부 끝 슬래시 포함("/albums/")이라, 끝 슬래시 없이 직접 주소를
-  // 입력해 들어온 경우(북마크 등) path.startsWith(href)가 항상 false가 되어 active
-  // 표시가 전혀 안 되는 버그가 있었음
   function stripTrailingSlash(p: string) {
    return p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
   }
 
   function initHeader() {
    const path = stripTrailingSlash(window.location.pathname);
-   // "header a[href]"처럼 느슨하게 쓰면 매거진 상세 등 페이지 자체의 <header class="title-header">
-   // (예: "View All" 백링크)까지 걸려서 무관한 링크에 current가 붙는 버그가 있었음 —
-   // 사이트 전역 헤더(.full-bleed)로만 범위를 한정
    document.querySelectorAll("header.full-bleed a[href], .pill-nav a[href], .site-menu-links a[href]").forEach(a => {
     const href = a.getAttribute("href");
     if (!href || href === "/") return;
     const hrefPath = stripTrailingSlash(href);
-    // 정확히 같은 페이지이거나("/magazine"), 그 하위 상세 페이지("/magazine/hom-1")일 때만
-    // — 경계(슬래시) 없이 이어 붙여 비교하면 "/album"이 "/albums"에도 매치되는 식의
-    // 오탐이 생길 수 있어 반드시 "/"를 넣어 구분함
     const isCurrent = path === hrefPath || path.startsWith(hrefPath + "/");
     a.classList.toggle("current", isCurrent);
-    // 클래스만으로는 스크린리더가 "현재 페이지"임을 알 수 없어 aria-current도 함께 반영
     if (isCurrent) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
    });
   }
 
-  // pill-nav가 화면 하단에 고정되므로 실제 높이를 CSS 변수로 노출 — body 하단 여백(footer 가림 방지)에 사용
   function updateBottomNavHeight() {
    const nav = document.querySelector(".pill-nav");
    if (nav) document.documentElement.style.setProperty("--bottom-nav-height", nav.getBoundingClientRect().height + "px");
   }
 
-  // SiteMenu 패널이 Menu 버튼 바로 아래 가깝게 붙도록, header 전체(아래 패딩 포함)가
-  // 아니라 버튼이 실제로 있는 header-bar 줄의 bottom 좌표만 노출
   function updateHeaderHeight() {
    const bar = document.querySelector(".header-bar");
    if (bar) document.documentElement.style.setProperty("--menu-anchor-top", bar.getBoundingClientRect().bottom + "px");
   }
 
-  // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
   function initTheme() {
    const btns = Array.from(document.querySelectorAll<HTMLElement>(".theme-toggle-btn"));
    if (btns.length === 0) return;
@@ -304,15 +255,9 @@ import SiteMenu from "../components/SiteMenu.astro";
     const logo = document.getElementById("site-logo") as HTMLImageElement | null;
     if (logo) logo.src = theme === "dark" ? "/images/logo-w.png" : "/images/logo.png";
 
-    // iOS Safari는 <meta name="theme-color">로 상태바/툴바 배경을 입히는데, 이게 실제
-    // 페이지 배경(--color-bg)과 어긋나면 스크롤 중 그 틈으로 콘텐츠가 비쳐 보임 —
-    // 토글할 때마다 같이 갱신(최초 로드 시 값은 BaseLayout의 인라인 스크립트가 맞춰줌)
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) themeColorMeta.setAttribute("content", theme === "dark" ? "#020202" : "#ffffff");
 
-    // 일부 모바일 브라우저는 position:fixed/sticky 요소의 배경이 CSS 커스텀 프로퍼티
-    // (--color-bg)로만 바뀌면 리페인트를 건너뛰어, 라이트→다크→라이트로 되돌려도
-    // 상/하단 바가 이전 테마 배경인 채로 남는 경우가 있음 — 강제로 리페인트시킴
     [document.querySelector("header.full-bleed"), document.querySelector(".pill-nav")].forEach(el => {
      if (!(el instanceof HTMLElement)) return;
      const prevDisplay = el.style.display;
@@ -336,7 +281,6 @@ import SiteMenu from "../components/SiteMenu.astro";
    });
   }
 
-  // ── Search 인덱스 전역 캐시 ─────────────────────────────
   if (!(window as any).__searchCache) {
    (window as any).__searchCache = { index: [] as any[], loaded: false, promise: null as Promise<void> | null };
   }
@@ -354,9 +298,7 @@ import SiteMenu from "../components/SiteMenu.astro";
    return searchCache.promise;
   }
 
-  // ── Search 모달 ──────────────────────────────────────────
   function initSearch() {
-   // dialog는 페이지마다 새로 렌더링 → 매번 fresh하게 조회
    const openBtn = document.getElementById("search-open-btn");
    const dialog = document.getElementById("search-dialog") as HTMLDialogElement | null;
    const input = document.getElementById("search-input") as HTMLInputElement | null;
@@ -367,7 +309,6 @@ import SiteMenu from "../components/SiteMenu.astro";
 
    if (!openBtn || !dialog || !input) return;
 
-   // AbortController로 이전 페이지의 리스너를 정리하고 새로 바인딩
    const ac = new AbortController();
    const sig = ac.signal;
    const prev = (openBtn as any).__searchAC as AbortController | undefined;
@@ -380,7 +321,6 @@ import SiteMenu from "../components/SiteMenu.astro";
     input!.value = "";
     hint!.textContent = "";
     hint!.classList.remove("search-hint--emphasized");
-    // 처음 열었을 때는 추천 5개 중 3개만(.suggestions-expanded 없는 기본 상태)
     suggestions?.classList.remove("suggestions-hidden", "suggestions-expanded");
     setTimeout(() => input!.focus(), 50);
    }
@@ -389,8 +329,6 @@ import SiteMenu from "../components/SiteMenu.astro";
     dialog!.close();
    }
 
-   // Escape 키로 닫히는 경우(브라우저 기본 동작) 등 닫히는 경로가 여러 개라,
-   // dialog 자체의 close 이벤트 하나로 aria-expanded 동기화를 통일
    dialog.addEventListener(
     "close",
     () => {
@@ -399,8 +337,6 @@ import SiteMenu from "../components/SiteMenu.astro";
     { signal: sig }
    );
 
-   // showModal() 특성상 열려있는 동안 openBtn 자체가 inert(클릭 불가)라
-   // 트리거 버튼을 닫기로 재사용할 수 없음 — 별도 닫기 버튼(closeBtn) 필요
    openBtn.addEventListener("click", openDialog, { signal: sig });
    closeBtn?.addEventListener("click", closeDialog, { signal: sig });
 
@@ -421,7 +357,6 @@ import SiteMenu from "../components/SiteMenu.astro";
      const q = input!.value.trim();
 
      if (!q) {
-      // 입력을 지워 다시 빈 상태가 되면 디바운스 없이 바로 초기 상태(추천 3개)로 복귀
       hint!.textContent = "";
       hint!.classList.remove("search-hint--emphasized");
       submitBtn?.classList.remove("has-results");
@@ -439,14 +374,11 @@ import SiteMenu from "../components/SiteMenu.astro";
       submitBtn?.classList.toggle("has-results", count > 0);
 
       if (count > 0) {
-       // 결과가 있으면 추천 영역은 숨기고(제출하면 /search 결과 페이지에서 확인) 개수만 안내
        hint!.textContent = `${count} result${count > 1 ? "s" : ""}`;
        hint!.classList.remove("search-hint--emphasized");
        suggestions?.classList.add("suggestions-hidden");
        suggestions?.classList.remove("suggestions-expanded");
       } else {
-       // 결과가 없으면 추천 5개를 전부 보여주고(빈 손으로 돌려보내지 않음), 안내 문구를
-       // 그 위에 여백을 넉넉히 줘서 눈에 띄게 함
        hint!.textContent = "검색결과가 없습니다";
        hint!.classList.add("search-hint--emphasized");
        suggestions?.classList.remove("suggestions-hidden");
@@ -469,7 +401,6 @@ import SiteMenu from "../components/SiteMenu.astro";
     { signal: sig }
    );
 
-   // 페이지 로드마다 인덱스 백그라운드 프리패치
    loadSearchIndex();
   }
 
@@ -483,6 +414,5 @@ import SiteMenu from "../components/SiteMenu.astro";
  </script>
 </header>
 
-<!-- Search 모달 / 전체 메뉴 패널: header 밖에 두어 z-index 충돌 방지 -->
 <Search />
 <SiteMenu />

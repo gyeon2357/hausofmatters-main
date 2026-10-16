@@ -9,9 +9,7 @@ const {pdfPath} = Astro.props;
 <button type="button" class="flipbook-btn" data-pdf={pdfPath}>Read Now</button>
 
 <script>
-  // Flipbook 초기화 함수
   function initFlipbook() {
-    // jQuery와 flipBook이 로드될 때까지 대기
     if (typeof $ === "undefined" || typeof $.fn?.flipBook === "undefined") {
       console.log("[Flipbook] 라이브러리 로드 대기 중...");
       setTimeout(initFlipbook, 100);
@@ -27,7 +25,6 @@ const {pdfPath} = Astro.props;
       return;
     }
 
-    // 이미 초기화된 경우 스킵
     if (btn.classList.contains("flipbook-initialized")) {
       console.log("[Flipbook] 이미 초기화됨");
       return;
@@ -54,7 +51,6 @@ const {pdfPath} = Astro.props;
     }
   }
 
-  // 초기 로드
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       console.log("[Flipbook] DOMContentLoaded 발동");
@@ -65,7 +61,6 @@ const {pdfPath} = Astro.props;
     initFlipbook();
   }
 
-  // View Transitions 이후 재초기화
   document.addEventListener("astro:after-swap", () => {
     const btn = document.querySelector<HTMLElement>(".flipbook-btn");
     if (btn) {

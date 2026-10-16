@@ -20,7 +20,6 @@ type Props = {
 const { album } = Astro.props;
 const { Content } = await render(album);
 
-// 관련 앨범 로드
 const allAlbums = await getCollection("albums");
 const relatedAlbumEntries = album.data.relatedAlbums
  ? allAlbums.filter(a => album.data.relatedAlbums!.includes(a.id))
@@ -30,7 +29,6 @@ const category = album.data.category === "w-hom" ? "w-hom" : "hom";
 const backHref = `/albums/${category}`;
 const backLabel = "Back";
 
-// 같은 카테고리 내 Prev/Next 탐색 (발매일 최신순 정렬)
 const sameCategoryAlbums = allAlbums
  .filter(a => (a.data.category === "w-hom" ? "w-hom" : "hom") === category)
  .sort((a, b) => new Date(b.data.release).getTime() - new Date(a.data.release).getTime());
@@ -41,7 +39,6 @@ const nextAlbum = hasAlbumSiblings
  ? sameCategoryAlbums[(currentAlbumIndex - 1 + sameCategoryAlbums.length) % sameCategoryAlbums.length]
  : undefined;
 
-// artist
 const rawArtist = album.data.artist as unknown;
 const artistId: string | undefined =
  typeof rawArtist === "string"
@@ -58,7 +55,6 @@ if (artistId) {
  } catch {}
 }
 
-// magazine 링크
 let magazineHref: string | undefined;
 if (album.data.magazine) {
  try {
@@ -67,7 +63,6 @@ if (album.data.magazine) {
    magazineHref = `/magazine/${magazineEntry.data.slug ?? magazineEntry.id}`;
   }
  } catch {
-  // magazine 파일이 없으면 id를 slug로 직접 사용
   magazineHref = `/magazine/${album.data.magazine}`;
  }
 }

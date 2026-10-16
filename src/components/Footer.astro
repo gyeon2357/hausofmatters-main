@@ -4,7 +4,6 @@ import Separator from "../components/Separator.astro";
 
 <Separator />
 <footer>
- <!-- 화면에 고정된 플로팅 버튼이 아니라, 푸터까지 스크롤했을 때만 보이는 일반 링크 스타일 버튼 -->
  <button id="footer-top-btn" type="button" class="nav-link footer-top-btn" aria-label="맨 위로">Back to Top</button>
 
  <p>Instagram</p>
@@ -24,8 +23,6 @@ import Separator from "../components/Separator.astro";
   align-items: start;
 
   padding: 1rem 0;
-  /* body의 전역 letter-spacing(-0.02px)이 button엔 적용 안 돼 Back to Top만 미묘하게
-     달라 보였음 — 푸터 안에서는 모두 기본값으로 통일 */
   letter-spacing: normal;
  }
 
@@ -56,7 +53,6 @@ import Separator from "../components/Separator.astro";
 
  .footer-top-btn {
   margin: 0;
-  /* .nav-link 기본값(font-size-base)이 아니라, 나머지 푸터 크레딧 요소와 동일한 크기로 */
   font-size: var(--font-size-s);
  }
 </style>
