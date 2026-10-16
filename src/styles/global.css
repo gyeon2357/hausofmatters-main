@@ -106,6 +106,10 @@
  --color-point: color(display-p3 1 0.682353 0.313725 / 1);
 }
 
+html {
+ background-color: var(--color-bg);
+}
+
 body {
  font-family: var(--main-font);
 
