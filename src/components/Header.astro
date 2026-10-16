@@ -69,9 +69,13 @@ import SiteMenu from "../components/SiteMenu.astro";
    position: sticky;
    top: 0;
    z-index: 100;
-   /* 맨 위에서는 배경 없이 콘텐츠 위에 떠 있다가, 스크롤하면 흰 바가 나타나 텍스트를
-      가려주지 않게 함 (아래 .header--scrolled, 스크립트가 스크롤 위치에 따라 토글) */
-   background: transparent;
+   /* 예전엔 맨 위에서 배경을 투명하게 뒀다가 스크롤하면 JS(스크롤 이벤트 +
+      IntersectionObserver + resize/pageshow 리스너 등)로 배경을 채우는 방식이었는데,
+      iOS Safari에서 주소창이 접히는 스크롤 중 이 토글이 늦게 따라오거나 아예 누락되는
+      경우가 반복적으로 보고됨(헤더 위/틈으로 콘텐츠가 계속 비쳐 보임) — 근본 원인은
+      "배경을 스크롤 위치에 따라 JS로 토글한다"는 설계 자체였음. 스크롤 감지를 완전히
+      없애고 처음부터 항상 불투명 배경으로 고정해 이 버그 자체가 성립하지 않게 함 */
+   background: var(--color-bg);
    transition: background-color 0.2s ease;
    /* 모바일 Safari는 주소창이 접히는 스크롤 중에 position:sticky 요소를 한 프레임
       늦게 따라오는 경우가 있어서, 스크롤된 뒤에도 헤더 위로 콘텐츠가 잠깐 보이는
@@ -86,10 +90,6 @@ import SiteMenu from "../components/SiteMenu.astro";
       Search/Menu 패널의 닫기 버튼(z-index 100인 header보다 낮은 90)을 가로채지 않도록
       기본은 클릭을 투과시키고, 실제 내용이 있는 .header-bar만 다시 받게 함 */
    pointer-events: none;
-  }
-
-  header.header--scrolled {
-   background: var(--color-bg);
   }
 
   /* 테마(좌) - 로고(중앙) - 검색/Menu(우) 3열 그리드. 좌우 칸의 콘텐츠 폭/노출 여부가
@@ -282,49 +282,6 @@ import SiteMenu from "../components/SiteMenu.astro";
    if (bar) document.documentElement.style.setProperty("--menu-anchor-top", bar.getBoundingClientRect().bottom + "px");
   }
 
-  // 맨 위에서는 배경 없이 콘텐츠 위에 떠 있다가, 스크롤하면 흰 바(테마 배경)가 나타나
-  // 텍스트가 콘텐츠에 섞여 안 보이는 걸 방지.
-  function updateHeaderScrollBg() {
-   document.querySelector("header.full-bleed")?.classList.toggle("header--scrolled", window.scrollY > 4);
-  }
-
-  // IntersectionObserver(문서 맨 위 #scroll-sentinel 관찰)를 기본으로 쓰되 — iOS Safari는
-  // 관성 스크롤 중 scroll 이벤트를 거의/전혀 쏘지 않아서, scroll 이벤트만으로는 빠르게
-  // 스크롤할 때 헤더 배경이 갱신될 기회를 놓쳐 콘텐츠가 헤더 위로 비쳐 보였음 —
-  // IntersectionObserver는 메인 스레드 이벤트 루프에 의존하지 않아 이 문제가 없음.
-  // 그래도 간헐적으로 놓치는 경우가 보고돼서, scroll 이벤트와 bfcache 복원(pageshow)
-  // 시점에도 같은 상태 동기화 함수를 한 번 더 걸어 이중으로 보강함.
-  // header는 transition:persist라 리스너가 페이지 이동마다 쌓이지 않도록 AbortController로
-  // 이전 리스너를 정리하고 새로 바인딩
-  function initHeaderScrollBg() {
-   const header = document.querySelector("header.full-bleed") as HTMLElement | null;
-   if (!header) return;
-
-   updateHeaderScrollBg();
-
-   const ac = new AbortController();
-   const prev = (header as any).__scrollBgAC as AbortController | undefined;
-   prev?.abort();
-   (header as any).__scrollBgAC = ac;
-
-   const sentinel = document.getElementById("scroll-sentinel");
-   if (sentinel) {
-    const observer = new IntersectionObserver(updateHeaderScrollBg, { threshold: 0 });
-    observer.observe(sentinel);
-    ac.signal.addEventListener("abort", () => observer.disconnect());
-   }
-
-   window.addEventListener("scroll", updateHeaderScrollBg, { passive: true, signal: ac.signal });
-   window.addEventListener("pageshow", updateHeaderScrollBg, { signal: ac.signal });
-   // 모바일에서 Search/Menu를 showModal()로 열었다 닫으면, 배경 콘텐츠가 inert였던 동안
-   // IntersectionObserver/scroll 이벤트가 갱신될 기회를 놓쳐 헤더가 스크롤된 상태인데도
-   // 다시 투명하게 "뚫려" 보이는 경우가 있었음 — Search/SiteMenu가 닫힐 때 이 이벤트를
-   // 쏴서 명시적으로 다시 동기화함 (이름 충돌 방지용 네임스페이스)
-   document.addEventListener("hom:resync-header-bg", updateHeaderScrollBg, { signal: ac.signal });
-   // 키보드가 열렸다 닫히는 것도 뷰포트 리사이즈라 같은 증상을 낼 수 있어 보강
-   window.addEventListener("resize", updateHeaderScrollBg, { passive: true, signal: ac.signal });
-  }
-
   // 데스크톱 헤더의 테마 버튼 + MobileMenu 안의 테마 버튼, 두 개를 함께 동기화
   function initTheme() {
    const btns = Array.from(document.querySelectorAll<HTMLElement>(".theme-toggle-btn"));
@@ -438,9 +395,6 @@ import SiteMenu from "../components/SiteMenu.astro";
     "close",
     () => {
      openBtn!.setAttribute("aria-expanded", "false");
-     // showModal()로 열려있는 동안 배경(헤더 포함)이 inert라, 스크롤 상태 감지가 갱신될
-     // 기회를 놓쳐서 닫은 뒤 헤더가 다시 투명해 보일 수 있었음 — 직접 재동기화를 요청
-     document.dispatchEvent(new Event("hom:resync-header-bg"));
     },
     { signal: sig }
    );
@@ -524,7 +478,6 @@ import SiteMenu from "../components/SiteMenu.astro";
   document.addEventListener("astro:page-load", initSearch);
   document.addEventListener("astro:page-load", updateBottomNavHeight);
   document.addEventListener("astro:page-load", updateHeaderHeight);
-  document.addEventListener("astro:page-load", initHeaderScrollBg);
   window.addEventListener("resize", updateBottomNavHeight, { passive: true });
   window.addEventListener("resize", updateHeaderHeight, { passive: true });
  </script>
