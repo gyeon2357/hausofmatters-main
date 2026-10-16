@@ -184,13 +184,15 @@ const whomEditors: Member[] = [
   <section class="members-container" id="members-container">
    <div class="contact-intro" id="contact-intro">
     <p class="contact-intro-text">오픈 마인드로 다양한 제안을 검토하고 있습니다. 언제든 편하게 메시지 남겨주세요.</p>
-    <div class="contact-intro-mail">
-     <a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a>
-     <button id="mail-copy-btn" type="button" class="text-btn">Copy</button>
-     <button id="mail-share-btn" type="button" class="text-btn">Share</button>
-    </div>
-    <div class="contact-intro-social">
-     <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer">@hausofmatters</a>
+    <div class="contact-intro-links">
+     <div class="contact-intro-mail">
+      <a href="mailto:khlhomofficial@gmail.com">khlhomofficial@gmail.com</a>
+      <button id="mail-copy-btn" type="button" class="text-btn">Copy</button>
+      <button id="mail-share-btn" type="button" class="text-btn">Share</button>
+     </div>
+     <div class="contact-intro-social">
+      <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer">@hausofmatters</a>
+     </div>
     </div>
    </div>
    {
@@ -362,6 +364,12 @@ const whomEditors: Member[] = [
   font-size: var(--font-size-s);
   color: var(--color-text-alt);
   margin: 0;
+ }
+
+ .contact-intro-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
  }
 
  .contact-intro-mail {
