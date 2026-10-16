@@ -48,11 +48,6 @@ import TextSlider from "../components/TextSlider.astro";
  </ul>
 
  <div class="site-menu-utility">
-  <!-- 헤더에 있던 테마 전환 버튼을 메뉴 오버레이 안으로 옮김 — Header.astro의
-       initTheme()이 .theme-toggle-btn 클래스로 찾아 동기화하므로 그대로 둠 -->
-  <button id="theme-toggle" aria-label="다크모드 전환" class="text-btn theme-toggle-btn">
-   <TextSlider content="Dark" />
-  </button>
   <a href="https://www.instagram.com/hausofmatters/" target="_blank" rel="noopener noreferrer" class="text-btn">Instagram</a>
   <!-- 메일 주소를 그대로 노출하지 않고 About의 연락처 블록으로 보냄 -->
   <a href="/about/#contact-intro" data-astro-prefetch class="text-btn">Contact</a>
