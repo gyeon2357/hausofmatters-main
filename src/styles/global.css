@@ -533,27 +533,51 @@ dd {
  margin-top: 1rem;
 }
 
+/* 제목(항상 첫 번째 자식)은 좌측, 꼬리 nav-link(Back/View All 등, 마지막 자식일 때)는
+   우측 — 화면 크기와 무관하게 항상 같은 줄에 둠. 그 사이에 정렬 버튼 그룹 같은 다른
+   콘텐츠가 더 있으면(.title-header > :not(:first-child):not(nav-link 계열) 규칙)
+   전체 폭을 차지하며 자기 줄로 내려감 */
 .title-header {
  position: relative;
  display: grid;
- grid-template-columns: 100%;
+ grid-template-columns: 1fr auto;
+ column-gap: 1rem;
+ row-gap: 0.5rem;
 
  font-family: var(--info-font);
  font-weight: 700;
  line-height: 1.4;
+ font-size: 1.5em;
 
- gap: 1rem;
- /* 정렬 버튼 등 옆 칸 콘텐츠가 좁은 화면에서 줄바꿈되어 행이 늘어나도,
-    h2는 항상 행 상단(=헤더에서 일정한 여백)에 고정되도록 center 대신 start 사용 */
- align-items: start;
+ align-items: center;
  padding: 1rem 0 1.25rem;
  width: 100%;
+}
+
+.title-header > :first-child {
+ grid-column: 1;
+ grid-row: 1;
+}
+
+/* 꼬리 nav-link: <a class="nav-link">(hom.astro 등) 또는 여러 nav-link를 담은
+   wrapper <div class="title-nav-links">(앨범/매거진/아티스트 상세 페이지) 둘 다 지원.
+   title-row/section처럼 다른 역할의 마지막 자식(예: ArtistGridHeader의 <section>)은
+   이 클래스들이 없어 매치되지 않고 아래 "나머지" 규칙으로 자기 줄에 남음 */
+.title-header > .nav-link:last-child,
+.title-header > .title-nav-links:last-child {
+ grid-column: 2;
+ grid-row: 1;
+ justify-self: end;
+}
+
+.title-header > :not(:first-child):not(.nav-link):not(.title-nav-links) {
+ grid-column: 1 / -1;
 }
 
 /* 페이지 제목은 시맨틱하게 h1이어야 하지만(페이지당 단 하나), 예전에 h2로 쓰인 곳이
    남아있을 수도 있어 둘 다 선택자에 포함 — 실제 마크업은 전부 h1로 통일함.
    font-size를 명시하지 않으면 브라우저 기본 h1(2em)/h2(1.5em)이 그대로 적용돼
-   의도보다 훨씬 커짐 — .title-header(--initial)가 정한 크기를 1:1로 그대로 쓰게 함.
+   의도보다 훨씬 커짐 — .title-header가 정한 크기를 1:1로 그대로 쓰게 함.
    margin도 리셋하지 않으면 브라우저 기본 h1 margin(0.67em)이 그대로 남아서, 같은 grid
    행에 함께 있는 Back/View All 등 옆 링크와 세로 위치가 어긋나 보임(h1만 아래로 밀림) */
 .title-header h1,
@@ -562,15 +586,6 @@ dd {
  font-size: 1em;
  text-wrap: nowrap;
  font-weight: 400;
-}
-
-.title-header--initial {
- font-size: var(--font-size-l);
-
- @media screen and (min-width: 50em) {
-  grid-template-columns: 20vw 1fr auto;
-  gap: 1rem;
- }
 }
 
 .album-card {

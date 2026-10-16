@@ -64,7 +64,11 @@ const { albumsTotal, title = "Review" } = Astro.props;
  .sort-group > button::before {
   content: "\2610";
   display: inline-block;
-  font-size: inherit;
+  /* 라벨 글자와 같은 크기(inherit)로 두면 체크박스 글리프가 과하게 커 보였음 —
+     더 작게 줄이고, line-height:1로 글리프 자체의 여분 행간을 없애 버튼의
+     flex 세로 중앙 정렬(align-items:center)이 그대로 먹히게 함 */
+  font-size: 0.7em;
+  line-height: 1;
   text-decoration: none;
 
   margin-right: 0.25rem;

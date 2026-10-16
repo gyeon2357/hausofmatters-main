@@ -82,7 +82,7 @@ const seoDescription = artistName ? `${artistName} — ${album.data.name}` : alb
     {album.data.name}
     {artistName && <span class="faded">by {artistName}</span>}
    </h1>
-   <div>
+   <div class="title-nav-links">
     <a class="nav-link" href={backHref}>{backLabel}</a>
     {
      hasAlbumSiblings && (
